@@ -1,0 +1,24 @@
+{
+  "name": "core-portal-e2e",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TACC/Core-Portal-E2E.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TACC/Core-Portal-E2E/issues"
+  },
+  "homepage": "https://github.com/TACC/Core-Portal-E2E#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.32.3"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3"
+  }
+}
