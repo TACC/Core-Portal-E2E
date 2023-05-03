@@ -10,7 +10,8 @@ setup('authenticate', async ({ page, portal, environment }) => {
   await page.getByPlaceholder('Username').fill(process.env.USERNAME);
   await page.getByPlaceholder('Password').click();
   await page.getByPlaceholder('Password').fill(process.env.PASSWORD);
-  await page.getByRole('button', { name: 'Sign In' }).click();
+  await page.getByRole('button', { name: 'Login' }).click();
+  await page.getByRole('button', { name: 'Submit' }).click();
 
   await page.context().storageState({path: authFile})
 });
