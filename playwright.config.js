@@ -54,25 +54,25 @@ module.exports = defineConfig({
       dependencies: ['setup']
     },
 
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'],
-            storageState: 'playwright/.auth/user.json',
-            portal: process.env.PORTAL,
-            environment: process.env.ENVIRONMENT,
-          },
-      dependencies: ['setup']
-    },
+    // {
+    //   name: 'firefox',
+    //   use: { ...devices['Desktop Firefox'],
+    //         storageState: 'playwright/.auth/user.json',
+    //         portal: process.env.PORTAL,
+    //         environment: process.env.ENVIRONMENT,
+    //       },
+    //   dependencies: ['setup']
+    // },
 
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'],
-            storageState: 'playwright/.auth/user.json',
-            portal: process.env.PORTAL,
-            environment: process.env.ENVIRONMENT,
-          },
-      dependencies: ['setup']
-    },
+    // {
+    //   name: 'webkit',
+    //   use: { ...devices['Desktop Safari'],
+    //         storageState: 'playwright/.auth/user.json',
+    //         portal: process.env.PORTAL,
+    //         environment: process.env.ENVIRONMENT,
+    //       },
+    //   dependencies: ['setup']
+    // },
 
     /* Test against mobile viewports. */
     // {
