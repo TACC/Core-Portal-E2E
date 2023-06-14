@@ -14,7 +14,7 @@ test('test sidenav navigation to public data page', async ({ page, portal, envir
     
   });
 
-  test('test topnav navigation to public data page', async ({ page, portal, environment }) => {
+test('test topnav navigation to public data page', async ({ page, portal, environment }) => {
     
     const url = `https://${environment === 'prod' ? '' : `${environment}.`}${portal}.tacc.utexas.edu`;
     await page.goto(url);
