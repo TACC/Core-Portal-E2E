@@ -15,7 +15,7 @@ test.describe('History Page Navigation Tests', () => {
 
         const heading = page.getByRole('heading', { level: 2 })
         await expect(heading).toHaveText('History / Jobs')
-        const messageVisible = await page.getByRole('status', { name: 'message' }).isVisible()
+        const messageVisible = await page.getByRole('table').getByRole('status', { name: 'message' }).isVisible()
 
         if (messageVisible) {
             const message = page.getByRole('status', { name: 'message' })
