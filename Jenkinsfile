@@ -31,6 +31,10 @@ pipeline {
             reportName: 'Playwright Test Report', 
             reportTitles: ''
          ])
+         junit(
+            allowEmptyResults: true,
+            testResults: 'playwright-report/results.xml'
+         )
       }
    }
 }
