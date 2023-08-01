@@ -15,7 +15,7 @@ pipeline {
             withCredentials([usernamePassword(credentialsId: 'portal_tests_user', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                sh 'echo "username is $USERNAME"'
                sh 'npx playwright test --list'
-               sh 'npx playwright test USERNAME=$USERNAME PASSWORD=$PASSWORD'
+               sh 'USERNAME=$USERNAME PASSWORD=$PASSWORD npx playwright test'
             }
          }
       }
