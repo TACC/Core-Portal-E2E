@@ -45,14 +45,23 @@ module.exports = defineConfig({
       }
     },
     {
-      name: 'chromium',
+      name: 'default',
       use: { ...devices['Desktop Chrome'],
             storageState: 'playwright/.auth/user.json',
             portal: process.env.PORTAL,
             environment: process.env.ENVIRONMENT,
           },
-      dependencies: ['setup']
+      dependencies: ['setup'],
+      testIgnore: 'unauthorized-user/*.spec.js'
     },
+    {
+      name: 'unauthorized',
+      testMatch: 'unauthorized-user/*.spec.js',
+      use: { ...devices['Desktop Chrome'],
+            portal: process.env.PORTAL,
+            environment: process.env.ENVIRONMENT,
+          },
+    }
 
     // {
     //   name: 'firefox',
