@@ -31,3 +31,27 @@ test('test dashboard elements exist', async ({ page, portal, environment }) => {
 
   await expect(page.getByRole('link', {name: 'Manage Account'})).toBeVisible();
 });
+
+test('test applications page link exists when there are no submitted jobs', async ({ page, portal, environment }) => {
+
+  const url = `https://${environment === 'prod' ? '' : `${environment}.`}${portal}.tacc.utexas.edu`;
+  await page.goto(url);
+  await page.locator('#navbarDropdown').click();
+  await page.getByRole('link', { name: 'My Dashboard' }).click();
+
+  const heading = page.getByRole('heading', {level: 2});
+  await expect(heading).toHaveText('Dashboard');
+
+  await expect(page.getByRole('heading', {level: 3, name: 'My Recent Jobs'})).toBeVisible();
+
+  const jobs = page.locator('table.jobs-view tbody tr[role="row"]');
+  const jobsCount = await jobs.count();
+  const statusMessage = page.locator('table.jobs-view tbody tr:first-child.-status');
+
+  if (jobsCount == 0 && await statusMessage.isVisible()){
+    await expect(statusMessage.getByRole('link')).toContainText('Applications Page');
+  } else {
+    expect(await statusMessage.isVisible()).toBeFalsy;
+  }
+
+});
