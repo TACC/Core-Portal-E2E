@@ -6,10 +6,10 @@ setup('authenticate', async ({ page, portal, environment }) => {
   const url = `https://${environment === 'prod' ? '' : `${environment}.`}${portal}.tacc.utexas.edu`;
   await page.goto(url);
   await page.getByRole('link', { name: 'Log in' }).click();
-  await page.getByPlaceholder('Username').click();
-  await page.getByPlaceholder('Username').fill(process.env.USERNAME);
-  await page.getByPlaceholder('Password').click();
-  await page.getByPlaceholder('Password').fill(process.env.PASSWORD);
+  await page.getByLabel('Username').click();
+  await page.getByLabel('Username').fill(process.env.USERNAME);
+  await page.getByLabel('Password').click();
+  await page.getByLabel('Password').fill(process.env.PASSWORD);
   await page.getByRole('button', { name: 'Login' }).click();
   await page.getByRole('button', { name: 'Submit' }).click();
 
