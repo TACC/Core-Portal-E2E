@@ -18,8 +18,8 @@ test('test topnav navigation to public data page', async ({ page, portal, enviro
 
     await page.waitForURL("https://portals.develop.tapis.io/**")
 
-    const heading = page.getByRole('heading', {level: 2});
-    await expect(heading).toHaveText('Tapis Login - Tenant portals');
+    const heading = page.getByRole('heading', {level: 1});
+    await expect(heading).toHaveText('Log In');
   })
 
 
