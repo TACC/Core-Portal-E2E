@@ -18,9 +18,9 @@ test.describe('Onboarding Admin page tests', () => {
   test('test table is populated', async ({ page }) => {
     const table = page.getByRole('table')
     await expect(table.locator('tbody')).toBeVisible()
-    const row = await table.locator('tbody').locator('tr').all()
+    const rows = await table.locator('tbody').locator('tr').all()
 
-    expect(row.length).toBeGreaterThan(0)
+    expect(rows.length).toBeGreaterThan(0)
   });
 
   test('page change navigation works', async ({ page }) => {
@@ -97,9 +97,8 @@ test.describe('Onboarding Admin page tests', () => {
        else {
         await expect(heading).toHaveText(`${name} - System Access`)
       }
-
+      
       await page.getByRole('button', { name: 'Close' }).click();
-
     }
   });
 });
