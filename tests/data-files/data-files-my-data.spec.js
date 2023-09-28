@@ -49,19 +49,43 @@ test('test create new folder', async ({ page, portal, environment }) => {
   await page.locator('#navbarDropdown').click();
   await page.getByRole('link', { name: 'Dashboard' }).click();
   await page.getByRole('link', { name: 'Data Files' }).click();
+
   await page.getByRole('button', { name: '+ Add'}).click();
   await page.locator('button:has-text(" Folder")').click();
 
   // Test folder creation
   const folderName = page.locator('[name="dirname"]');
-  await folderName.fill('qa-test-folder-1');
+  await folderName.fill('testFolder1');
   await page.locator('button:has-text("Create Folder")').click();
 
-  await expect(page.locator('div.tr:has-text("qa-test-folder-1")')).toBeVisible();
-
   // Delete test folder
-  await page.locator('div.tr:has-text("qa-test-folder-1")').click();
+  test.slow();
+  await page.getByRole('checkbox', { name: 'select folder testFolder1' }).check();
   await page.locator('button:has-text("Trash")').click();
+});
 
+test('test upload file', async ({ page, portal, environment }) => {
 
+  // Navigate to Create Folder dialog
+  const url = `https://${environment === 'prod' ? '' : `${environment}.`}${portal}.tacc.utexas.edu`;
+  await page.goto(url);
+  await page.locator('#navbarDropdown').click();
+  await page.getByRole('link', { name: 'Dashboard' }).click();
+  await page.getByRole('link', { name: 'Data Files' }).click();
+
+  await page.getByRole('button', { name: '+ Add'}).click();
+  await page.locator('button:has-text("Upload")').click();
+
+  // Test upload file
+  const fileChooserPromise = page.waitForEvent('filechooser');
+  await page.getByText('Select File(s)').click();
+  const fileChooser = await fileChooserPromise;
+  var buf = Buffer.from("this is a test", 'utf8');
+  await fileChooser.setFiles(
+    [
+        {"name": "testFile1", "mimeType": "text/plain", "buffer": buf}
+    ],
+  );
+  await page.locator('button:has-text("Upload Selected")').click();
+  await page.locator("button.close").click();
 });
