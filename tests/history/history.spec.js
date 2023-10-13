@@ -28,12 +28,12 @@ test.describe('History Page Navigation Tests', () => {
     })
 
     test('Jobv2 tab is displayed and redirects correctly', async ({ page, portal, environment }) => {
-        await expect(page.getByRole('link', { name: 'Pre-April 2023' })).toBeVisible();
+        await expect(page.getByRole('link', { name: 'Pre-June 2023' })).toBeVisible();
 
-        await page.getByRole('link', { name: 'Pre-April 2023' }).click();
+        await page.getByRole('link', { name: 'Pre-June 2023' }).click();
 
         const heading = page.getByRole('heading', { level: 2 })
-        await expect(heading).toHaveText('History / Pre-April 2023')
+        await expect(heading).toHaveText('History / Pre-June 2023')
 
         const url = `https://${environment === 'prod' ? '' : `${environment}.`}${portal}.tacc.utexas.edu`;
         expect(page.url()).toBe(`${url}/workbench/history/jobsv2`)
