@@ -47,7 +47,7 @@ test.describe('Onboarding Admin page tests', () => {
 
   test('search works', async ({ page }) => {
     await page.getByPlaceholder('Search for users').click();
-    await page.getByPlaceholder('Search for users').fill('wma portal');
+    await page.getByPlaceholder('Search for users').fill('wma_prtl_test_user');
     await page.getByRole('button', { name: 'Search', exact: true }).click();
 
     const table = page.getByRole('table')
@@ -56,7 +56,7 @@ test.describe('Onboarding Admin page tests', () => {
     const rows = await table.locator('tbody').locator('tr').all()
 
     expect(rows.length).toEqual(2);
-    await expect(page.getByRole('cell', { name: 'WMA Portal' })).toBeVisible();
+    await expect(page.getByRole('cell', { name: 'WMA Test User' })).toBeVisible();
 
     await page.getByPlaceholder('Search for users').fill('');
     await page.getByRole('button', { name: 'Search', exact: true }).click();
@@ -84,8 +84,8 @@ test.describe('Onboarding Admin page tests', () => {
 
     for (const row of firstUser) {
       const viewLogsButton = row.getByText('View Log')
-      const name = await firstUser[0].locator('td').nth(0).innerText()
-      const stepType = await row.locator('td').nth(1).innerText()
+      const name = (await firstUser[0].locator('td').nth(0).innerHTML()).split('<br>')[0];
+      const stepType = await row.locator('td').nth(1).innerText();
 
       await viewLogsButton.click();
       await expect(page.locator('.modal-dialog')).toBeVisible();
