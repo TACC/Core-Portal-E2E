@@ -15,7 +15,7 @@ test.describe('Allocation Page Tests', () => {
     test('Request New Allocation button is clickable and opens new tab', async ({ page }) => {
 
         const requestNewAllocationButton = page.getByRole('link', { name: 'Request New Allocation' })
-        
+
         expect(await requestNewAllocationButton.getAttribute('href')).toEqual('https://submit-tacc.xras.org/')
 
         const requestNewAllocationPagePromise = page.waitForEvent('popup');
@@ -26,12 +26,12 @@ test.describe('Allocation Page Tests', () => {
     })
 
     test('View Team modal open and close flow', async ({ page }) => {
-        await page.getByRole('button', { name: 'View Team' }).nth(1).click();
+        await page.getByRole('button', { name: 'View Team' }).nth(0).click();
         await expect(page.locator('.modal-dialog')).toBeVisible();
         await expect(page.getByRole('tab', { name: 'View Team' })).toBeVisible();
         await page.getByRole('dialog').getByRole('button', { name: 'Close' }).click();
         await expect(page.locator('.modal-dialog')).not.toBeVisible();
-        
+
     })
 
     test('Correct sidebar items displayed and can be navigated between', async ({ page }) => {
@@ -49,5 +49,5 @@ test.describe('Allocation Page Tests', () => {
         expect(headingValueExpired).toBe('Allocations/Expired');
 
     })
-    
+
 })
