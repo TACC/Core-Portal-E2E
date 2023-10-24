@@ -56,7 +56,7 @@ module.exports = defineConfig({
             environment: process.env.ENVIRONMENT,
           },
       dependencies: ['setup'],
-      testIgnore: 'unauthorized-user/*.spec.js'
+      testIgnore: ['unauthorized-user/*.spec.js', 'data-files/applications/*.spec.js']
     },
     {
       name: 'unauthorized',
@@ -65,6 +65,17 @@ module.exports = defineConfig({
             portal: process.env.PORTAL,
             environment: process.env.ENVIRONMENT,
           },
+    },
+    {
+      name: 'applications',
+      testMatch: 'data-files/applications/*.spec.js',
+      use: { 
+        ...devices['Desktop Chrome'],
+        storageState: 'playwright/.auth/user.json',
+        portal: process.env.PORTAL,
+        environment: process.env.ENVIRONMENT,
+      },
+      dependencies: ['setup'],
     }
 
     // {
