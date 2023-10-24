@@ -3,9 +3,11 @@ import { expect, base } from '@playwright/test';
 
 const apps = ['compress', 'extract']
 
+// Run tests for both compress and extract back to back
 for (const app of apps) {
     test.describe(`Data files ${app} tests`, () => {
-        let jobSubmissionTimestamp;
+
+        let jobSubmissionTimestamp; // Used to identify a job on the History page
         const statuses = ['PROCESSING', 'QUEUEING', 'RUNNING', 'FINISHING', 'FINISHED']
     
         test.beforeEach(async ({ page, portal, environment }) => {
@@ -17,6 +19,9 @@ for (const app of apps) {
             await page.getByRole('link', { name: 'e2e-test-files' }).click();
             await page.getByRole('link', { name: 'test_data-do_not_delete' }).click();
         })
+
+        /* These tests are run serialized because we want to make sure that a job is 
+        submitted before we can go to the History page to check it's data */
 
         test.describe.serial(`${app} app job submission`, () => {
             test(`submit ${app} files job and monitor status`, async ({ page }) => {
@@ -74,16 +79,15 @@ for (const app of apps) {
                 }
             })
         
-            test('check successful job submission', async ({ page }) => {
+            test('successful job submission and job data', async ({ page }) => {
                         
                 await page.getByRole('link', { name: 'History', exact: true }).click();
         
-                let regExp = new RegExp(`${app}.*${jobSubmissionTimestamp}`)
+                const regExp = new RegExp(`${app}.*${jobSubmissionTimestamp}`)
                 const row =  page.locator("tr", { has: page.getByText(regExp)})
         
                 const statusRegExp = new RegExp(statuses.join('|'))
                 await expect(row.locator('td').nth(2), 'Does not have a valid status').toHaveText(statusRegExp, { ignoreCase: true })
-        
         
                 // Open job details modal and verify job info
                 await row.getByRole('link', { name: 'View Details', exact: true }).click();
