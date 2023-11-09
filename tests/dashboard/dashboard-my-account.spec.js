@@ -1,12 +1,12 @@
 import { expect, base } from '@playwright/test';
 import { test } from '../../fixtures/baseFixture'
+import { getPortalUrl } from '../../utils/navigationHelper';
 
 
 test.describe('My Account page tests', () => {
   
   test.beforeEach(async ({ page, portal, environment }) => {
-    const url = `https://${environment === 'prod' ? '' : `${environment}.`}${portal}.tacc.utexas.edu`;
-    await page.goto(url);
+    await page.goto(getPortalUrl(portal, environment));
     await page.locator('#navbarDropdown').click();
     await page.getByRole('link', { name: 'My Account' }).click();
   });
@@ -21,7 +21,7 @@ test.describe('My Account page tests', () => {
     expect(await backToDashboardButton.getAttribute('href')).toEqual('/workbench/dashboard');
   
     await backToDashboardButton.click();
-    expect(page.url()).toEqual(`https://${environment === 'prod' ? '' : `${environment}.`}${portal}.tacc.utexas.edu/workbench/dashboard`)
+    expect(page.url()).toEqual(`${getPortalUrl(portal, environment)}/workbench/dashboard`)
   
   });
   

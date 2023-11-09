@@ -1,11 +1,11 @@
 import { test } from '../../fixtures/baseFixture'
 import { expect, base } from '@playwright/test';
+import { getPortalUrl } from '../../utils/navigationHelper';
 
 
 test.describe('History Page Navigation Tests', () => {
     test.beforeEach(async ({ page, portal, environment }) => {
-        const url = `https://${environment === 'prod' ? '' : `${environment}.`}${portal}.tacc.utexas.edu`;
-        await page.goto(url);
+        await page.goto(getPortalUrl(portal, environment));
         await page.locator('#navbarDropdown').click();
         await page.getByRole('link', { name: 'My Dashboard' }).click();
         await page.getByRole('link', { name: 'History', exact: true }).click();
@@ -35,7 +35,7 @@ test.describe('History Page Navigation Tests', () => {
         const heading = page.getByRole('heading', { level: 2 })
         await expect(heading).toHaveText('History / Pre-June 2023')
 
-        const url = `https://${environment === 'prod' ? '' : `${environment}.`}${portal}.tacc.utexas.edu`;
+        const url = getPortalUrl(portal, environment)
         expect(page.url()).toBe(`${url}/workbench/history/jobsv2`)
     })
 })

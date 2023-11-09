@@ -1,12 +1,12 @@
 import { test } from '../../fixtures/baseFixture'
 import { expect, base } from '@playwright/test';
+import { getPortalUrl } from '../../utils/navigationHelper';
 
 
 test.describe('Allocation Page Tests', () => {
 
     test.beforeEach(async ({ page, portal, environment }) => {
-        const url = `https://${environment === 'prod' ? '' : `${environment}.`}${portal}.tacc.utexas.edu`;
-        await page.goto(url);
+        await page.goto(getPortalUrl(portal, environment));
         await page.locator('#navbarDropdown').click();
         await page.getByRole('link', { name: 'My Dashboard' }).click();
         await page.getByRole('link', { name: 'Allocations' }).click();

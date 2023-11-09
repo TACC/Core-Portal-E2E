@@ -1,10 +1,11 @@
 import { test as setup } from '../../fixtures/baseFixture'
+import { getPortalUrl } from '../../utils/navigationHelper'
+
 
 const authFile = 'playwright/.auth/user.json';
 
 setup('authenticate', async ({ page, portal, environment }) => {
-  const url = `https://${environment === 'prod' ? '' : `${environment}.`}${portal}.tacc.utexas.edu`;
-  await page.goto(url);
+  await page.goto(getPortalUrl(portal, environment));
   await page.getByRole('link', { name: 'Log in' }).click();
   await page.getByLabel('Username').click();
   await page.getByLabel('Username').fill(process.env.USERNAME);
