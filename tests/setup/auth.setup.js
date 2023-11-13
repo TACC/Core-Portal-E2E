@@ -5,6 +5,9 @@ import { SYSTEM_MONITOR_DISPLAY_LIST, PORTAL_DATAFILES_STORAGE_SYSTEMS } from '.
 const authFile = 'playwright/.auth/user.json';
 
 setup('authenticate', async ({ page, portal, environment }) => {
+
+  console.log("Using portal url: ", getPortalUrl(portal, environment))
+
   await page.goto(getPortalUrl(portal, environment));
   await page.getByRole('link', { name: 'Log in' }).click();
   await page.getByLabel('Username').click();

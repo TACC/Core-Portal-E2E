@@ -9,6 +9,7 @@ import dotenv from 'dotenv'
 
 dotenv.config({path: 'settings/.env.default'})
 dotenv.config({path: 'settings/.env.secret'})
+dotenv.config({path: 'settings/.env.portal'})
 
 /**
  * @see https://playwright.dev/docs/test-configuration

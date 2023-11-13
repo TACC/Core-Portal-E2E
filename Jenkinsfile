@@ -28,10 +28,11 @@ pipeline {
                sh "ls -l core-portal-deployments/${params.Portal}/camino"
 
                // Copying the portal configuration file to the local workspace
-               def sourceFilePath = "core-portal-deployments/${params.Portal}/camino/${params.Environment}.settings_custom.py"
-               def destinationFilePath = 'utils/custom_portal_settings.py'
+               def sourceFilePath = "core-portal-deployments/${params.Portal}/camino"
+               def destinationFilePath = 'utils'
 
-               sh "cp ${sourceFilePath} ${destinationFilePath}"
+               sh "cp ${sourceFilePath}/${params.Environment}.settings_custom.py ${destinationFilePath}/custom_portal_settings.py"
+               sh "cp ${sourceFilePath}/${params.Environment}.env ${destinationFilePath}/.env.portal"
 
                // Running a Python script to process and output the portal settings as JSON
                sh "python3 utils/pythonHelper.py"

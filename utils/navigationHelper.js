@@ -1,4 +1,5 @@
 
 export function getPortalUrl(portal, environment) {
-    return `https://${environment === 'prod' ? '' : `${environment}.`}${portal}.tacc.utexas.edu`;
+    const portalUrl = process.env.NGINX_SERVER_NAME
+    return `https://${portalUrl}`;
 }
