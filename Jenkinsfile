@@ -33,17 +33,12 @@ pipeline {
                sh "cp ${sourceFilePath}/${params.Environment}.settings_custom.py ${destinationFilePath}/custom_portal_settings.py"
                sh "cp ${sourceFilePath}/${params.Environment}.env ${destinationFilePath}/.env.portal"
 
-               // Debugging
-               echo "PORTAL: ${params.Portal} ENV: ${params.Environment}"
-               sh "ls -l settings"
-               sh "cat settings/.env.portal"
-               sh "cat settings/custom_portal_settings.py"
-
                // Running a Python script to process and output the portal settings as JSON
                sh "python3 utils/pythonHelper.py"
 
                echo "Using the following portal settings:"
                sh "cat settings/custom_portal_settings.json"
+               sh "cat settings/.env.portal"
             }
          }
       }
