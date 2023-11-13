@@ -10,6 +10,10 @@ pipeline {
       stage('Checkout Core Portal Deployments Code') {
          steps {
             script {
+
+               // remove existing repository
+               sh 'rm -rf core-portal-deployments'
+
                dir('core-portal-deployments') {
                   git branch: 'main',
                      credentialsId: "4895fa1e-c4c2-4152-b1d7-a05f16c78130",
