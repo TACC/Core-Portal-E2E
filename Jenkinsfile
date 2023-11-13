@@ -9,10 +9,6 @@ pipeline {
       stage('Checkout Core Portal Deployments Code') {
          steps {
             script {
-
-               // remove existing repository
-               sh 'rm -rf core-portal-deployments'
-
                dir('core-portal-deployments') {
                   git branch: 'main',
                      credentialsId: "4895fa1e-c4c2-4152-b1d7-a05f16c78130",
@@ -29,9 +25,6 @@ pipeline {
                // Displaying the contents of the current directory and the config directory
                sh "ls -l"
                sh "ls -l core-portal-deployments/${params.Portal}/camino"
-
-               // Clear previous files first
-               sh "rm settings/custom_portal_settings.json settings/custom_portal_settings.py settings/.env.portal"
 
                // Copying the portal configuration file to the local workspace
                def sourceFilePath = "core-portal-deployments/${params.Portal}/camino"
