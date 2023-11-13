@@ -6,10 +6,8 @@ pipeline {
 
    }
    stages {
-
       stage('Checkout Core Portal Deployments Code') {
          steps {
-            cleanWs()
             script {
 
                // remove existing repository
@@ -88,6 +86,7 @@ pipeline {
             allowEmptyResults: true,
             testResults: 'playwright-report/results.xml'
          )
+         cleanWs()
       }
    }
 }
