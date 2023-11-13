@@ -9,6 +9,7 @@ pipeline {
 
       stage('Checkout Core Portal Deployments Code') {
          steps {
+            cleanWs()
             script {
 
                // remove existing repository
