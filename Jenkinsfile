@@ -27,6 +27,9 @@ pipeline {
                sh "ls -l"
                sh "ls -l core-portal-deployments/${params.Portal}/camino"
 
+               // Clear previous files first
+               sh "rm settings/custom_portal_settings.json settings/custom_portal_settings.py settings/.env.portal"
+
                // Copying the portal configuration file to the local workspace
                def sourceFilePath = "core-portal-deployments/${params.Portal}/camino"
                def destinationFilePath = 'settings'
