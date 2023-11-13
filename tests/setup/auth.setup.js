@@ -1,6 +1,6 @@
 import { test as setup } from '../../fixtures/baseFixture'
 import { getPortalUrl } from '../../utils/navigationHelper'
-
+import { SYSTEM_MONITOR_DISPLAY_LIST, PORTAL_DATAFILES_STORAGE_SYSTEMS } from '../../settings/custom_portal_settings.json'
 
 const authFile = 'playwright/.auth/user.json';
 
@@ -15,4 +15,7 @@ setup('authenticate', async ({ page, portal, environment }) => {
   await page.getByRole('button', { name: 'Connect' }).click();
 
   await page.context().storageState({path: authFile})
+
+  console.log(PORTAL_DATAFILES_STORAGE_SYSTEMS)
+  console.log(SYSTEM_MONITOR_DISPLAY_LIST)
 });
