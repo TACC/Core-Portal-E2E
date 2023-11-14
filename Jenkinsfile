@@ -9,6 +9,7 @@ pipeline {
       stage('Checkout Core Portal Deployments Code') {
          steps {
             script {
+               // Clone Core Portal Deployments repo into a subdirectory
                dir('core-portal-deployments') {
                   git branch: 'main',
                      credentialsId: "4895fa1e-c4c2-4152-b1d7-a05f16c78130",
