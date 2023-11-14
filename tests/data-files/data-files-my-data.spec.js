@@ -12,7 +12,7 @@ test('test navigation to my data work', async ({ page, portal, environment }) =>
   await page.getByRole('link', { name: 'Data Files' }).click();
 
   const heading = page.getByRole('heading', {level: 2});
-  await expect(heading).toHaveText("My Data (Work)");
+  await expect(heading.locator('.system-name')).toHaveText("My Data (Work)");
 });
 
 test('test navigation to my data scratch', async ({ page, portal, environment }) => {
@@ -25,7 +25,7 @@ test('test navigation to my data scratch', async ({ page, portal, environment })
   await page.getByRole('link', { name: "My Data (Scratch)"}).click();
 
   const heading = page.getByRole('heading', {level: 2});
-  await expect(heading).toHaveText("My Data (Scratch)");
+  await expect(heading.locator('.system-name')).toHaveText("My Data (Scratch)");
 });
 
 test('test navigation to my data frontera', async ({ page, portal, environment }) => {
@@ -38,5 +38,5 @@ test('test navigation to my data frontera', async ({ page, portal, environment }
   await page.getByRole('link', { name: "My Data (Frontera)"}).click();
 
   const heading = page.getByRole('heading', {level: 2});
-  await expect(heading).toHaveText("My Data (Frontera)");
+  await expect(heading.locator('.system-name')).toHaveText("My Data (Frontera)");
 });

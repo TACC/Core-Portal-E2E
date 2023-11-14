@@ -11,5 +11,5 @@ test('test navigation to google drive', async ({ page, portal, environment }) =>
   await page.getByRole('link', { name: "Google Drive"}).click();
 
   const heading = page.getByRole('heading', {level: 2});
-  await expect(heading).toHaveText("Google Drive");
+  await expect(heading.locator('.system-name')).toHaveText("Google Drive");
 });

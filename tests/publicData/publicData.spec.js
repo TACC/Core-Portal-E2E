@@ -10,7 +10,7 @@ test('test sidenav navigation to public data page', async ({ page, portal, envir
     await page.getByRole('link', { name: 'Public Data' }).click();
 
     const heading = page.getByRole('heading', {level: 2});
-    await expect(heading).toHaveText('Public Data');
+    await expect(heading.locator('.system-name')).toHaveText('Public Data');
     
   });
 
@@ -21,5 +21,5 @@ test('test topnav navigation to public data page', async ({ page, portal, enviro
     await page.getByRole('link', { name: 'Public Data' }).click();
     
     const heading = page.getByRole('heading', {level: 2});
-    await expect(heading).toHaveText('Public Data');
+    await expect(heading.locator('.system-name')).toHaveText('Public Data');
   });
