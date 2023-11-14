@@ -55,7 +55,7 @@ pipeline {
          steps {
             withCredentials([usernamePassword(credentialsId: 'portal_tests_user', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                sh 'npx playwright test --list'
-               sh 'USERNAME=$USERNAME PASSWORD=$PASSWORD npx playwright test --project=setup'
+               sh 'USERNAME=$USERNAME PASSWORD=$PASSWORD npx playwright test'
             }
          }
       }
