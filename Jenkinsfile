@@ -6,10 +6,10 @@ pipeline {
 
    }
    stages {
-
       stage('Checkout Core Portal Deployments Code') {
          steps {
             script {
+               // Clone Core Portal Deployments repo into a subdirectory
                dir('core-portal-deployments') {
                   git branch: 'main',
                      credentialsId: "4895fa1e-c4c2-4152-b1d7-a05f16c78130",
@@ -29,7 +29,7 @@ pipeline {
 
                // Copying the portal configuration file to the local workspace
                def sourceFilePath = "core-portal-deployments/${params.Portal}/camino"
-               def destinationFilePath = 'utils'
+               def destinationFilePath = 'settings'
 
                sh "cp ${sourceFilePath}/${params.Environment}.settings_custom.py ${destinationFilePath}/custom_portal_settings.py"
                sh "cp ${sourceFilePath}/${params.Environment}.env ${destinationFilePath}/.env.portal"
@@ -39,6 +39,7 @@ pipeline {
 
                echo "Using the following portal settings:"
                sh "cat settings/custom_portal_settings.json"
+               sh "cat settings/.env.portal"
             }
          }
       }
@@ -74,6 +75,7 @@ pipeline {
             allowEmptyResults: true,
             testResults: 'playwright-report/results.xml'
          )
+         cleanWs()
       }
    }
 }
