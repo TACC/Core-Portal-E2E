@@ -1,12 +1,12 @@
 import { expect, base } from '@playwright/test';
 import { test } from '../../fixtures/baseFixture'
-import { getPortalUrl } from '../../utils/navigationHelper';
+ 
 
 
 test.describe('My Account page tests', () => {
   
-  test.beforeEach(async ({ page, portal, environment }) => {
-    await page.goto(getPortalUrl(portal, environment));
+  test.beforeEach(async ({ page, portal, environment, baseURL }) => {
+    await page.goto(baseURL);
     await page.locator('#navbarDropdown').click();
     await page.getByRole('link', { name: 'My Account' }).click();
   });
@@ -16,12 +16,12 @@ test.describe('My Account page tests', () => {
     await expect(heading).toHaveText('Manage Account');
   });
   
-  test('back to dashboard button exists and redirects correctly', async ({ page, portal, environment }) => {
+  test('back to dashboard button exists and redirects correctly', async ({ page, portal, environment, baseURL }) => {
     const backToDashboardButton = page.getByRole('link', { name: 'Back to Dashboard' });
     expect(await backToDashboardButton.getAttribute('href')).toEqual('/workbench/dashboard');
   
     await backToDashboardButton.click();
-    expect(page.url()).toEqual(`${getPortalUrl(portal, environment)}/workbench/dashboard`)
+    expect(page.url()).toEqual(`${baseURL}/workbench/dashboard`)
   
   });
   

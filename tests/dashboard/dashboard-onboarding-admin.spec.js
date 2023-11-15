@@ -1,11 +1,11 @@
 import { expect, base } from '@playwright/test';
 import { test } from '../../fixtures/baseFixture'
-import { getPortalUrl } from '../../utils/navigationHelper';
+ 
 
 test.describe('Onboarding Admin page tests', () => {
   
-  test.beforeEach(async ({ page, portal, environment }) => {
-    await page.goto(getPortalUrl(portal, environment));
+  test.beforeEach(async ({ page, portal, environment, baseURL }) => {
+    await page.goto(baseURL);
     await page.locator('#navbarDropdown').click();
     await page.getByRole('link', { name: 'Onboarding Admin' }).click();
   })

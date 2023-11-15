@@ -1,19 +1,19 @@
 import { expect, base, Page } from '@playwright/test';
 import { test } from '../../fixtures/baseFixture'
-import { getPortalUrl } from '../../utils/navigationHelper';
+ 
 
 test.describe('test Add button', async () => {
 
   test.describe.configure({ mode: 'serial' });
 
-    test.beforeEach(async ({ page, portal, environment }) => {
-      await page.goto(getPortalUrl(portal, environment));
+    test.beforeEach(async ({ page, portal, environment, baseURL }) => {
+      await page.goto(baseURL);
       await page.locator('#navbarDropdown').click();
       await page.getByRole('link', { name: 'Dashboard' }).click();
       await page.getByRole('link', { name: 'Data Files' }).click();
     })
 
-    test('test create new folder', async ({ page, portal, environment }) => {
+    test('test create new folder', async ({ page, portal, environment, baseURL }) => {
       // Navigate to Create Folder dialog
       await page.getByRole('button', { name: '+ Add'}).click();
       await page.locator('button:has-text(" Folder")').click();
@@ -24,7 +24,7 @@ test.describe('test Add button', async () => {
       await page.locator('button:has-text("Create Folder")').click();
     });
 
-    test('test upload file', async ({ page, portal, environment }) => {
+    test('test upload file', async ({ page, portal, environment, baseURL }) => {
       // Navigate to Create File dialog
       await page.getByRole('button', { name: '+ Add'}).click();
       await page.locator('button:has-text("Upload")').click();
@@ -49,13 +49,13 @@ test.describe('test Add button', async () => {
       await page.getByRole('dialog').getByRole('button', { name: 'Close' }).click();
     });
 
-    test('test delete test resources', async ({ browser, portal, environment }) => {
+    test('test delete test resources', async ({ browser, portal, environment, baseURL }) => {
         // Create a new incognito browser context
         const context = await browser.newContext();
         // Create a new page inside context.
         const page = await context.newPage();
         // Navigate to My Data (Work)
-        await page.goto(getPortalUrl(portal, environment));
+        await page.goto(baseURL);
         await page.locator('#navbarDropdown').click();
         await page.getByRole('link', { name: 'Dashboard' }).click();
         await page.getByRole('link', { name: 'Data Files' }).click();
