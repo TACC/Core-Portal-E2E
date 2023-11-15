@@ -47,6 +47,7 @@ module.exports = defineConfig({
       use: {
         portal: process.env.PORTAL,
         environment: process.env.ENVIRONMENT,
+        baseURL: `https://${process.env.NGINX_SERVER_NAME}`
       }
     },
     {
@@ -55,6 +56,7 @@ module.exports = defineConfig({
             storageState: 'playwright/.auth/user.json',
             portal: process.env.PORTAL,
             environment: process.env.ENVIRONMENT,
+            baseURL: `https://${process.env.NGINX_SERVER_NAME}`
           },
       dependencies: ['setup'],
       testIgnore: 'unauthorized-user/*.spec.js'
@@ -65,6 +67,7 @@ module.exports = defineConfig({
       use: { ...devices['Desktop Chrome'],
             portal: process.env.PORTAL,
             environment: process.env.ENVIRONMENT,
+            baseURL: `https://${process.env.NGINX_SERVER_NAME}`
           },
     }
 
