@@ -11,5 +11,5 @@ test('test navigation to shared workspaces', async ({ page, portal, environment 
   await page.getByRole('link', { name: "Shared Workspaces"}).click();
 
   const heading = page.getByRole('heading', {level: 2});
-  await expect(heading).toHaveText("Shared Workspaces");
+  await expect(heading.locator('.system-name')).toHaveText("Shared Workspaces");
 });
