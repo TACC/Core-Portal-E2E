@@ -11,5 +11,5 @@ test('test navigation to community data page', async ({ page, portal, environmen
   await page.getByRole('link', { name: 'Community Data'}).click();
 
   const heading = page.getByRole('heading', {level: 2});
-  await expect(heading).toHaveText("Community Data");
+  await expect(heading.locator('.system-name')).toHaveText("Community Data");
 });
