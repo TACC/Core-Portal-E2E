@@ -1,6 +1,9 @@
 import json 
 import os
 import sys
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Get the absolute path of the current script
 script_path = os.path.abspath(__file__)
@@ -17,6 +20,8 @@ import custom_portal_settings
 
 # Define the output file path
 output_path = os.path.join(settings_folder, 'custom_portal_settings.json')
+
+print(os.getenv('NGINX_SERVER_NAME'))
 
 data = {
     "PORTAL_DATAFILES_STORAGE_SYSTEMS": custom_portal_settings._PORTAL_DATAFILES_STORAGE_SYSTEMS or [],

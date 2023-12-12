@@ -35,6 +35,7 @@ pipeline {
                sh "cp ${sourceFilePath}/${params.Environment}.env ${destinationFilePath}/.env.portal"
 
                // Running a Python script to process and output the portal settings as JSON
+               sh "pip3 install python-dotenv"
                sh "python3 utils/pythonHelper.py"
 
                echo "Using the following portal settings:"
