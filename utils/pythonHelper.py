@@ -1,9 +1,6 @@
 import json 
 import os
 import sys
-from dotenv import load_dotenv
-
-load_dotenv()
 
 # Get the absolute path of the current script
 script_path = os.path.abspath(__file__)
@@ -20,6 +17,13 @@ import custom_portal_settings
 
 # Define the output file path
 output_path = os.path.join(settings_folder, 'custom_portal_settings.json')
+
+
+with open(f'{settings_folder}/.env.portal') as file:
+    for line in file:
+        if line.strip() and not line.startswith('#'):
+            key, value = line.strip().split('=', 1)
+            os.environ[key] = value
 
 print(os.getenv('NGINX_SERVER_NAME'))
 
