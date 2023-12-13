@@ -1,5 +1,5 @@
 pipeline {
-   agent { docker { image 'mcr.microsoft.com/playwright:v1.32.3-jammy' } }
+   agent { docker { image 'mcr.microsoft.com/playwright:v1.40.0-jammy' } }
    environment {
       HOME = '.'
    }
