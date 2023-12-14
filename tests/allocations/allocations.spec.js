@@ -4,9 +4,8 @@ import { expect, base } from '@playwright/test';
 
 test.describe('Allocation Page Tests', () => {
 
-    test.beforeEach(async ({ page, portal, environment }) => {
-        const url = `https://${environment === 'prod' ? '' : `${environment}.`}${portal}.tacc.utexas.edu`;
-        await page.goto(url);
+    test.beforeEach(async ({ page, portal, environment, baseURL }) => {
+        await page.goto(baseURL);
         await page.locator('#navbarDropdown').click();
         await page.getByRole('link', { name: 'My Dashboard' }).click();
         await page.getByRole('link', { name: 'Allocations' }).click();

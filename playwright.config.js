@@ -1,6 +1,7 @@
 // @ts-check
 const { defineConfig, devices } = require('@playwright/test');
 import dotenv from 'dotenv'
+import { NGINX_SERVER_NAME } from './settings/custom_portal_settings.json'
 
 /**
  * Read environment variables from file.
@@ -46,6 +47,7 @@ module.exports = defineConfig({
       use: {
         portal: process.env.PORTAL,
         environment: process.env.ENVIRONMENT,
+        baseURL: `https://${NGINX_SERVER_NAME}`
       }
     },
     {
@@ -54,6 +56,7 @@ module.exports = defineConfig({
             storageState: 'playwright/.auth/user.json',
             portal: process.env.PORTAL,
             environment: process.env.ENVIRONMENT,
+            baseURL: `https://${NGINX_SERVER_NAME}`
           },
       dependencies: ['setup'],
       testIgnore: 'unauthorized-user/*.spec.js'
@@ -64,6 +67,7 @@ module.exports = defineConfig({
       use: { ...devices['Desktop Chrome'],
             portal: process.env.PORTAL,
             environment: process.env.ENVIRONMENT,
+            baseURL: `https://${NGINX_SERVER_NAME}`
           },
     }
 

@@ -1,11 +1,11 @@
 import { test } from '../../fixtures/baseFixture'
 import { expect, base } from '@playwright/test';
+ 
 
 
 test.describe('History Page Navigation Tests', () => {
-    test.beforeEach(async ({ page, portal, environment }) => {
-        const url = `https://${environment === 'prod' ? '' : `${environment}.`}${portal}.tacc.utexas.edu`;
-        await page.goto(url);
+    test.beforeEach(async ({ page, portal, environment, baseURL }) => {
+        await page.goto(baseURL);
         await page.locator('#navbarDropdown').click();
         await page.getByRole('link', { name: 'My Dashboard' }).click();
         await page.getByRole('link', { name: 'History', exact: true }).click();
@@ -27,7 +27,7 @@ test.describe('History Page Navigation Tests', () => {
         }
     })
 
-    test('Jobv2 tab is displayed and redirects correctly', async ({ page, portal, environment }) => {
+    test('Jobv2 tab is displayed and redirects correctly', async ({ page, portal, environment, baseURL }) => {
         await expect(page.getByRole('link', { name: 'Pre-June 2023' })).toBeVisible();
 
         await page.getByRole('link', { name: 'Pre-June 2023' }).click();
@@ -35,7 +35,7 @@ test.describe('History Page Navigation Tests', () => {
         const heading = page.getByRole('heading', { level: 2 })
         await expect(heading).toHaveText('History / Pre-June 2023')
 
-        const url = `https://${environment === 'prod' ? '' : `${environment}.`}${portal}.tacc.utexas.edu`;
+        const url = baseURL
         expect(page.url()).toBe(`${url}/workbench/history/jobsv2`)
     })
 })

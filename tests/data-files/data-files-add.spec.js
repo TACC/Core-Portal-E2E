@@ -1,18 +1,20 @@
 import { expect, base, Page } from '@playwright/test';
 import { test } from '../../fixtures/baseFixture'
+ 
 
 test.describe('test Add button', async () => {
 
   test.describe.configure({ mode: 'serial' });
 
-    test('test create new folder', async ({ page, portal, environment }) => {
-      // Navigate to Create Folder dialog
-      const url = `https://${environment === 'prod' ? '' : `${environment}.`}${portal}.tacc.utexas.edu`;
-      await page.goto(url);
+    test.beforeEach(async ({ page, portal, environment, baseURL }) => {
+      await page.goto(baseURL);
       await page.locator('#navbarDropdown').click();
       await page.getByRole('link', { name: 'Dashboard' }).click();
       await page.getByRole('link', { name: 'Data Files' }).click();
+    })
 
+    test('test create new folder', async ({ page, portal, environment, baseURL }) => {
+      // Navigate to Create Folder dialog
       await page.getByRole('button', { name: '+ Add'}).click();
       await page.locator('button:has-text(" Folder")').click();
 
@@ -22,14 +24,8 @@ test.describe('test Add button', async () => {
       await page.locator('button:has-text("Create Folder")').click();
     });
 
-    test('test upload file', async ({ page, portal, environment }) => {
+    test('test upload file', async ({ page, portal, environment, baseURL }) => {
       // Navigate to Create File dialog
-      const url = `https://${environment === 'prod' ? '' : `${environment}.`}${portal}.tacc.utexas.edu`;
-      await page.goto(url);
-      await page.locator('#navbarDropdown').click();
-      await page.getByRole('link', { name: 'Dashboard' }).click();
-      await page.getByRole('link', { name: 'Data Files' }).click();
-
       await page.getByRole('button', { name: '+ Add'}).click();
       await page.locator('button:has-text("Upload")').click();
 
@@ -53,14 +49,13 @@ test.describe('test Add button', async () => {
       await page.getByRole('dialog').getByRole('button', { name: 'Close' }).click();
     });
 
-    test('test delete test resources', async ({ browser, portal, environment }) => {
+    test('test delete test resources', async ({ browser, portal, environment, baseURL }) => {
         // Create a new incognito browser context
         const context = await browser.newContext();
         // Create a new page inside context.
         const page = await context.newPage();
         // Navigate to My Data (Work)
-        const url = `https://${environment === 'prod' ? '' : `${environment}.`}${portal}.tacc.utexas.edu`;
-        await page.goto(url);
+        await page.goto(baseURL);
         await page.locator('#navbarDropdown').click();
         await page.getByRole('link', { name: 'Dashboard' }).click();
         await page.getByRole('link', { name: 'Data Files' }).click();
