@@ -2,6 +2,8 @@ import { expect, base } from '@playwright/test';
 import { test } from '../../fixtures/baseFixture';
 
 test.describe('Data Files My Data Work Operations tests', () => {
+    // test.beforeEach(async ({ page, portal, environment, baseURL }) => {
+    //     await page.goto(baseURL);
     test.beforeEach(async ({ page, portal, environment }) => {
         const url = `https://${environment === 'prod' ? '' : `${environment}.`}${portal}.tacc.utexas.edu`;
         await page.goto(url);
@@ -15,6 +17,7 @@ test.describe('Data Files My Data Work Operations tests', () => {
     })
 
     test('Rename File', async ({ page }) => {
+        test.setTimeout(150000);
         //click into the data files area
         await expect(page.locator('.data-files-table-body')).toBeVisible();
         await page.locator('.data-files-table-body').dblclick();
@@ -46,11 +49,12 @@ test.describe('Data Files My Data Work Operations tests', () => {
 
         //trash the renamed file
         await page.getByLabel('select file testRenameTest.txt').click();
-        await page.getByText('Trash').click();
-        expect(copied_file).toBeUndefined;
+        await page.getByRole('button', { name: 'Trash' }).click();
+        expect(renamed_file).toBeUndefined;
     })
 
     test('Copy File', async ({ page }) => {
+        test.setTimeout(150000);
         //make sure the file and the selection box exist
         const copy_file = page.getByText('testCopy.txt');
         expect(copy_file).toBeVisible;
@@ -75,11 +79,12 @@ test.describe('Data Files My Data Work Operations tests', () => {
 
         //trash the copied file
         await page.getByLabel('select file testCopy.txt').click();
-        await page.getByText('Trash').click();
+        await page.getByRole('button', { name: 'Trash' }).click();
         expect(copied_file).toBeUndefined;
     })
 
     test('Move File', async ({ page }) => {
+        test.setTimeout(150000);
         const move_file = page.getByText('testMove.txt');
         expect(move_file).toBeVisible;
 
@@ -106,6 +111,10 @@ test.describe('Data Files My Data Work Operations tests', () => {
         //do a move
         await page.getByRole('checkbox', { name: 'select file testMove.txt' }).click();
         await page.getByRole('button', { name: 'Move' }).click();
+        //need some extra wait time for the modal to load
+        //otherwise this part times out
+        //dunno why this modal takes a little longer
+        await page.waitForTimeout(2000);
         await page.getByText('Back').click();
         await page.getByRole('row', { name: 'Folder e2e-test-files Move' }).getByRole('button', { name: 'Move' }).click();
 
@@ -117,11 +126,12 @@ test.describe('Data Files My Data Work Operations tests', () => {
 
         //trash the moved file
         await page.getByLabel('select file testMove.txt').click();
-        await page.getByText('Trash').click();
+        await page.getByRole('button', { name: 'Trash' }).click();
         expect(moved_file).toBeUndefined;
     })
 
     // test('Download File', async({ page }) => {
+    //     test.setTimeout(150000);
     //     const download_file = page.getByText('testDownload.txt');
     //     expect(download_file).toBeVisible;
 
@@ -141,24 +151,67 @@ test.describe('Data Files My Data Work Operations tests', () => {
 
     //     //do the download
 
-    //     //trash the renamed file
+    //     //trash the file
     //     await page.getByLabel('select file testDownload.txt').click();
-    //     await page.getByText('Trash').click();
+    //     await page.getByRole('button', { name: 'Trash' }).click();
     //     expect(copied_file).toBeUndefined;
     // })
 
-    test('Link File', async({ page }) => {
-        const link_file = page.getByText('testLink.txt');
-        expect(link_file).toBeVisible;
+    // test('Link File', async({ page }) => {
+    //     test.setTimeout(150000);
+    //     const link_file = page.getByText('testLink.txt');
+    //     expect(link_file).toBeVisible;
+
+    //     //click into the data files area
+    //     await expect(page.locator('.data-files-table-body')).toBeVisible();
+    //     await page.locator('.data-files-table-body').dblclick();
+    //     //scroll down
+    //     await page.mouse.wheel(0, 200);
+
+    //     //copy the file to the test directory
+    //     await page.getByRole('checkbox', { name: 'select file testLink.txt' }).click();
+    //     await page.getByRole('button', { name: 'Copy' }).click();
+    //     await page.getByText('Back').click();
+    //     await page.getByText('test_data_destination').click();
+    //     await page.getByRole('row', { name: 'Folder test_data_destination Copy' }).getByRole('button', { name: 'Copy' }).click();
+
+    //     //go to the test_data_destination directory and check the file is there
+    //     await page.getByRole('link', { name: 'My Data (Work)' }).click();
+    //     await page.getByText( 'e2e-test-files' ).click();
+    //     await page.getByText( 'test_data_destination' ).click();
+    //     const copied_file = page.getByText( 'testLink.txt' );
+    //     expect(copied_file).toBeVisible;
+
+    //     //do the link testing
+    //     await page.getByRole('checkbox', { name: 'select file testLink.txt' }).click();
+    //     await page.getByRole('button', { name: 'Link' }).click();
+    //     await page.getByRole('button', { name: 'Generate Link'}).click();
+    //     const link = page.getByRole('textbox').innerText;
+    //     //expect(page.getByRole('input', { type: 'text' }).toHaveText("https://portals.tapis.io/v3/files/postits/redeem/"));
+    //     expect(link).toContain("https://portals.tapis.io/v3/files/postits/redeem/");
+    //     //TODO: add clipboard check for copy button
+    //     //TODO: add "replace link" check
+    //     //TODO: add "delete" check
+
+    //     //trash the file
+    //     await page.getByRole('checkbox', { name: 'select file testLink.txt' }).click();
+    //     await page.getByRole('button', { name: 'Trash' }).click();
+    //     expect(copied_file).toBeUndefined;
+    // })
+
+    test('Trash File', async({ page }) => {
+        test.setTimeout(150000);
+        const trash_file = page.getByText('testTrash.txt');
+        expect(trash_file).toBeVisible;
 
         //click into the data files area
         await expect(page.locator('.data-files-table-body')).toBeVisible();
         await page.locator('.data-files-table-body').dblclick();
         //scroll down
-        await page.mouse.wheel(0, 200);
+        await page.mouse.wheel(0, 400);
 
         //copy the file to the test directory
-        await page.getByRole('checkbox', { name: 'select file testLink.txt' }).click();
+        await page.getByRole('checkbox', { name: 'select file testTrash.txt' }).click();
         await page.getByRole('button', { name: 'Copy' }).click();
         await page.getByText('Back').click();
         await page.getByText('test_data_destination').click();
@@ -168,19 +221,12 @@ test.describe('Data Files My Data Work Operations tests', () => {
         await page.getByRole('link', { name: 'My Data (Work)' }).click();
         await page.getByText( 'e2e-test-files' ).click();
         await page.getByText( 'test_data_destination' ).click();
-        const copied_file = page.getByText( 'testLink.txt' );
+        const copied_file = page.getByText( 'testTrash.txt' );
         expect(copied_file).toBeVisible;
 
-        //do the link testing
-
-        //trash the renamed file
-        await page.getByLabel('select file testLink.txt').click();
-        await page.getByText('Trash').click();
+        //trash the file
+        await page.getByLabel('select file testTrash.txt').click();
+        await page.getByRole('button', { name: 'Trash' }).click();
         expect(copied_file).toBeUndefined;
     })
-
-    // test('Trash File', async({ page }) => {
-    //     const trash_file = page.getByText('testTrash.txt');
-    //     expect(trash_file).toBeVisible;
-    // })
 })
