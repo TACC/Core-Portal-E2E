@@ -3,6 +3,7 @@ import { test } from '../../fixtures/baseFixture';
 
 test.describe('Data Files My Data Work Operations tests', () => {
     test.beforeEach(async ({ page, portal, environment, baseURL }) => {
+        test.setTimeout(150000);
         await page.goto(baseURL);
         await page.locator('#navbarDropdown').click();
         await page.getByRole('link', { name: 'My Dashboard' }).click();
@@ -14,7 +15,6 @@ test.describe('Data Files My Data Work Operations tests', () => {
     })
 
     test('Rename File', async ({ page }) => {
-        test.setTimeout(150000);
         //click into the data files area
         await expect(page.locator('.data-files-table-body')).toBeVisible();
         await page.locator('.data-files-table-body').dblclick();
@@ -51,7 +51,6 @@ test.describe('Data Files My Data Work Operations tests', () => {
     })
 
     test('Copy File', async ({ page }) => {
-        test.setTimeout(150000);
         //make sure the file and the selection box exist
         const copy_file = page.getByText('testCopy.txt');
         expect(copy_file).toBeVisible;
@@ -81,7 +80,6 @@ test.describe('Data Files My Data Work Operations tests', () => {
     })
 
     test('Move File', async ({ page }) => {
-        test.setTimeout(150000);
         const move_file = page.getByText('testMove.txt');
         expect(move_file).toBeVisible;
 
@@ -128,7 +126,6 @@ test.describe('Data Files My Data Work Operations tests', () => {
     })
 
     // test('Download File', async({ page }) => {
-    //     test.setTimeout(150000);
     //     const download_file = page.getByText('testDownload.txt');
     //     expect(download_file).toBeVisible;
 
@@ -155,7 +152,6 @@ test.describe('Data Files My Data Work Operations tests', () => {
     // })
 
     // test('Link File', async({ page }) => {
-    //     test.setTimeout(150000);
     //     const link_file = page.getByText('testLink.txt');
     //     expect(link_file).toBeVisible;
 
@@ -197,7 +193,6 @@ test.describe('Data Files My Data Work Operations tests', () => {
     // })
 
     test('Trash File', async({ page }) => {
-        test.setTimeout(150000);
         const trash_file = page.getByText('testTrash.txt');
         expect(trash_file).toBeVisible;
 
