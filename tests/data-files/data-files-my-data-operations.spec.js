@@ -2,8 +2,8 @@ import { expect, base } from '@playwright/test';
 import { test } from '../../fixtures/baseFixture';
 
 test.describe('Data Files My Data Work Operations tests', () => {
-    test.beforeEach(async ({ page, portal, environment, baseURL }) => {
-        test.setTimeout(150000);
+    test.beforeEach(async ({ page, portal, environment, baseURL }, testInfo) => {
+        testInfo.setTimeout(testInfo.timeout + 150000);
         await page.goto(baseURL);
         await page.locator('#navbarDropdown').click();
         await page.getByRole('link', { name: 'My Dashboard' }).click();
