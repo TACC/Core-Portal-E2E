@@ -4,7 +4,6 @@ import { WORKBENCH_SETTINGS } from '../../settings/custom_portal_settings.json';
 
 const hideApps = WORKBENCH_SETTINGS['hideApps'];
 
-
 test('test navigation to application page', async ({ page, portal, environment, baseURL }) => {
   test.skip(hideApps === true, 'Apps hidden on portal, test skipped');
   await page.goto(baseURL);

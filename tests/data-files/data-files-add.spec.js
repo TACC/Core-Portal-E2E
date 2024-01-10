@@ -1,8 +1,11 @@
 import { expect, base, Page } from '@playwright/test';
-import { test } from '../../fixtures/baseFixture'
- 
+import { test } from '../../fixtures/baseFixture.js';
+import { WORKBENCH_SETTINGS } from '../../settings/custom_portal_settings.json';
+
+const hideDataFiles = WORKBENCH_SETTINGS['hideDataFiles'];
 
 test.describe('test Add button', async () => {
+  test.skip(hideDataFiles === true, 'Data Files hidden on portal, test skipped');
 
   test.describe.configure({ mode: 'serial' });
 
