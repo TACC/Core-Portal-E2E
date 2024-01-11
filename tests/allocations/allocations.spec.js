@@ -1,8 +1,12 @@
-import { test } from '../../fixtures/baseFixture'
+import { test } from '../../fixtures/baseFixture.js'
 import { expect, base } from '@playwright/test';
+import { WORKBENCH_SETTINGS } from '../../settings/custom_portal_settings.json';
+
+const hideAllocations = WORKBENCH_SETTINGS['hideAllocations'];
 
 
 test.describe('Allocation Page Tests', () => {
+    test.skip(hideAllocations === true, 'Allocations hidden on portal, test skipped');
 
     test.beforeEach(async ({ page, portal, environment, baseURL }) => {
         await page.goto(baseURL);
