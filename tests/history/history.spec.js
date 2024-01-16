@@ -1,5 +1,8 @@
-import { test } from '../../fixtures/baseFixture'
+import { test } from '../../fixtures/baseFixture.js'
 import { expect, base } from '@playwright/test';
+import { WORKBENCH_SETTINGS } from '../../settings/custom_portal_settings.json';
+ 
+const jobsv2Title = WORKBENCH_SETTINGS['jobsv2Title'];
  
 
 
@@ -28,12 +31,12 @@ test.describe('History Page Navigation Tests', () => {
     })
 
     test('Jobv2 tab is displayed and redirects correctly', async ({ page, portal, environment, baseURL }) => {
-        await expect(page.getByRole('link', { name: 'Pre-June 2023' })).toBeVisible();
+        await expect(page.getByRole('link', { name: jobsv2Title })).toBeVisible();
 
-        await page.getByRole('link', { name: 'Pre-June 2023' }).click();
+        await page.getByRole('link', { name: jobsv2Title }).click();
 
         const heading = page.getByRole('heading', { level: 2 })
-        await expect(heading).toHaveText('History / Pre-June 2023')
+        await expect(heading).toHaveText('History / ' + jobsv2Title)
 
         const url = baseURL
         expect(page.url()).toBe(`${url}/workbench/history/jobsv2`)
