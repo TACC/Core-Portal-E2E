@@ -1,4 +1,4 @@
-import { expect, base, Page } from '@playwright/test';
+import { expect } from '@playwright/test';
 import { test } from '../../fixtures/baseFixture'
 import { PORTAL_DATAFILES_STORAGE_SYSTEMS } from '../../settings/custom_portal_settings.json'
 
@@ -36,6 +36,29 @@ test.describe('Shared Workspaces tests', () => {
         await expect(page.locator('.listing-placeholder')).toBeVisible();
 
         await expect(page.getByRole('heading', {level: 3})).toHaveText('Test Shared Workspace')
+
+        await page.getByRole('main').getByRole('link', { name: 'Shared Workspaces' }).click();
+
+        const table = page.getByRole('table').and(page.locator('.projects-listing'))
+        const rows = await table.locator('tbody').locator('tr').all()
+
+        expect(rows.length).toBe(1);
+
+    })
+
+    test('Shared Workspace Search', async ({ page }) => {
+        const input = page.getByRole('form', { name: 'Workspace Search' }).locator('input')
+        const searchButton = page.getByRole('form', { name: 'Workspace Search' }).getByRole('button', { name: 'Search', exact: true })
+        const table = page.getByRole('table').and(page.locator('.projects-listing'))
+
+        await input.fill('Test Shared Workspace')
+        await searchButton.click();
+        const rows = await table.locator('tbody').locator('tr').all()
+        expect(rows.length).toBe(1);
+
+        await input.fill('random string')
+        await searchButton.click();
+        await expect(table).toContainText("No Shared Workspaces match your search term.")
     })
 
     test('Edit Shared Workspace Name and Description', async ({ page }) => {
