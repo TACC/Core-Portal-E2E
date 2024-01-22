@@ -1,4 +1,4 @@
-import { test as setup } from '../../fixtures/baseFixture.js'
+import { test as setup } from '../../fixtures/baseFixture'
 import { SYSTEM_MONITOR_DISPLAY_LIST, PORTAL_DATAFILES_STORAGE_SYSTEMS } from '../../settings/custom_portal_settings.json'
 
 const authFile = 'playwright/.auth/user.json';

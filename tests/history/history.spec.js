@@ -1,4 +1,4 @@
-import { test } from '../../fixtures/baseFixture.js'
+import { test } from '../../fixtures/baseFixture'
 import { expect, base } from '@playwright/test';
 import { WORKBENCH_SETTINGS } from '../../settings/custom_portal_settings.json';
  

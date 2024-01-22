@@ -1,5 +1,5 @@
 import { expect, base, Page } from '@playwright/test';
-import { test } from '../../fixtures/baseFixture.js';
+import { test } from '../../fixtures/baseFixture';
 import { WORKBENCH_SETTINGS } from '../../settings/custom_portal_settings.json';
 
 const hideDataFiles = WORKBENCH_SETTINGS['hideDataFiles'];

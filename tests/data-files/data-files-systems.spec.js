@@ -1,5 +1,5 @@
 import { expect, base } from '@playwright/test';
-import { test } from '../../fixtures/baseFixture.js';
+import { test } from '../../fixtures/baseFixture';
 import { WORKBENCH_SETTINGS } from '../../settings/custom_portal_settings.json';
 import { PORTAL_DATAFILES_STORAGE_SYSTEMS } from '../../settings/custom_portal_settings.json';
 

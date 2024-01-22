@@ -1,5 +1,5 @@
 import { expect, base } from '@playwright/test';
-import { test } from '../../fixtures/baseFixture.js';
+import { test } from '../../fixtures/baseFixture';
 import { NGINX_SERVER_NAME } from '../../settings/custom_portal_settings.json';
 
 test.describe('Public Data Tests', () => {
