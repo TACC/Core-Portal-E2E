@@ -48,7 +48,8 @@ module.exports = defineConfig({
         portal: process.env.PORTAL,
         environment: process.env.ENVIRONMENT,
         baseURL: `https://${NGINX_SERVER_NAME}`
-      }
+      },
+      teardown: 'teardown'
     },
     {
       name: 'default',
@@ -69,6 +70,14 @@ module.exports = defineConfig({
             environment: process.env.ENVIRONMENT,
             baseURL: `https://${NGINX_SERVER_NAME}`
           },
+    },
+    {
+      name: 'teardown',
+      testMatch: 'teardown/*.teardown.js',
+      use: {
+        storageState: 'playwright/.auth/user.json',
+        baseURL: `https://${NGINX_SERVER_NAME}`
+      }
     }
 
     // {
