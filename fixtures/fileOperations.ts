@@ -40,7 +40,6 @@ export class FileOperations {
       // Delete resources
       let trash = false;
       await this.page.waitForTimeout(5000);
-      await this.page.locator('div .data-files-table-body').evaluate(e => e.scrollTop=e.scrollHeight);     
       for (var i in resourceNameArr) {
         if (await this.page.getByRole('checkbox', { name: resourceNameArr[i] }).isVisible()){
             await this.page.getByRole('checkbox', { name: resourceNameArr[i] }).first().check();
