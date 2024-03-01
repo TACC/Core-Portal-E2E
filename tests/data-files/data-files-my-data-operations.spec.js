@@ -8,6 +8,7 @@ test.describe('Data Files My Data Work Operations tests', () => {
         await page.locator('#navbarDropdown').click();
         await page.getByRole('link', { name: 'My Dashboard' }).click();
         await page.getByRole('link', { name: 'Data Files', exact: true }).click();
+        await page.getByText( "My Data (Work)" ).click();
         const heading = page.getByRole('heading', {level: 2});
         await expect(heading.locator('.system-name')).toHaveText("My Data (Work)");
         await page.getByText( 'e2e-test-files' ).click();
