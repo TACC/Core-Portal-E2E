@@ -15,6 +15,24 @@ test.describe('Data Files My Data Work Operations tests', () => {
         await page.getByText( 'test_data-do_not_delete' ).click();
     })
 
+    //clean up just in case a test failed
+    test.afterEach(async ({page, portal, baseURL }) => {
+        console.log(`Finished ${test.info().title} with status ${test.info().status} on portal ${portal} and base url ${baseURL}`);
+
+        if (test.info().status !== test.info().expectedStatus) {
+            console.log(`Did not run as expected, ended up at ${page.url()}`);
+            await page.goto(baseURL);
+            await page.locator('#navbarDropdown').click();
+            await page.getByRole('link', { name: 'My Dashboard' }).click();
+            await page.getByRole('link', { name: 'Data Files', exact: true }).click();
+            await page.getByText( 'e2e-test-files' ).click();
+            await page.getByText( 'test_data_destination' ).click();
+            await expect(page.getByTestId('loading-spinner')).not.toBeVisible();
+            await page.getByRole('checkbox', { name: "select all folders and files"}).click();
+            await page.getByRole('button', { name: 'Trash' }).click();
+        }
+    })
+
     test('Rename File', async ({ page }) => {
         //click into the data files area
         await expect(page.locator('.data-files-table-body')).toBeVisible();
@@ -126,72 +144,91 @@ test.describe('Data Files My Data Work Operations tests', () => {
         expect(moved_file).toBeUndefined;
     })
 
-    // test('Download File', async({ page }) => {
-    //     const download_file = page.getByText('testDownload.txt');
-    //     expect(download_file).toBeVisible;
+    test('Download File', async({ page }) => {
+        const download_file = page.getByText('testDownload.txt');
+        expect(download_file).toBeVisible;
 
-    //     //copy the file to the test directory
-    //     await page.getByRole('checkbox', { name: 'select file testDownload.txt' }).click();
-    //     await page.getByRole('button', { name: 'Copy' }).click();
-    //     await page.getByText('Back').click();
-    //     await page.getByText('test_data_destination').click();
-    //     await page.getByRole('row', { name: 'Folder test_data_destination Copy' }).getByRole('button', { name: 'Copy' }).click();
+        //copy the file to the test directory
+        await page.getByRole('checkbox', { name: 'select file testDownload.txt' }).click();
+        await page.getByRole('button', { name: 'Copy' }).click();
+        await page.getByText('Back').click();
+        await page.getByText('test_data_destination').click();
+        await page.getByRole('row', { name: 'Folder test_data_destination Copy' }).getByRole('button', { name: 'Copy' }).click();
 
-    //     //go to the test_data_destination directory and check the file is there
-    //     await page.getByRole('link', { name: 'My Data (Work)' }).click();
-    //     await page.getByText( 'e2e-test-files' ).click();
-    //     await page.getByText( 'test_data_destination' ).click();
-    //     const copied_file = page.getByText( 'testDownload.txt' );
-    //     expect(copied_file).toBeVisible;
+        //go to the test_data_destination directory and check the file is there
+        await page.getByRole('link', { name: 'My Data (Work)' }).click();
+        await page.getByText( 'e2e-test-files' ).click();
+        await page.getByText( 'test_data_destination' ).click();
+        const copied_file = page.getByText( 'testDownload.txt' );
+        expect(copied_file).toBeVisible;
 
-    //     //do the download
+        //do the download
+        const downloadPromise = page.waitForEvent('download');
+        await page.getByRole('checkbox', { name: 'select file testDownload.txt' }).click();
+        await page.getByRole('button', {name: 'Download'}).click();
+        const download = await downloadPromise;
+        expect(download.suggestedFilename()).toEqual("testDownload.txt");
 
-    //     //trash the file
-    //     await page.getByLabel('select file testDownload.txt').click();
-    //     await page.getByRole('button', { name: 'Trash' }).click();
-    //     expect(copied_file).toBeUndefined;
-    // })
+        //trash the file
+        //do not need to re-select the file
+        //it does not unselect when using operation button
+        await page.getByRole('button', { name: 'Trash' }).click();
+        expect(copied_file).toBeUndefined;
+    })
 
-    // test('Link File', async({ page }) => {
-    //     const link_file = page.getByText('testLink.txt');
-    //     expect(link_file).toBeVisible;
+    test('Link File', async({ page }) => {
+        const link_file = page.getByText('testLink.txt');
+        expect(link_file).toBeVisible;
 
-    //     //click into the data files area
-    //     await expect(page.locator('.data-files-table-body')).toBeVisible();
-    //     await page.locator('.data-files-table-body').dblclick();
-    //     //scroll down
-    //     await page.mouse.wheel(0, 200);
+        //click into the data files area
+        await expect(page.locator('.data-files-table-body')).toBeVisible();
+        await page.locator('.data-files-table-body').dblclick();
+        //scroll down
+        await page.mouse.wheel(0, 200);
 
-    //     //copy the file to the test directory
-    //     await page.getByRole('checkbox', { name: 'select file testLink.txt' }).click();
-    //     await page.getByRole('button', { name: 'Copy' }).click();
-    //     await page.getByText('Back').click();
-    //     await page.getByText('test_data_destination').click();
-    //     await page.getByRole('row', { name: 'Folder test_data_destination Copy' }).getByRole('button', { name: 'Copy' }).click();
+        //copy the file to the test directory
+        await page.getByRole('checkbox', { name: 'select file testLink.txt' }).click();
+        await page.getByRole('button', { name: 'Copy' }).click();
+        await page.getByText('Back').click();
+        await page.getByText('test_data_destination').click();
+        await page.getByRole('row', { name: 'Folder test_data_destination Copy' }).getByRole('button', { name: 'Copy' }).click();
 
-    //     //go to the test_data_destination directory and check the file is there
-    //     await page.getByRole('link', { name: 'My Data (Work)' }).click();
-    //     await page.getByText( 'e2e-test-files' ).click();
-    //     await page.getByText( 'test_data_destination' ).click();
-    //     const copied_file = page.getByText( 'testLink.txt' );
-    //     expect(copied_file).toBeVisible;
+        //go to the test_data_destination directory and check the file is there
+        await page.getByRole('link', { name: 'My Data (Work)' }).click();
+        await page.getByText( 'e2e-test-files' ).click();
+        await page.getByText( 'test_data_destination' ).click();
+        const copied_file = page.getByText( 'testLink.txt' );
+        expect(copied_file).toBeVisible;
 
-    //     //do the link testing
-    //     await page.getByRole('checkbox', { name: 'select file testLink.txt' }).click();
-    //     await page.getByRole('button', { name: 'Link' }).click();
-    //     await page.getByRole('button', { name: 'Generate Link'}).click();
-    //     const link = page.getByRole('textbox').innerText;
-    //     //expect(page.getByRole('input', { type: 'text' }).toHaveText("https://portals.tapis.io/v3/files/postits/redeem/"));
-    //     expect(link).toContain("https://portals.tapis.io/v3/files/postits/redeem/");
-    //     //TODO: add clipboard check for copy button
-    //     //TODO: add "replace link" check
-    //     //TODO: add "delete" check
+        //do the link testing
+        await page.getByRole('checkbox', { name: 'select file testLink.txt' }).click();
+        await page.getByRole('button', { name: 'Link' }).click();
+        await expect(page.getByTestId('loading-spinner')).not.toBeVisible();
+        await page.getByRole('button', { name: 'Generate Link'}).click();
+        const link = await page.getByRole('textbox').getAttribute('value');
+        expect(link).toContain("https://portals.tapis.io/v3/files/postits/redeem/");
+        //clipboard check for copy button
+        await page.getByRole('dialog').getByRole('button', { name: 'Copy'}).click();
+        let clipboardText = await page.evaluate("navigator.clipboard.readText()");
+        expect(clipboardText).toEqual(link);
+        //"replace link" check
+        await page.getByRole('button', { name: 'Replace Link'}).click();
+        await page.getByRole('button', { name: 'Confirm'}).click();
+        const link2 = await page.getByRole('textbox').getAttribute('value');
+        expect(link2).toContain("https://portals.tapis.io/v3/files/postits/redeem/");
+        //"delete" check
+        await page.getByRole('button', { name: 'Delete' }).click();
+        await page.getByRole('button', { name: 'Confirm'}).click();
+        const empty_link = await page.getByRole('textbox').getAttribute('value');
+        expect(empty_link).toContain('');
+        await page.getByRole('dialog').getByLabel('Close').click();
 
-    //     //trash the file
-    //     await page.getByRole('checkbox', { name: 'select file testLink.txt' }).click();
-    //     await page.getByRole('button', { name: 'Trash' }).click();
-    //     expect(copied_file).toBeUndefined;
-    // })
+        //trash the file
+        //do not need to re-select the file
+        //it does not unselect when using operation button
+        await page.getByRole('button', { name: 'Trash' }).click();
+        expect(copied_file).toBeUndefined;
+    })
 
     test('Trash File', async({ page }) => {
         const trash_file = page.getByText('testTrash.txt');
