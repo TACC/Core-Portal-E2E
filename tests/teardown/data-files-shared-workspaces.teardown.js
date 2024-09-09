@@ -8,10 +8,12 @@ test('Cleanup shared workspaces', async ({ page, baseURL }) => {
     const tenant = 'https://portals.tapis.io';
     const projectPrefix = PORTAL_PROJECTS_SYSTEM_PREFIX;
 
+    let systems = []
+
     try {
         const accessToken = await getAccessToken(page, username, password, tenant)
 
-        const systems = await getSystems(page, tenant, projectPrefix, accessToken)
+        systems = await getSystems(page, tenant, projectPrefix, accessToken)
     
         for (const system of systems) {
             await deleteSystem(page, system.id, tenant, accessToken)
@@ -29,8 +31,16 @@ test('Cleanup shared workspaces', async ({ page, baseURL }) => {
     await page.getByRole('link', { name: 'Data Files' }).click();
     await page.getByRole('main').getByRole('link', { name: 'Shared Workspaces' }).click();
 
-    await expect(page.locator('.projects-listing')).toContainText("You don't have any Shared Workspaces.")
+    await expect(page.locator('.data-files-nav-link')).toBeVisible();
 
+    const links = await page.locator('.data-files-nav-link').all();
+
+    for (const system of systems) {
+        for (const link of links) {
+            const href = await link.getAttribute('href');
+            expect(href).not.toContain(system.id);
+        }    
+    }
 })
 
 async function getAccessToken(page, username, password, tenant) {

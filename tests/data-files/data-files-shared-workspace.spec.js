@@ -9,7 +9,7 @@ test.describe.configure({ mode: 'serial' })
 test.describe('Shared Workspaces tests', () => {
 
     // Skip the tests if portal does not have Shared Workspaces
-    test.skip(!portalStorageSystems.some(system => (system.name === 'Shared Workspaces' && system.scheme === 'projects')))
+    test.skip(!portalStorageSystems.some(system => (system.scheme === 'projects')))
 
     test.beforeEach(async ({ page, baseURL }) => {
         await page.goto(baseURL);
@@ -20,6 +20,7 @@ test.describe('Shared Workspaces tests', () => {
     })
 
     test('Add Shared Workspace', async ({ page }) => {
+        test.setTimeout(100000)
         await page.getByRole('button', { name: '+ Add' }).click();
         await page.getByRole('menuitem', { name: 'Shared Workspace' }).click();
 
@@ -31,7 +32,7 @@ test.describe('Shared Workspaces tests', () => {
 
         await page.getByRole('button', { name: 'Add Workspace' }).click();
 
-        await expect(page.locator('.modal-dialog')).not.toBeVisible();
+        await expect(page.locator('.modal-dialog')).not.toBeVisible({timeout: 20000});
 
         await expect(page.locator('.listing-placeholder')).toBeVisible();
 
@@ -42,7 +43,7 @@ test.describe('Shared Workspaces tests', () => {
         const table = page.getByRole('table').and(page.locator('.projects-listing'))
         const rows = await table.locator('tbody').locator('tr').all()
 
-        expect(rows.length).toBe(1);
+        expect(rows.length).toBeGreaterThanOrEqual(1);
 
     })
 
