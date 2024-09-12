@@ -38,33 +38,6 @@ test.describe('System Status page tests', () => {
 
         }
     })
-
-    async function getSystemQueues({page, system, ...options}) {
-
-        const url = `https://tap.tacc.utexas.edu/status/${system}`;
-        const request = new URL(url);
-
-        await page.on('console', m => console.log(m));
-        // return await page.evaluate(i => i, 99);
-    
-        return await page.evaluate(async ({url, page}) => {
-            const fetchParams = {
-                credentials: 'same-origin',
-            };
-            const cookies = await page.context().cookies();
-            csrfToken = cookies.filter(cookie => cookie.name === 'csrftoken')[0];
-            //console.log(csrfToken);
-            fetchParams.headers = {
-                'X-CSRFToken': csrfToken,
-                ...fetchParams.headers,
-            };
-            const response = await fetch(url, fetchParams);
-            const jsonResponse = response.json();
-
-            return jsonResponse.result.queues;
-    
-        }, {request, page})
-    }
     
     test('Queue status table shows up on each system tab and shows all system queues', async ({ page }) => {
         for (const system of SYSTEM_MONITOR_DISPLAY_LIST) {
@@ -84,5 +57,30 @@ test.describe('System Status page tests', () => {
 
         }
     })
-
 })
+
+async function getSystemQueues({page, system}) {
+
+    const url = `https://tap.tacc.utexas.edu/status/${system}`;
+    const request = new URL(url);
+
+    await page.on('console', m => console.log(m));
+    console.log(request);
+
+    return page.evaluate(async (request, page) => {
+        const fetchParams = {
+            credentials: 'same-origin',
+        };
+        const cookies = await page.context().cookies();
+        csrfToken = cookies.filter(cookie => cookie.name === 'csrftoken')[0];
+        fetchParams.headers = {
+            'X-CSRFToken': csrfToken,
+            ...fetchParams.headers,
+        };
+        const response = await fetch(request, fetchParams);
+        const jsonResponse = response.json();
+
+        return jsonResponse.result.queues;
+
+    }, ( request, page ))
+}
