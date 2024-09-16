@@ -15,7 +15,7 @@ test.describe('test Add button', async () => {
 
     test('test create new folder', async ({ page, fileOperations }) => {
       await fileOperations.createFolder('E2EtestFolder1');
-      page.waitForTimeout(5000);
+      await page.getByTestId('loading-spinner').last().waitFor({ state: "hidden" });
       expect (await page.getByRole('checkbox', { name: 'select folder E2EtestFolder1', exact: true  }).isVisible());
     });
 
