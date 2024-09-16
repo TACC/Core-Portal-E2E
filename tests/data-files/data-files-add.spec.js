@@ -16,12 +16,12 @@ test.describe('test Add button', async () => {
     test('test create new folder', async ({ page, fileOperations }) => {
       await fileOperations.createFolder('E2EtestFolder1');
       page.waitForTimeout(5000);
-      expect (await page.getByRole('checkbox', { name: 'select file E2EtestFile1' }).isVisible());
+      expect (await page.getByRole('checkbox', { name: 'select folder E2EtestFolder1', exact: true  }).isVisible());
     });
 
     test('test upload file', async ({ page, fileOperations }) => {
       await fileOperations.uploadFile('E2EtestFile1', 'File content.');
-      expect (await page.getByRole('checkbox', { name: 'select file E2EtestFile1' }).isVisible());
+      expect (await page.getByRole('checkbox', { name: 'select file E2EtestFile1', exact: true  }).isVisible());
     });
 
     /** Resources clean-up */
@@ -31,8 +31,7 @@ test.describe('test Add button', async () => {
       await page.getByRole('link', { name: 'Dashboard' }).click();
       await page.getByRole('link', { name: 'Data Files' }).click();
 
-      await fileOperations.delete('E2EtestFolder1', 'E2EtestFile1');
-      page.waitForTimeout(5000);
+      await fileOperations.delete('select folder E2EtestFolder1', 'select file E2EtestFile1');
       await fileOperations.emptyTrash();
     })
 });
