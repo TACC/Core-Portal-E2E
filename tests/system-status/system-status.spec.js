@@ -47,40 +47,31 @@ test.describe('System Status page tests', () => {
 
             await expect(systemQueuesTable.locator('tbody')).toBeVisible();
 
-            const systemQueuesRows = await systemQueuesTable.locator('tbody').locator('tr').all();
+            let systemQueues = await getSystemQueues({ page: page, system: system });
+            systemQueues = Object.keys(systemQueues.queues);
 
-            const systemQueues = await getSystemQueues({ page: page, system: system.toLowerCase() });
-
-            for (const queue of Object.keys(systemQueues)) {
-                await expect(systemQueuesRows.locator('td', { name: queue })).toBeVisible();
+            if (systemQueues.length > 0) {
+                for (const queue of systemQueues) {
+                    await expect(systemQueuesTable.locator('tbody').locator('tr').getByRole('cell', { name: queue, exact: true })).toBeVisible();
+                }
             }
+            else { // if system in maintenance, tap queues response is empty, thus check for following message
+                await expect(systemQueuesTable.getByText('Unable to gather system queue information')).toBeVisible();
 
+            }
         }
     })
 })
 
 async function getSystemQueues({page, system}) {
 
+    if (system != 'Stampede3') { // TAP name for S3 is not formatted like the other systems
+        system = system.toLowerCase();
+    }
+
     const url = `https://tap.tacc.utexas.edu/status/${system}`;
-    const request = new URL(url);
 
-    await page.on('console', m => console.log(m));
-    console.log(request);
+    const result = await page.request.get(url);
+    return await result.json();
 
-    return page.evaluate(async (request, page) => {
-        const fetchParams = {
-            credentials: 'same-origin',
-        };
-        const cookies = await page.context().cookies();
-        csrfToken = cookies.filter(cookie => cookie.name === 'csrftoken')[0];
-        fetchParams.headers = {
-            'X-CSRFToken': csrfToken,
-            ...fetchParams.headers,
-        };
-        const response = await fetch(request, fetchParams);
-        const jsonResponse = response.json();
-
-        return jsonResponse.result.queues;
-
-    }, ( request, page ))
 }
