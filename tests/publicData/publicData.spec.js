@@ -1,9 +1,9 @@
 import { expect, base } from '@playwright/test';
 import { test } from '../../fixtures/baseFixture';
-import { NGINX_SERVER_NAME } from '../../settings/custom_portal_settings.json';
+import { PORTAL_DATAFILES_STORAGE_SYSTEMS } from '../../settings/custom_portal_settings.json';
 
 test.describe('Public Data Tests', () => {
-  test.skip(NGINX_SERVER_NAME != 'cep.tacc.utexas.edu', 'Public Data not on portal, test skipped');
+  test.skip(PORTAL_DATAFILES_STORAGE_SYSTEMS != 'Public Data', 'Public Data not on portal, test skipped');
 
   test.beforeEach(async ({ page, portal, environment, baseURL }) => {
     await page.goto(baseURL);
