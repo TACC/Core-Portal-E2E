@@ -4,7 +4,7 @@ import { PORTAL_DATAFILES_STORAGE_SYSTEMS } from '../../settings/custom_portal_s
 
 let publicDataEntry = false;
 for (const entry of PORTAL_DATAFILES_STORAGE_SYSTEMS) {
-  if (entry.name === "Public Data") {
+  if (entry.scheme === "public") {
     publicDataEntry = true;
     break;
   }
