@@ -32,32 +32,33 @@ export class FileOperations {
       );
 
       await this.page.locator('button:has-text("Upload Selected")').click();
-      await this.page.waitForTimeout(5000);
+      await this.page.getByTestId('loading-spinner').last().isHidden();
       await this.page.getByRole('dialog').getByRole('button', { name: 'Close' }).click();
     }
     
     async delete(...resourceNameArr: string[]) {
       // Delete resources
       let trash = false;
-      await this.page.waitForTimeout(5000);
+      await this.page.getByTestId('loading-spinner').waitFor({ state: "hidden" });
       for (var i in resourceNameArr) {
-        if (await this.page.getByRole('checkbox', { name: resourceNameArr[i] }).isVisible()){
-            await this.page.getByRole('checkbox', { name: resourceNameArr[i] }).first().check();
+        if (await this.page.getByRole('checkbox', { name: resourceNameArr[i], exact: true  }).isVisible()){
+            await this.page.getByRole('checkbox', { name: resourceNameArr[i], exact: true  }).check();
             trash = true;
           }
       }
       if (trash){
         await this.page.locator('button:has-text("Trash")').click();
+        await this.page.waitForTimeout(3000);
       }
     }
 
     async emptyTrash() {
       // Empty trash
       await this.page.getByRole('link', { name: '.Trash' }).click();
-      await this.page.waitForTimeout(5000);
-      const trashBttn = this.page.getByRole('button', { name: 'Empty' });
-      if (await trashBttn.isEnabled()){
-          await trashBttn.click();
+      await this.page.getByTestId('loading-spinner').waitFor({ state: "hidden" });
+      const emptyBttn = this.page.locator('button:has-text("Empty")');
+      if (await emptyBttn.isEnabled()){
+          await emptyBttn.click();
           await this.page.getByRole('button', { name: 'Delete Files' }).click();
       }
     }
