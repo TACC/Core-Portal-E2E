@@ -21,7 +21,7 @@ module.exports = defineConfig({
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 2 : 1,
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
@@ -48,7 +48,8 @@ module.exports = defineConfig({
         portal: process.env.PORTAL,
         environment: process.env.ENVIRONMENT,
         baseURL: `https://${NGINX_SERVER_NAME}`
-      }
+      },
+      teardown: 'teardown'
     },
     {
       name: 'default',
@@ -69,6 +70,14 @@ module.exports = defineConfig({
             environment: process.env.ENVIRONMENT,
             baseURL: `https://${NGINX_SERVER_NAME}`
           },
+    },
+    {
+      name: 'teardown',
+      testMatch: 'teardown/*.teardown.js',
+      use: {
+        storageState: 'playwright/.auth/user.json',
+        baseURL: `https://${NGINX_SERVER_NAME}`
+      }
     }
 
     // {
