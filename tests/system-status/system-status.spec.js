@@ -1,10 +1,10 @@
 import { test } from '../../fixtures/baseFixture';
-import { expect, base } from '@playwright/test';
+import { expect } from '@playwright/test';
 import {SYSTEM_MONITOR_DISPLAY_LIST} from '../../settings/custom_portal_settings.json';
 
 test.describe('System Status page tests', () => {
 
-    test.beforeEach(async ({ page, portal, environment, baseURL }) => {
+    test.beforeEach(async ({ page, baseURL }) => {
         await page.goto(baseURL);
         await page.locator('#navbarDropdown').click();
         await page.getByRole('link', { name: 'My Dashboard' }).click();
@@ -27,7 +27,7 @@ test.describe('System Status page tests', () => {
         for (const system of SYSTEM_MONITOR_DISPLAY_LIST) {
             await page.getByRole('link', { name: system }).click();
 
-            const systemStatusTable = await page.locator('table.multi-system');
+            const systemStatusTable = page.locator('table.multi-system');
 
             await expect(systemStatusTable.locator('tbody')).toBeVisible()
 
