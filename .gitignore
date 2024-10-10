@@ -3,4 +3,9 @@ node_modules/
 /playwright-report/
 /playwright/.cache/
 /settings/.env.secret
+/settings/.env.portal
 /playwright/.auth
+/settings/custom_portal_settings.py
+/settings/custom_portal_settings.json
+/utils/__pycache__/
+/settings/__pycache__/
