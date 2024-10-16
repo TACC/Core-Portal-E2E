@@ -8,7 +8,7 @@ test.describe('Data Files My Data Work Operations tests', () => {
         await page.locator('#navbarDropdown').click();
         await page.getByRole('link', { name: 'My Dashboard' }).click();
         await page.getByRole('link', { name: 'Data Files', exact: true }).click();
-        await page.getByText( "My Data (Work)" ).click();
+        await page.getByRole('link', { name: 'My Data (Work)' }).click();
         const heading = page.getByRole('heading', {level: 2});
         await expect(heading.locator('.system-name')).toHaveText("My Data (Work)");
         await page.getByText( 'e2e-test-files' ).click();
@@ -52,7 +52,7 @@ test.describe('Data Files My Data Work Operations tests', () => {
         await page.getByText( 'e2e-test-files' ).click();
         await page.getByText( 'test_data_destination' ).click();
         const copied_file = page.getByText( 'testRename.txt' );
-        expect(copied_file).toBeVisible;
+        await expect(copied_file).toBeVisible();
 
         //do the rename
         await page.getByLabel( 'select file testRename.txt' ).click();
@@ -61,7 +61,7 @@ test.describe('Data Files My Data Work Operations tests', () => {
         await page.getByRole('textbox').fill('testRenameTest.txt');
         await page.getByRole('dialog').getByRole('button', { name: 'Rename' }).click();
         const renamed_file = page.getByText( 'testRenameTest.txt');
-        expect(renamed_file).toBeVisible;
+        await expect(renamed_file).toBeVisible();
 
         //trash the renamed file
         await page.getByLabel('select file testRenameTest.txt').click();
@@ -70,12 +70,6 @@ test.describe('Data Files My Data Work Operations tests', () => {
     })
 
     test('Copy File', async ({ page }) => {
-        //make sure the file and the selection box exist
-        const copy_file = page.getByText('testCopy.txt');
-        expect(copy_file).toBeVisible;
-        const copy_selector = page.getByLabel('select file testCopy.txt');
-        expect(copy_selector).toBeVisible;
-
         //copy the file to the test directory
         await page.getByRole('checkbox', {name: 'select file testCopy.txt' }).click();
         await page.getByRole('button', { name: 'Copy' }).click();
@@ -90,7 +84,7 @@ test.describe('Data Files My Data Work Operations tests', () => {
         await page.getByText( 'e2e-test-files' ).click();
         await page.getByText('test_data_destination').click();
         const copied_file = page.getByText('testCopy.txt');
-        expect(copied_file).toBeVisible;
+        await expect(copied_file).toBeVisible();
 
         //trash the copied file
         await page.getByLabel('select file testCopy.txt').click();
@@ -99,9 +93,6 @@ test.describe('Data Files My Data Work Operations tests', () => {
     })
 
     test('Move File', async ({ page }) => {
-        const move_file = page.getByText('testMove.txt');
-        expect(move_file).toBeVisible;
-
         //click into the data files area
         await expect(page.locator('.data-files-table-body')).toBeVisible();
         await page.locator('.data-files-table-body').dblclick();
@@ -120,7 +111,7 @@ test.describe('Data Files My Data Work Operations tests', () => {
         await page.getByText( 'e2e-test-files' ).click();
         await page.getByText('test_data_destination').click();
         const copied_file = page.getByText('testMove.txt');
-        expect(copied_file).toBeVisible;
+        await expect(copied_file).toBeVisible();
 
         //do a move
         await page.getByRole('checkbox', { name: 'select file testMove.txt' }).click();
@@ -129,6 +120,8 @@ test.describe('Data Files My Data Work Operations tests', () => {
         //otherwise this part times out
         //dunno why this modal takes a little longer
         await page.waitForTimeout(2000);
+        //await expect(page.getByTestId('loading-spinner')).not.toBeVisible();
+        //await expect(page.getByRole('row', { name: 'Folder test_data_destination Move' }).getByRole('button', { name: 'Move' })).toBeVisible();
         await page.getByText('Back').click();
         await page.getByRole('row', { name: 'Folder e2e-test-files Move' }).getByRole('button', { name: 'Move' }).click();
 
@@ -136,7 +129,7 @@ test.describe('Data Files My Data Work Operations tests', () => {
         await page.getByRole('link', { name: 'My Data (Work)' }).click();
         await page.getByText( 'e2e-test-files' ).click();
         const moved_file = page.getByText('testMove.txt');
-        expect(moved_file).toBeVisible;
+        await expect(moved_file).toBeVisible();
 
         //trash the moved file
         await page.getByLabel('select file testMove.txt').click();
@@ -145,9 +138,6 @@ test.describe('Data Files My Data Work Operations tests', () => {
     })
 
     test('Download File', async({ page }) => {
-        const download_file = page.getByText('testDownload.txt');
-        expect(download_file).toBeVisible;
-
         //copy the file to the test directory
         await page.getByRole('checkbox', { name: 'select file testDownload.txt' }).click();
         await page.getByRole('button', { name: 'Copy' }).click();
@@ -160,7 +150,7 @@ test.describe('Data Files My Data Work Operations tests', () => {
         await page.getByText( 'e2e-test-files' ).click();
         await page.getByText( 'test_data_destination' ).click();
         const copied_file = page.getByText( 'testDownload.txt' );
-        expect(copied_file).toBeVisible;
+        await expect(copied_file).toBeVisible();
 
         //do the download
         const downloadPromise = page.waitForEvent('download');
@@ -177,9 +167,6 @@ test.describe('Data Files My Data Work Operations tests', () => {
     })
 
     test('Link File', async({ page }) => {
-        const link_file = page.getByText('testLink.txt');
-        expect(link_file).toBeVisible;
-
         //click into the data files area
         await expect(page.locator('.data-files-table-body')).toBeVisible();
         await page.locator('.data-files-table-body').dblclick();
@@ -198,7 +185,7 @@ test.describe('Data Files My Data Work Operations tests', () => {
         await page.getByText( 'e2e-test-files' ).click();
         await page.getByText( 'test_data_destination' ).click();
         const copied_file = page.getByText( 'testLink.txt' );
-        expect(copied_file).toBeVisible;
+        await expect(copied_file).toBeVisible();
 
         //do the link testing
         await page.getByRole('checkbox', { name: 'select file testLink.txt' }).click();
@@ -231,9 +218,6 @@ test.describe('Data Files My Data Work Operations tests', () => {
     })
 
     test('Trash File', async({ page }) => {
-        const trash_file = page.getByText('testTrash.txt');
-        expect(trash_file).toBeVisible;
-
         //click into the data files area
         await expect(page.locator('.data-files-table-body')).toBeVisible();
         await page.locator('.data-files-table-body').dblclick();
@@ -252,7 +236,7 @@ test.describe('Data Files My Data Work Operations tests', () => {
         await page.getByText( 'e2e-test-files' ).click();
         await page.getByText( 'test_data_destination' ).click();
         const copied_file = page.getByText( 'testTrash.txt' );
-        expect(copied_file).toBeVisible;
+        await expect(copied_file).toBeVisible();
 
         //trash the file
         await page.getByLabel('select file testTrash.txt').click();
