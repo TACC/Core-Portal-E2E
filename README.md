@@ -1,6 +1,6 @@
 # Core-Portal-E2E
 
-Steps to run: 
+Steps to run:
 
 1. Run the command `npm install` and `npx playwright install` to install playwright and the relevant project dependancies
 2. In the settings folder create and populate the following files:
@@ -9,3 +9,7 @@ Steps to run:
    * `custom_portal_settings.py` : copy contents of the settings_custom file relevant to the portal and environment being tested from the Core Portal Deployments repo ([settings_custom](https://github.com/TACC/Core-Portal-Deployments/blob/main/core-portal/camino/prod.settings_custom.py) file for prod cep)
 3. Run the following command from root of the project: `python3 utils/pythonHelper.py` and ensure a file named `custom_portal_settings.json` gets created in the settings folder with some portal data
 4. Run tests using the command `npx playwright test`
+
+Useful cli flags:
+* `--debug` to run debug mode (headed + step-through controls + selector creation)
+* `--headed` to run headed
