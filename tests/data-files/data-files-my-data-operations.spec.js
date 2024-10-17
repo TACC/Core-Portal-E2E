@@ -119,9 +119,7 @@ test.describe('Data Files My Data Work Operations tests', () => {
         //need some extra wait time for the modal to load
         //otherwise this part times out
         //dunno why this modal takes a little longer
-        await page.waitForTimeout(2000);
-        //await expect(page.getByTestId('loading-spinner')).not.toBeVisible();
-        //await expect(page.getByRole('row', { name: 'Folder test_data_destination Move' }).getByRole('button', { name: 'Move' })).toBeVisible();
+        await page.waitForTimeout(250);
         await page.getByText('Back').click();
         await page.getByRole('row', { name: 'Folder e2e-test-files Move' }).getByRole('button', { name: 'Move' }).click();
 
