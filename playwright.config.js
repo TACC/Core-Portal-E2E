@@ -35,6 +35,7 @@ module.exports = defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+    permissions: ["clipboard-read"],
   },
   expect: {
     timeout: 10000,
@@ -60,7 +61,7 @@ module.exports = defineConfig({
             baseURL: `https://${NGINX_SERVER_NAME}`
           },
       dependencies: ['setup'],
-      testIgnore: 'unauthorized-user/*.spec.js'
+      testIgnore: ['unauthorized-user/*.spec.js', 'data-files/applications/*.spec.js']
     },
     {
       name: 'unauthorized',
@@ -70,6 +71,17 @@ module.exports = defineConfig({
             environment: process.env.ENVIRONMENT,
             baseURL: `https://${NGINX_SERVER_NAME}`
           },
+    },
+    {
+      name: 'applications',
+      testMatch: 'data-files/applications/*.spec.js',
+      use: { 
+        ...devices['Desktop Chrome'],
+        storageState: 'playwright/.auth/user.json',
+        portal: process.env.PORTAL,
+        environment: process.env.ENVIRONMENT,
+      },
+      dependencies: ['setup'],
     },
     {
       name: 'teardown',

@@ -1,7 +1,7 @@
 import { test as base } from './baseFixture'
 import { FileOperations } from './fileOperations';
 
-// Declare the types of yfixtures.
+// Declare the types of fixtures.
 type MyFixtures = {
   fileOperations: FileOperations;
 };
