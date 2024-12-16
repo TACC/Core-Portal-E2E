@@ -1,5 +1,5 @@
 pipeline {
-   agent { docker { image 'mcr.microsoft.com/playwright:v1.49.1-noble' } }
+   agent any
    environment {
       HOME = '.'
       CORE_PORTAL_DEPLOYMENTS_REPO = 'git@github.com:TACC/Core-Portal-Deployments.git'
