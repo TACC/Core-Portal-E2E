@@ -1,14 +1,18 @@
-import { test } from '../../fixtures/baseFixture'
+import { test } from '../../fixtures/baseFixture';
 import { expect, base } from '@playwright/test';
+import { WORKBENCH_SETTINGS } from '../../settings/custom_portal_settings.json';
+
+const hideAllocations = WORKBENCH_SETTINGS['hideAllocations'];
 
 
 test.describe('Allocation Page Tests', () => {
+    test.skip(hideAllocations === true, 'Allocations hidden on portal, test skipped');
 
     test.beforeEach(async ({ page, portal, environment, baseURL }) => {
         await page.goto(baseURL);
         await page.locator('#navbarDropdown').click();
         await page.getByRole('link', { name: 'My Dashboard' }).click();
-        await page.getByRole('link', { name: 'Allocations' }).click();
+        await page.locator('#react-root').getByRole('link', { name: 'Allocations' }).click();
     })
 
     test('Request New Allocation button is clickable and opens new tab', async ({ page }) => {

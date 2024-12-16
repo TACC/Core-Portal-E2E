@@ -13,9 +13,9 @@ test.describe('System Status page tests', () => {
 
     test('All systems for portal displayed in sidebar and can be navigated between', async ({ page }) => {
         for (const system of SYSTEM_MONITOR_DISPLAY_LIST) {
-            await expect(page.getByRole('link', { name: system })).toBeVisible();
+            await expect(page.getByRole('link', { name: system, exact: true })).toBeVisible();
 
-            await page.getByRole('link', { name: system }).click();
+            await page.getByRole('link', { name: system, exact: true }).click();
 
             const headingValueApproved = (await page.getByRole('heading', { level: 2 }).innerText()).replace(/\s+/g, "");
 
@@ -25,7 +25,7 @@ test.describe('System Status page tests', () => {
 
     test('System Status table shows up on each system tab', async ({ page }) => {
         for (const system of SYSTEM_MONITOR_DISPLAY_LIST) {
-            await page.getByRole('link', { name: system }).click();
+            await page.getByRole('link', { name: system, exact: true }).click();
 
             const systemStatusTable = page.locator('table.multi-system');
 
@@ -41,7 +41,7 @@ test.describe('System Status page tests', () => {
     
     test('Queue status table shows up on each system tab and shows all system queues', async ({ page }) => {
         for (const system of SYSTEM_MONITOR_DISPLAY_LIST) {
-            await page.getByRole('link', { name: system }).click();
+            await page.getByRole('link', { name: system, exact: true }).click();
         
             const systemQueuesTable = page.locator('article').locator('table');
 
