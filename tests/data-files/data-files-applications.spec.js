@@ -1,4 +1,4 @@
-import { test } from '../../../fixtures/baseFixture'
+import { test } from '../../fixtures/baseFixture';
 import { expect, base } from '@playwright/test';
 
 const apps = ['compress', 'extract']
@@ -10,12 +10,12 @@ for (const app of apps) {
         let jobSubmissionTimestamp; // Used to identify a job on the History page
         const statuses = ['PROCESSING', 'QUEUEING', 'RUNNING', 'FINISHING', 'FINISHED']
     
-        test.beforeEach(async ({ page, portal, environment }) => {
-            const url = `https://${environment === 'prod' ? '' : `${environment}.`}${portal}.tacc.utexas.edu`;
-            await page.goto(url);
+        test.beforeEach(async ({ page, portal, environment, baseURL }) => {
+            await page.goto(baseURL);
             await page.locator('#navbarDropdown').click();
             await page.getByRole('link', { name: 'My Dashboard' }).click();
             await page.getByRole('link', { name: 'Data Files', exact: true }).click();
+            await page.getByRole('link', { name: 'My Data (Work)' }).click();
             await page.getByRole('link', { name: 'e2e-test-files' }).click();
             await page.getByRole('link', { name: 'test_data-do_not_delete' }).click();
         })

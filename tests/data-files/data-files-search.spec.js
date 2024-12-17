@@ -1,9 +1,12 @@
 import { expect, base } from '@playwright/test';
-import { test } from '../../fixtures/baseFixture'
+import { test } from '../../fixtures/baseFixture';
+import { WORKBENCH_SETTINGS } from '../../settings/custom_portal_settings.json';
  
+const hideDataFiles = WORKBENCH_SETTINGS['hideDataFiles'];
 
 test.describe('Data Files Search Tests', () => {
-    
+    test.skip(hideDataFiles === true, 'Data Files hidden on portal, test skipped');
+
     test.beforeEach(async ({ page, portal, environment, baseURL }) => {
         await page.goto(baseURL);
         await page.locator('#navbarDropdown').click();

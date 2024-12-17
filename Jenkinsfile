@@ -1,5 +1,5 @@
 pipeline {
-   agent { docker { image 'mcr.microsoft.com/playwright:v1.46.1-jammy' } }
+   agent { docker { image 'mcr.microsoft.com/playwright:v1.49.1-noble' } }
    environment {
       HOME = '.'
       CORE_PORTAL_DEPLOYMENTS_REPO = 'git@github.com:TACC/Core-Portal-Deployments.git'
@@ -12,7 +12,7 @@ pipeline {
                // Clone Core Portal Deployments repo into a subdirectory
                dir('core-portal-deployments') {
                   git branch: 'main',
-                     credentialsId: "4895fa1e-c4c2-4152-b1d7-a05f16c78130",
+                     credentialsId: "wma-portals-github",
                      url: "${CORE_PORTAL_DEPLOYMENTS_REPO}"
                }
             }
