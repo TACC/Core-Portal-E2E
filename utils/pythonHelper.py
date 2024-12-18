@@ -30,7 +30,8 @@ data = {
     "PORTAL_DATAFILES_STORAGE_SYSTEMS": custom_portal_settings._PORTAL_DATAFILES_STORAGE_SYSTEMS or [],
     "SYSTEM_MONITOR_DISPLAY_LIST": custom_portal_settings._SYSTEM_MONITOR_DISPLAY_LIST or [],
     "NGINX_SERVER_NAME": os.getenv('NGINX_SERVER_NAME'),
-    "WORKBENCH_SETTINGS":custom_portal_settings._WORKBENCH_SETTINGS or []
+    "WORKBENCH_SETTINGS":custom_portal_settings._WORKBENCH_SETTINGS or [],
+    "PORTAL_PROJECTS_SYSTEM_PREFIX": custom_portal_settings._PORTAL_PROJECTS_SYSTEM_PREFIX or ''
 }
 
 with open(output_path, 'w') as json_file: 
