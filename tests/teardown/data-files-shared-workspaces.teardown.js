@@ -1,9 +1,8 @@
 import { expect } from '@playwright/test';
-import { test } from '../../fixtures/baseFixture'
+import { test } from '../../fixtures/baseFixture';
 import { PORTAL_PROJECTS_SYSTEM_PREFIX } from '../../settings/custom_portal_settings.json'
 
 test('Cleanup shared workspaces', async ({ page, baseURL }) => {
-    const {USERNAME: username, PASSWORD: password} = process.env;
 
     const tenant = 'https://portals.tapis.io';
     const projectPrefix = PORTAL_PROJECTS_SYSTEM_PREFIX;
@@ -11,9 +10,11 @@ test('Cleanup shared workspaces', async ({ page, baseURL }) => {
     let systems = []
 
     try {
-        const accessToken = await getAccessToken(page, username, password, tenant)
-
+        const accessToken = await getAccessToken(page, baseURL)
+        
         systems = await getSystems(page, tenant, projectPrefix, accessToken)
+
+        console.log(`Teardown: Found ${systems.length} shared workspaces to delete ${systems}`)
     
         for (const system of systems) {
             await deleteSystem(page, system.id, tenant, accessToken)
@@ -23,7 +24,6 @@ test('Cleanup shared workspaces', async ({ page, baseURL }) => {
         console.error(`An error occured when deleting shared workspaces: ${e.message}`)
     }
 
-
     // Ensure there are no shared workspaces left over
     await page.goto(baseURL);
     await page.locator('#navbarDropdown').click();
@@ -31,45 +31,39 @@ test('Cleanup shared workspaces', async ({ page, baseURL }) => {
     await page.getByRole('link', { name: 'Data Files' }).click();
     await page.getByRole('main').getByRole('link', { name: 'Shared Workspaces' }).click();
 
-    await expect(page.locator('.data-files-nav-link')).toBeVisible();
+    const table = page.getByRole('table').and(page.locator('.projects-listing'))
+    const rows = await table.locator('tbody').locator('tr').all()
 
-    const links = await page.locator('.data-files-nav-link').all();
+    if (rows.length > 0) {
+        const links = await page.locator('.data-files-nav-link').all();
 
-    for (const system of systems) {
-        for (const link of links) {
-            const href = await link.getAttribute('href');
-            expect(href).not.toContain(system.id);
-        }    
+        for (const system of systems) {
+            for (const link of links) {
+                const href = await link.getAttribute('href');
+                expect(href).not.toContain(system.id);
+            }    
+        }
     }
 })
 
-async function getAccessToken(page, username, password, tenant) {
+async function getAccessToken(page, baseURL) {
+    const url = `${baseURL}/api/auth/tapis`;
 
-    const url = `${tenant}/v3/oauth2/tokens`;
+    const cookies = await page.context().cookies()
 
-    const data = {
-        username: username, 
-        password: password, 
-        grant_type: 'password'
-    }
+    const headers = {
+        'Cookie': cookies.map(cookie => `${cookie.name}=${cookie.value}`).join('; ')
+    };
 
-    return await page.evaluate(async ({url, data}) => {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        });
-
-        const jsonResponse = await response.json();
-        return jsonResponse.result.access_token.access_token;
-    }, {url, data});
-
+    const response = await page.request.get(url, {headers: headers});
+    const jsonResponse = await response.json();
+    return jsonResponse.token;
 }
+
 
 async function getSystems(page, tenant, projectPrefix, accessToken) {
 
+    console.log('Getting systems with prefix: ', projectPrefix)
     // get systems that match the prefix of the current portal
     const url = `${tenant}/v3/systems?search=(id.like.${projectPrefix}*)`;
 

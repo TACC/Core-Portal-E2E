@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test';
-import { test } from '../../fixtures/baseFixture'
-import { PORTAL_DATAFILES_STORAGE_SYSTEMS } from '../../settings/custom_portal_settings.json'
+import { test } from '../../fixtures/baseFixture';
+import { PORTAL_DATAFILES_STORAGE_SYSTEMS } from '../../settings/custom_portal_settings.json';
 
 const portalStorageSystems = PORTAL_DATAFILES_STORAGE_SYSTEMS
 
