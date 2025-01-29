@@ -55,7 +55,7 @@ test.describe('Onboarding Admin page tests', () => {
     await expect(table.locator('tbody')).toBeVisible()
     const rows = await table.locator('tbody').locator('tr').all()
 
-    expect(rows.length).toEqual(2);
+    expect(rows.length).toEqual(3);
     await expect(page.getByRole('cell', { name: 'WMA Test User' })).toBeVisible();
 
     await page.getByPlaceholder('Search for users').fill('');
@@ -80,12 +80,15 @@ test.describe('Onboarding Admin page tests', () => {
     await expect(table.locator('tbody')).toBeVisible()
     const rows = await table.locator('tbody').locator('tr').all()
 
-    const firstUser = rows.slice(0, 2)
+    const firstUser = rows.slice(0, 3)
 
+    var nthStep = 1;
     for (const row of firstUser) {
       const viewLogsButton = row.getByText('View Log')
       const name = (await firstUser[0].locator('td').nth(0).innerHTML()).split('<br>')[0];
-      const stepType = await row.locator('td').nth(1).innerText();
+
+      const stepType = await row.locator('td').nth(nthStep).innerText();
+      nthStep = 0;
 
       await viewLogsButton.click();
       await expect(page.locator('.modal-dialog')).toBeVisible();
@@ -94,7 +97,10 @@ test.describe('Onboarding Admin page tests', () => {
       if (stepType === 'Allocations') {
         await expect(heading).toHaveText(`${name} - Allocations`)
       }
-       else {
+      else if (stepType === 'Checking Project Membership') {
+        await expect(heading).toHaveText(`${name} - Checking Project Membership`)
+      }
+      else {
         await expect(heading).toHaveText(`${name} - System Access`)
       }
       
