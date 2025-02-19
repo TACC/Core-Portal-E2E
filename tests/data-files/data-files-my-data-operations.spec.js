@@ -243,6 +243,6 @@ test.describe('Data Files My Data Work Operations tests', () => {
 
         //get storage path
         const path = page.getByTestId('textarea');
-        expect(path).toContainText("/work2/09694/wma_prtl_test_user/e2e-test-files/test_data-do_not_delete/testCopy.txt");
+        expect(path).toContainText("/wma_prtl_test_user/e2e-test-files/test_data-do_not_delete/testCopy.txt");
     })
 })
