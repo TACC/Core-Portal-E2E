@@ -1,5 +1,6 @@
 import { expect, base } from '@playwright/test';
-import { test } from '../../fixtures/baseFixture'
+import { test } from '../../fixtures/baseFixture';
+import { PORTAL_USER_ACCOUNT_SETUP_STEPS } from '../../settings/custom_portal_settings.json';
  
 
 test.describe('Onboarding Admin page tests', () => {
