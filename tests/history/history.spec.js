@@ -1,9 +1,9 @@
 import { test } from '../../fixtures/baseFixture'
 import { expect, base } from '@playwright/test';
 import { WORKBENCH_SETTINGS } from '../../settings/custom_portal_settings.json';
- 
+
 const jobsv2Title = WORKBENCH_SETTINGS['jobsv2Title'];
- 
+
 
 
 test.describe('History Page Navigation Tests', () => {
@@ -31,6 +31,9 @@ test.describe('History Page Navigation Tests', () => {
     })
 
     test('Jobv2 tab is displayed and redirects correctly', async ({ page, portal, environment, baseURL }) => {
+        if (jobsv2Title === null) {
+            test.skip("this portal does not have a jobsv2Title");
+        }
         await expect(page.getByRole('link', { name: jobsv2Title })).toBeVisible();
 
         await page.getByRole('link', { name: jobsv2Title }).click();
