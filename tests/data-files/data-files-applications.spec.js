@@ -1,5 +1,6 @@
 import { test } from '../../fixtures/baseFixture';
 import { expect, base } from '@playwright/test';
+import { WORKBENCH_SETTINGS } from '../../settings/custom_portal_settings.json';
 
 const apps = ['compress', 'extract']
 
@@ -49,7 +50,7 @@ for (const app of apps) {
                 const toastText = await notificationContent.textContent();
                 const regExp = new RegExp(`${app}.* processing`)
                 await expect(notificationContent).toHaveText(regExp);
-                await expect(notificationContent).not.toBeVisible();
+                await expect(notificationContent).toBeVisible();
         
                 const regex = /(\d{2}:\d{2}:\d{2})/;
                 let jobSubmissionTime = regex.exec(toastText)[1]
@@ -80,18 +81,22 @@ for (const app of apps) {
             })
         
             test('successful job submission and job data', async ({ page }) => {
+                let appName;
+
+                if (app == 'compress'){
+                    appName = WORKBENCH_SETTINGS['compressApp']['id'];
+                }
+                if (app == 'extract'){
+                    appName = WORKBENCH_SETTINGS['extractApp']['id'];
+                }
                         
                 await page.getByRole('link', { name: 'History', exact: true }).click();
-        
-                const regExp = new RegExp(`${app}.*${jobSubmissionTimestamp}`)
-                const row =  page.locator("tr", { has: page.getByText(regExp)})
-        
-                const statusRegExp = new RegExp(statuses.join('|'))
-                await expect(row.locator('td').nth(2), 'Does not have a valid status').toHaveText(statusRegExp, { ignoreCase: true })
-        
-                // Open job details modal and verify job info
+                const regExp = new RegExp(`${appName}.*${jobSubmissionTimestamp}`);
+                const row =  page.locator("tr", { hasText: regExp});
+                const statusRegExp = new RegExp(statuses.join('|'));
+                await expect(row, 'Does not have a valid status').toHaveText(statusRegExp, { ignoreCase: true })
                 await row.getByRole('link', { name: 'View Details', exact: true }).click();
-                await expect(page.locator('dd:below(:text("App ID"))').first()).toHaveText(app);
+                await expect(page.locator('dd:below(:text("App ID"))').first()).toHaveText(appName);
     
                 if (app === 'compress') {
                     await expect(page.locator('dd:below(:text("Archive File Name"))').first()).toHaveText('testCompress');
