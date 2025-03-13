@@ -1,7 +1,14 @@
 import { expect, base } from '@playwright/test';
-import { test } from '../../fixtures/baseFixture'
- 
+import { test } from '../../fixtures/baseFixture';
+import { PORTAL_DATAFILES_STORAGE_SYSTEMS } from '../../settings/custom_portal_settings.json';
 
+let has3rdPartyIntegrations = false;
+for (const entry of PORTAL_DATAFILES_STORAGE_SYSTEMS) {
+  if (entry.integration) {
+    has3rdPartyIntegrations = true;
+    break;
+  }
+}
 
 test.describe('My Account page tests', () => {
   
@@ -37,8 +44,12 @@ test.describe('My Account page tests', () => {
     expect(await editProfileInformationButton.getAttribute('href')).toEqual('https://accounts.tacc.utexas.edu/change_password');
   });
   
-  test('other section elements are present', async ({ page }) => {
+  test('licenses section element is present', async ({ page }) => {
     await expect(page.getByRole('heading', { name: 'Licenses' })).toBeVisible();
+  });
+
+  test('3rd party integrations section element is present', async ({ page }) => {
+    test.skip(has3rdPartyIntegrations === false, '3rd party integrations not on portal, test skipped');
     await expect(page.getByRole('heading', { name: '3rd Party Apps' })).toBeVisible();
   });
 });
