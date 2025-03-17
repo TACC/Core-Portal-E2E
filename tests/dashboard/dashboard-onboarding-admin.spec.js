@@ -1,18 +1,21 @@
 import { expect, base } from '@playwright/test';
 import { test } from '../../fixtures/baseFixture'
- 
+
 
 test.describe('Onboarding Admin page tests', () => {
-  
+
   test.beforeEach(async ({ page, portal, environment, baseURL }) => {
     await page.goto(baseURL);
     await page.locator('#navbarDropdown').click();
+    if (expect(page.getByRole('link', { name: 'Onboarding Admin' }).isDisabled)) {
+      test.skip('user does not have onboarding admin');
+    }
     await page.getByRole('link', { name: 'Onboarding Admin' }).click();
   })
 
-  test('test navigation to correct page', async ({ page }) => {    
-      const heading = page.getByRole('heading', {level: 5});
-      await expect(heading).toHaveText('Administrator Controls');
+  test('test navigation to correct page', async ({ page }) => {
+    const heading = page.getByRole('heading', { level: 5 });
+    await expect(heading).toHaveText('Administrator Controls');
   });
 
   test('test table is populated', async ({ page }) => {
@@ -30,14 +33,14 @@ test.describe('Onboarding Admin page tests', () => {
 
     const firstPageElement = await firstPageRows[0].innerText()
     expect(page.getByRole('button', { name: '< Previous' })).toBeDisabled()
-    
+
     await page.getByRole('button', { name: 'Next >' }).click();
     await expect(table.locator('tbody')).toBeVisible()
     const secondPageRows = await table.locator('tbody').locator('tr').all()
     const secondPageElement = await secondPageRows[0].innerText()
     expect(secondPageElement).not.toEqual(firstPageElement)
-   
-    await page.getByRole('button', { name: '< Previous' }).click(); 
+
+    await page.getByRole('button', { name: '< Previous' }).click();
     await expect(table.locator('tbody')).toBeVisible()
     const newFirstPageRows = await table.locator('tbody').locator('tr').all()
     const newFirstPageElement = await newFirstPageRows[0].innerText()
@@ -89,15 +92,15 @@ test.describe('Onboarding Admin page tests', () => {
 
       await viewLogsButton.click();
       await expect(page.locator('.modal-dialog')).toBeVisible();
-      const heading = page.locator('.modal-dialog').getByRole('heading', {level: 6});
+      const heading = page.locator('.modal-dialog').getByRole('heading', { level: 6 });
 
       if (stepType === 'Allocations') {
         await expect(heading).toHaveText(`${name} - Allocations`)
       }
-       else {
+      else {
         await expect(heading).toHaveText(`${name} - System Access`)
       }
-      
+
       await page.getByRole('button', { name: 'Close' }).click();
     }
   });
