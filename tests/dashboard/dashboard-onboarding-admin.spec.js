@@ -60,7 +60,7 @@ test.describe('Onboarding Admin page tests', () => {
     await expect(table.locator('tbody')).toBeVisible()
     const rows = await table.locator('tbody').locator('tr').all()
 
-    expect(rows.length).toEqual(PORTAL_USER_ACCOUNT_SETUP_STEPS);
+    expect(rows.length).toEqual(portalUserAccountSteps.length);
     await expect(page.getByRole('cell', { name: 'WMA Test User' })).toBeVisible();
 
     await page.getByPlaceholder('Search for users').fill('');
@@ -85,7 +85,7 @@ test.describe('Onboarding Admin page tests', () => {
     await expect(table.locator('tbody')).toBeVisible()
     const rows = await table.locator('tbody').locator('tr').all()
 
-    const steps = Object.keys(PORTAL_USER_ACCOUNT_SETUP_STEPS).length;
+    const steps = portalUserAccountSteps.length;
     const firstUser = rows.slice(0, steps)
 
     // The first row have the step name in the second column,
