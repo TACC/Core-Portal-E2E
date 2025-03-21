@@ -33,7 +33,6 @@ export class FileOperations {
 
     await page.locator('button:has-text("Upload Selected")').click();
     await page.getByTestId('loading-spinner').last().isHidden();
-    await page.getByRole('dialog').getByRole('button', { name: 'Close' }).click();
   }
 
   async delete(page: Page, ...resourceNameArr: string[]) {
