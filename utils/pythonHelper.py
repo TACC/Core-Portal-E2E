@@ -31,7 +31,8 @@ data = {
     "SYSTEM_MONITOR_DISPLAY_LIST": custom_portal_settings._SYSTEM_MONITOR_DISPLAY_LIST or [],
     "NGINX_SERVER_NAME": os.getenv('NGINX_SERVER_NAME'),
     "WORKBENCH_SETTINGS":custom_portal_settings._WORKBENCH_SETTINGS or [],
-    "PORTAL_PROJECTS_SYSTEM_PREFIX": custom_portal_settings._PORTAL_PROJECTS_SYSTEM_PREFIX or ''
+    "PORTAL_PROJECTS_SYSTEM_PREFIX": custom_portal_settings._PORTAL_PROJECTS_SYSTEM_PREFIX or '',
+    "PORTAL_USER_ACCOUNT_SETUP_STEPS": custom_portal_settings._PORTAL_USER_ACCOUNT_SETUP_STEPS or ''
 }
 
 with open(output_path, 'w') as json_file: 
