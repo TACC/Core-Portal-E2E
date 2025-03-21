@@ -1,6 +1,8 @@
 import { expect, base } from '@playwright/test';
-import { test } from '../../fixtures/baseFixture'
-
+import { test } from '../../fixtures/baseFixture';
+import { PORTAL_USER_ACCOUNT_SETUP_STEPS } from '../../settings/custom_portal_settings.json';
+ 
+const portalUserAccountSteps = PORTAL_USER_ACCOUNT_SETUP_STEPS;
 
 test.describe('Onboarding Admin page tests', () => {
 
@@ -58,7 +60,7 @@ test.describe('Onboarding Admin page tests', () => {
     await expect(table.locator('tbody')).toBeVisible()
     const rows = await table.locator('tbody').locator('tr').all()
 
-    expect(rows.length).toEqual(2);
+    expect(rows.length).toEqual(portalUserAccountSteps.length);
     await expect(page.getByRole('cell', { name: 'WMA Test User' })).toBeVisible();
 
     await page.getByPlaceholder('Search for users').fill('');
@@ -83,24 +85,26 @@ test.describe('Onboarding Admin page tests', () => {
     await expect(table.locator('tbody')).toBeVisible()
     const rows = await table.locator('tbody').locator('tr').all()
 
-    const firstUser = rows.slice(0, 2)
+    const steps = portalUserAccountSteps.length;
+    const firstUser = rows.slice(0, steps)
+
+    // The first row have the step name in the second column,
+    // for the rest it's in the first column
+    var stepNameColumn = 1;
 
     for (const row of firstUser) {
       const viewLogsButton = row.getByText('View Log')
-      const name = (await firstUser[0].locator('td').nth(0).innerHTML()).split('<br>')[0];
-      const stepType = await row.locator('td').nth(1).innerText();
+      const userName = (await firstUser[0].locator('td').nth(0).innerHTML()).split('<br>')[0];
+
+      const stepName = await row.locator('td').nth(stepNameColumn).innerText();
+      stepNameColumn = 0;
 
       await viewLogsButton.click();
       await expect(page.locator('.modal-dialog')).toBeVisible();
       const heading = page.locator('.modal-dialog').getByRole('heading', { level: 6 });
 
-      if (stepType === 'Allocations') {
-        await expect(heading).toHaveText(`${name} - Allocations`)
-      }
-      else {
-        await expect(heading).toHaveText(`${name} - System Access`)
-      }
-
+      await expect(heading).toHaveText(`${userName} - ${stepName}`)
+      
       await page.getByRole('button', { name: 'Close' }).click();
     }
   });
