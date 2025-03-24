@@ -1,20 +1,35 @@
 import { expect, base } from '@playwright/test';
 import { test } from '../../fixtures/fileOperationsFixture';
+import { WORKBENCH_SETTINGS, PORTAL_DATAFILES_STORAGE_SYSTEMS } from '../../settings/custom_portal_settings.json';
+
+const makeLink = WORKBENCH_SETTINGS['makeLink'];
+const hideDataFiles = WORKBENCH_SETTINGS['hideDataFiles'];
+const viewPath = WORKBENCH_SETTINGS['viewPath'];
+const portalStorageSystems = [];
+for (const system of PORTAL_DATAFILES_STORAGE_SYSTEMS) {
+    portalStorageSystems.push(system.name);
+}
 
 test.describe('Data Files My Data Work Operations tests', () => {
+    test.skip(hideDataFiles === true, 'Data Files hidden on portal, tests skipped');
+
     test.beforeEach(async ({ page, portal, environment, baseURL }, testInfo) => {
         testInfo.setTimeout(testInfo.timeout + 150000);
         await page.goto(baseURL);
         await page.locator('#navbarDropdown').click();
         await page.getByRole('link', { name: 'My Dashboard' }).click();
         await page.getByRole('link', { name: 'Data Files', exact: true }).click();
+        //check to see if My Data Work exists on this portal
+        if (!portalStorageSystems.includes('My Data (Work)')) {
+            test.skip(true, "My Data Work does not exist, skip");
+        }
         await page.getByRole('link', { name: 'My Data (Work)' }).click();
         //make sure we're in the right spot
         const heading = page.getByRole('heading', { level: 2 });
         await expect(heading.locator('.system-name')).toHaveText("My Data (Work)");
-        //traversse to test file storage location
-        await page.getByText('e2e-test-files').click();
-        await page.getByText('test_data-do_not_delete').click();
+        //traverse to test file storage location
+        await page.getByRole('link', { name: 'e2e-test-files' }).click();
+        await page.getByRole('link', { name: 'test_data-do_not_delete' }).click();
     })
 
     //clean up just in case a test failed
@@ -52,7 +67,7 @@ test.describe('Data Files My Data Work Operations tests', () => {
 
         //go to the test_data_destination directory and check the file is there
         await fileOperations.goToTestDestinationFolder(page);
-        const copied_file = page.getByText('testRename.txt');
+        const copied_file = page.getByRole('link', { name: 'testRename.txt' });
         await expect(copied_file).toBeVisible();
 
         //do the rename
@@ -61,7 +76,7 @@ test.describe('Data Files My Data Work Operations tests', () => {
         await page.getByRole('textbox').click();
         await page.getByRole('textbox').fill('testRenameTest.txt');
         await page.getByRole('dialog').getByRole('button', { name: 'Rename' }).click();
-        const renamed_file = page.getByText('testRenameTest.txt');
+        const renamed_file = page.getByRole('link', { name: 'testRenameTest.txt' })
         await expect(renamed_file).toBeVisible();
 
         //trash the renamed file
@@ -78,7 +93,7 @@ test.describe('Data Files My Data Work Operations tests', () => {
 
         //go to the test_data_destination directory and check the file is there
         await fileOperations.goToTestDestinationFolder(page);
-        const copied_file = page.getByText('testCopy.txt');
+        const copied_file = page.getByRole('link', { name: 'testCopy.txt' });
         await expect(copied_file).toBeVisible();
 
         //trash the copied file
@@ -101,7 +116,7 @@ test.describe('Data Files My Data Work Operations tests', () => {
 
         //go to the test_data_destination directory and check the file is there
         await fileOperations.goToTestDestinationFolder(page);
-        const copied_file = page.getByText('testMove.txt');
+        const copied_file = page.getByRole('link', { name: 'testMove.txt' });
         await expect(copied_file).toBeVisible();
 
         //do a move
@@ -111,13 +126,13 @@ test.describe('Data Files My Data Work Operations tests', () => {
         //otherwise this part times out
         //dunno why this modal takes a little longer
         await page.waitForTimeout(250);
-        await page.getByText('Back').click();
+        await page.getByRole('button', { name: 'Back' }).click();
         await page.getByRole('row', { name: 'Folder e2e-test-files Move' }).getByRole('button', { name: 'Move' }).click();
 
         //check for the moved file
         await page.getByRole('link', { name: 'My Data (Work)' }).click();
-        await page.getByText('e2e-test-files').click();
-        const moved_file = page.getByText('testMove.txt');
+        await page.getByRole('link', { name: 'e2e-test-files' }).click();
+        const moved_file = page.getByRole('link', { name: 'testMove.txt' });
         await expect(moved_file).toBeVisible();
 
         //trash the moved file
@@ -134,7 +149,7 @@ test.describe('Data Files My Data Work Operations tests', () => {
 
         //go to the test_data_destination directory and check the file is there
         await fileOperations.goToTestDestinationFolder(page);
-        const copied_file = page.getByText('testDownload.txt');
+        const copied_file = page.getByRole('link', { name: 'testDownload.txt' });
         await expect(copied_file).toBeVisible();
 
         //do the download
@@ -152,6 +167,8 @@ test.describe('Data Files My Data Work Operations tests', () => {
     })
 
     test('Link File', async ({ page, fileOperations }) => {
+        test.skip(makeLink === false, 'Link File hidden on portal, test skipped');
+
         //click into the data files area
         await expect(page.locator('.data-files-table-body')).toBeVisible();
         await page.locator('.data-files-table-body').dblclick();
@@ -165,7 +182,7 @@ test.describe('Data Files My Data Work Operations tests', () => {
 
         //go to the test_data_destination directory and check the file is there
         await fileOperations.goToTestDestinationFolder(page);
-        const copied_file = page.getByText('testLink.txt');
+        const copied_file = page.getByRole('link', { name: 'testLink.txt' });
         await expect(copied_file).toBeVisible();
 
         //do the link testing
@@ -212,12 +229,23 @@ test.describe('Data Files My Data Work Operations tests', () => {
 
         //go to the test_data_destination directory and check the file is there
         await fileOperations.goToTestDestinationFolder(page);
-        const copied_file = page.getByText('testTrash.txt');
+        const copied_file = page.getByRole('link', { name: 'testTrash.txt' });
         await expect(copied_file).toBeVisible();
 
         //trash the file
         await page.getByLabel('select file testTrash.txt').click();
         await page.getByRole('button', { name: 'Trash' }).click();
         expect(copied_file).toBeUndefined;
+    })
+
+    test('View Path', async ({ page }) => {
+        test.skip(viewPath === false, 'View Path hidden on portal, test skipped');
+
+        //click the view path link for the copy file
+        await page.getByRole('row', { name: 'select file testCopy.txt File' }).getByRole('button').click();
+
+        //get storage path
+        const path = page.getByTestId('textarea');
+        expect(path).toContainText("/wma_prtl_test_user/e2e-test-files/test_data-do_not_delete/testCopy.txt");
     })
 })
