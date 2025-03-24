@@ -23,13 +23,14 @@ test.describe('Applications page tests', () => {
     await page.locator('a .nav-text:has-text("Simulation [")').click();
     await page.getByRole('link', { name: 'OpenSeesMP V3.5 (Frontera)', exact: true }).click();
 
-    await page.getByPlaceholder('Browse Data Files')
+    await page.locator('input[name="fileInputs.Input Directory"]')
           .fill('tapis://cloud.data/corral/tacc/aci/CEP/community/opensees-mp/examples/smallmp');
     await page.locator('input[name="parameterSet.appArgs.TCL Script"]').fill('Example.tcl');
     const jobName = await page.locator('input[name="name"]').inputValue();
     await page.getByRole('button', { name: 'Submit'}).click();
     await page.getByRole('link', { name: 'History > Jobs'}).click();
 
+    await expect(page.locator('tr').filter({ hasText: jobName })).toBeVisible();
     await page.locator('tr').filter({ hasText: jobName })
           .getByRole('link', { name: 'View Details' }).click();
     await expect(page.locator('.modal-title .d-inline-block')).toHaveText(jobName);
