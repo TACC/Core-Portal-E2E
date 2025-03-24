@@ -1,10 +1,14 @@
 import { expect, base } from '@playwright/test';
 import { test } from '../../fixtures/fileOperationsFixture';
-import { WORKBENCH_SETTINGS } from '../../settings/custom_portal_settings.json';
+import { WORKBENCH_SETTINGS, PORTAL_DATAFILES_STORAGE_SYSTEMS } from '../../settings/custom_portal_settings.json';
 
 const makeLink = WORKBENCH_SETTINGS['makeLink'];
 const hideDataFiles = WORKBENCH_SETTINGS['hideDataFiles'];
 const viewPath = WORKBENCH_SETTINGS['viewPath'];
+const portalStorageSystems = [];
+for (const system of PORTAL_DATAFILES_STORAGE_SYSTEMS) {
+    portalStorageSystems.push(system.name);
+}
 
 test.describe('Data Files My Data Work Operations tests', () => {
     test.skip(hideDataFiles === true, 'Data Files hidden on portal, tests skipped');
@@ -16,8 +20,7 @@ test.describe('Data Files My Data Work Operations tests', () => {
         await page.getByRole('link', { name: 'My Dashboard' }).click();
         await page.getByRole('link', { name: 'Data Files', exact: true }).click();
         //check to see if My Data Work exists on this portal
-        //TODO: this is a temporary solution, there is probably a better way
-        if (!expect(page.getByRole('link', { name: 'My Data (Work)' }).exists)) {
+        if (!portalStorageSystems.includes('My Data (Work)')) {
             test.skip(true, "My Data Work does not exist, skip");
         }
         await page.getByRole('link', { name: 'My Data (Work)' }).click();
