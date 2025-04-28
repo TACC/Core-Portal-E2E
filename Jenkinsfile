@@ -71,10 +71,11 @@ pipeline {
             reportName: 'Playwright Test Report', 
             reportTitles: ''
          ])
-         junit(
-            allowEmptyResults: true,
-            testResults: 'playwright-report/results.xml'
-         )
+         slackUploadFile(
+            channel: 'wma-ops', 
+            filePath: 'playwright-report/index.html',
+            initialComment: 'Results of nightly E2E run', 
+        ) 
          cleanWs()
       }
    }
