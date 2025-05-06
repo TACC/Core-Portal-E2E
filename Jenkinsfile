@@ -62,20 +62,13 @@ pipeline {
    }
    post {
       always {
-         publishHTML([
-            allowMissing: true, 
-            alwaysLinkToLastBuild: true, 
-            keepAll: true, 
-            reportDir: 'playwright-report', 
-            reportFiles: 'index.html', 
-            reportName: 'Playwright Test Report', 
-            reportTitles: ''
-         ])
-         slackUploadFile(
-            channel: 'wma-ops', 
-            filePath: 'playwright-report/index.html',
-            initialComment: 'Results of nightly E2E run', 
-        ) 
+         junit(
+            allowEmptyResults: true,
+            testResults: 'playwright-report/results.xml'
+         )
+         slackSend(
+            channel: "wma-ops", 
+            message: "Ran E2E tests")
          cleanWs()
       }
    }
