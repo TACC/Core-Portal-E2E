@@ -68,7 +68,7 @@ pipeline {
          )
          slackSend(
             channel: "wma-ops", 
-            message: "Ran E2E tests")
+            message: "Ran E2E tests: https://jenkins.portals.tacc.utexas.edu/job/Core_Portal_E2E_Tests/${currentBuild.number}/testReport/")
          cleanWs()
       }
    }
