@@ -53,9 +53,12 @@ pipeline {
 
       stage('e2e-tests') {
          steps {
-            withCredentials([usernamePassword(credentialsId: 'portal_tests_user', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+            withCredentials([
+               usernamePassword(credentialsId: 'portal_tests_user', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD'),
+               string(credentialsId: 'PORTALS_TEST_USER_MFA_SECRET', variable: 'MFA_SECRET')
+            ]) {
                sh 'npx playwright test --list'
-               sh 'USERNAME=$USERNAME PASSWORD=$PASSWORD npx playwright test'
+               sh 'USERNAME=$USERNAME PASSWORD=$PASSWORD MFA_SECRET=$MFA_SECRET npx playwright test'
             }
          }
       }
