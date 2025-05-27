@@ -48,7 +48,8 @@ module.exports = defineConfig({
       use: {
         portal: process.env.PORTAL,
         environment: process.env.ENVIRONMENT,
-        baseURL: `https://${NGINX_SERVER_NAME}`
+        baseURL: `https://${NGINX_SERVER_NAME}`,
+        mfaSecret: process.env.MFA_SECRET
       },
       teardown: 'teardown'
     },
