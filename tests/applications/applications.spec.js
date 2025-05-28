@@ -28,6 +28,7 @@ test.describe('Applications tests', () => {
     await page.locator('input[name="parameterSet.appArgs.TCL Script"]').fill('Example.tcl');
     const jobName = await page.locator('input[name="name"]').inputValue();
     await page.getByRole('button', { name: 'Submit'}).click();
+    await page.getByTestId('loading-spinner').waitFor({ state: "hidden" });
     await page.getByRole('link', { name: 'History > Jobs'}).click();
 
     await page.getByTestId('loading-spinner').waitFor({ state: "hidden" });
