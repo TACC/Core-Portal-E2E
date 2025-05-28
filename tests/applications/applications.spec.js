@@ -30,6 +30,7 @@ test.describe('Applications tests', () => {
     await page.getByRole('button', { name: 'Submit'}).click();
     await page.getByRole('link', { name: 'History > Jobs'}).click();
 
+    await page.getByTestId('loading-spinner').waitFor({ state: "hidden" });
     await expect(page.locator('tr').filter({ hasText: jobName })).toBeVisible();
     await page.locator('tr').filter({ hasText: jobName })
           .getByRole('link', { name: 'View Details' }).click();
