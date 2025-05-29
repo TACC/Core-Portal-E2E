@@ -65,13 +65,13 @@ test.describe('System Status page tests', () => {
 
 async function getSystemQueues({page, system}) {
 
-    if (system != 'Stampede3') { // TAP name for S3 is not formatted like the other systems
-        system = system.toLowerCase();
+    if (system.toLowerCase() == 'lonestar6') {
+        system = 'ls6'
     }
 
-    const url = `https://tap.tacc.utexas.edu/status/${system}`;
+    const systemId = `${system.toLowerCase()}.tacc.utexas.edu`;
 
+    const url = `https://tap.tacc.utexas.edu/status/${systemId}`;
     const result = await page.request.get(url);
     return await result.json();
-
 }
