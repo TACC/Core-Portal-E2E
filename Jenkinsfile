@@ -70,7 +70,7 @@ pipeline {
             testResults: 'playwright-report/results.xml'
          )
          slackSend(
-            channel: "wma-ops", 
+            channel: "wma-e2e-slack-notifications", 
             message: "Ran E2E tests: https://jenkins.portals.tacc.utexas.edu/job/Core_Portal_E2E_Tests/${currentBuild.number}/testReport/")
          cleanWs()
       }
