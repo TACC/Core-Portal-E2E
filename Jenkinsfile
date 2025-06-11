@@ -65,19 +65,13 @@ pipeline {
    }
    post {
       always {
-         publishHTML([
-            allowMissing: true, 
-            alwaysLinkToLastBuild: true, 
-            keepAll: true, 
-            reportDir: 'playwright-report', 
-            reportFiles: 'index.html', 
-            reportName: 'Playwright Test Report', 
-            reportTitles: ''
-         ])
          junit(
             allowEmptyResults: true,
             testResults: 'playwright-report/results.xml'
          )
+         slackSend(
+            channel: "wma-e2e-slack-notifications", 
+            message: "Ran E2E tests: https://jenkins.portals.tacc.utexas.edu/job/Core_Portal_E2E_Tests/${currentBuild.number}/testReport/")
          cleanWs()
       }
    }
