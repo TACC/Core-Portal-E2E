@@ -74,17 +74,13 @@ pipeline {
             def buildStatus = currentBuild.result ?: 'SUCCESS'
             def statusEmoji = buildStatus == 'SUCCESS' ? ':white_check_mark:' : ':x:'
             def statusText = buildStatus == 'SUCCESS' ? 'PASSED' : 'FAILED'
-            
-            // Get test statistics from Jenkins test results
-            def passedTests = currentBuild.getTestResultSummary()?.passCount ?: 0
-            def failedTests = currentBuild.getTestResultSummary()?.failCount ?: 0
-            def skippedTests = currentBuild.getTestResultSummary()?.skipCount ?: 0
-            
+            def summary = junit testResults: 'playwright-report/results.xml'
+
             def message = """
                   ${statusEmoji} *Core Portal E2E Tests - ${statusText}*
                   - *Portal:* ${params.Portal}
                   - *Environment:* ${params.Environment}
-                  - *Tests:* ${passedTests} passed, ${failedTests} failed, ${skippedTests} skipped
+                  - *Tests:* ${summary.totalCount}, Failures: ${summary.failCount}, Skipped: ${summary.skipCount}, Passed: ${summary.passCount}
 
                   <https://jenkins.portals.tacc.utexas.edu/job/Core_Portal_E2E_Tests/${currentBuild.number}/testReport/|View Test Report>
             """.stripIndent()
