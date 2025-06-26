@@ -65,12 +65,12 @@ pipeline {
    }
    post {
       always {
-         def testResults = junit(
-            allowEmptyResults: true,
-            testResults: 'playwright-report/results.xml'
-         )
-         
          script {
+            def testResults = junit(
+               allowEmptyResults: true,
+               testResults: 'playwright-report/results.xml'
+            )
+            
             def buildStatus = currentBuild.result ?: 'SUCCESS'
             def statusEmoji = buildStatus == 'SUCCESS' ? ':white_check_mark:' : ':x:'
             def statusText = buildStatus == 'SUCCESS' ? 'PASSED' : 'FAILED'
