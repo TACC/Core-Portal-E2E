@@ -69,9 +69,32 @@ pipeline {
             allowEmptyResults: true,
             testResults: 'playwright-report/results.xml'
          )
-         slackSend(
-            channel: "wma-e2e-slack-notifications", 
-            message: "Ran E2E tests: https://jenkins.portals.tacc.utexas.edu/job/Core_Portal_E2E_Tests/${currentBuild.number}/testReport/")
+         
+         script {
+            def buildStatus = currentBuild.result ?: 'SUCCESS'
+            def statusEmoji = buildStatus == 'SUCCESS' ? ':white_check_mark:' : ':x:'
+            def statusText = buildStatus == 'SUCCESS' ? 'PASSED' : 'FAILED'
+            
+            // Get test statistics from Jenkins test results
+            def passedTests = currentBuild.rawBuild.getAction(hudson.tasks.junit.TestResultAction.class)?.passCount ?: 0
+            def failedTests = currentBuild.rawBuild.getAction(hudson.tasks.junit.TestResultAction.class)?.failCount ?: 0
+            def skippedTests = currentBuild.rawBuild.getAction(hudson.tasks.junit.TestResultAction.class)?.skipCount ?: 0
+            
+            def message = """
+                  ${statusEmoji} *Core Portal E2E Tests - ${statusText}*
+                  - *Portal:* ${params.Portal}
+                  - *Environment:* ${params.Environment}
+                  - *Tests:* ${passedTests} passed, ${failedTests} failed, ${skippedTests} skipped
+
+                  <https://jenkins.portals.tacc.utexas.edu/job/Core_Portal_E2E_Tests/${currentBuild.number}/testReport/|View Test Report>
+            """.stripIndent()
+            
+            slackSend(
+               channel: "wma-e2e-slack-notifications", 
+               message: message
+            )
+         }
+         
          cleanWs()
       }
    }
