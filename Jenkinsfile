@@ -76,9 +76,9 @@ pipeline {
             def statusText = buildStatus == 'SUCCESS' ? 'PASSED' : 'FAILED'
             
             // Get test statistics from Jenkins test results
-            def passedTests = currentBuild.rawBuild.getAction(hudson.tasks.junit.TestResultAction.class)?.passCount ?: 0
-            def failedTests = currentBuild.rawBuild.getAction(hudson.tasks.junit.TestResultAction.class)?.failCount ?: 0
-            def skippedTests = currentBuild.rawBuild.getAction(hudson.tasks.junit.TestResultAction.class)?.skipCount ?: 0
+            def passedTests = currentBuild.getTestResultSummary()?.passCount ?: 0
+            def failedTests = currentBuild.getTestResultSummary()?.failCount ?: 0
+            def skippedTests = currentBuild.getTestResultSummary()?.skipCount ?: 0
             
             def message = """
                   ${statusEmoji} *Core Portal E2E Tests - ${statusText}*
