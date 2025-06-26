@@ -65,7 +65,7 @@ pipeline {
    }
    post {
       always {
-         junit(
+         def testResults = junit(
             allowEmptyResults: true,
             testResults: 'playwright-report/results.xml'
          )
@@ -74,13 +74,12 @@ pipeline {
             def buildStatus = currentBuild.result ?: 'SUCCESS'
             def statusEmoji = buildStatus == 'SUCCESS' ? ':white_check_mark:' : ':x:'
             def statusText = buildStatus == 'SUCCESS' ? 'PASSED' : 'FAILED'
-            def summary = junit testResults: 'playwright-report/results.xml'
 
             def message = """
                   ${statusEmoji} *Core Portal E2E Tests - ${statusText}*
                   - *Portal:* ${params.Portal}
                   - *Environment:* ${params.Environment}
-                  - *Tests:* ${summary.totalCount}, Failures: ${summary.failCount}, Skipped: ${summary.skipCount}, Passed: ${summary.passCount}
+                  - *Tests:* Total: ${testResults.totalCount}, Passed: ${testResults.passCount}, Failed: ${testResults.failCount}, Skipped: ${testResults.skipCount}
 
                   <https://jenkins.portals.tacc.utexas.edu/job/Core_Portal_E2E_Tests/${currentBuild.number}/testReport/|View Test Report>
             """.stripIndent()
