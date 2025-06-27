@@ -65,13 +65,31 @@ pipeline {
    }
    post {
       always {
-         junit(
-            allowEmptyResults: true,
-            testResults: 'playwright-report/results.xml'
-         )
-         slackSend(
-            channel: "wma-e2e-slack-notifications", 
-            message: "Ran E2E tests: https://jenkins.portals.tacc.utexas.edu/job/Core_Portal_E2E_Tests/${currentBuild.number}/testReport/")
+         script {
+            def testResults = junit(
+               allowEmptyResults: true,
+               testResults: 'playwright-report/results.xml'
+            )
+            
+            def buildStatus = currentBuild.result ?: 'SUCCESS'
+            def statusEmoji = buildStatus == 'SUCCESS' ? ':white_check_mark:' : ':x:'
+            def statusText = buildStatus == 'SUCCESS' ? 'PASSED' : 'FAILED'
+
+            def message = """
+                  ${statusEmoji} *Core Portal E2E Tests - ${statusText}*
+                  - *Portal:* ${params.Portal}
+                  - *Environment:* ${params.Environment}
+                  - *Tests:* Total: ${testResults.totalCount}, Passed: ${testResults.passCount}, Failed: ${testResults.failCount}, Skipped: ${testResults.skipCount}
+
+                  <https://jenkins.portals.tacc.utexas.edu/job/Core_Portal_E2E_Tests/${currentBuild.number}/testReport/|View Test Report>
+            """.stripIndent()
+            
+            slackSend(
+               channel: "wma-e2e-slack-notifications", 
+               message: message
+            )
+         }
+         
          cleanWs()
       }
    }
