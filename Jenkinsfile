@@ -57,13 +57,14 @@ pipeline {
                usernamePassword(credentialsId: 'portal_tests_user', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD'),
                string(credentialsId: 'PORTALS_TEST_USER_MFA_SECRET', variable: 'MFA_SECRET')
             ]) {
-
-               if (params.RunType == 'Limited') {
-                  sh 'npx playwright test --list --project=limited --project=unauthorized'
-                  sh 'USERNAME=$USERNAME PASSWORD=$PASSWORD MFA_SECRET=$MFA_SECRET npx playwright test --project=limited --project=unauthorized'
-               } else {
-                  sh 'npx playwright test --list --project=default --project=unauthorized'
-                  sh 'USERNAME=$USERNAME PASSWORD=$PASSWORD MFA_SECRET=$MFA_SECRET npx playwright test --project=default --project=unauthorized'
+               script {
+                  if (params.RunType == 'Limited') {
+                     sh 'npx playwright test --list --project=limited --project=unauthorized'
+                     sh 'USERNAME=$USERNAME PASSWORD=$PASSWORD MFA_SECRET=$MFA_SECRET npx playwright test --project=limited --project=unauthorized'
+                  } else {
+                     sh 'npx playwright test --list --project=default --project=unauthorized'
+                     sh 'USERNAME=$USERNAME PASSWORD=$PASSWORD MFA_SECRET=$MFA_SECRET npx playwright test --project=default --project=unauthorized'
+                  }
                }
             }
          }
