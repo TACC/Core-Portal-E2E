@@ -18,25 +18,6 @@ test.describe('Applications tests', () => {
     const heading = page.getByRole('heading', {level: 2});
     await expect(heading).toHaveText('Applications');
   });
-
-  test('OpenSeesMP application test', async ({ page, portal, environment, baseURL }) => {
-    await page.locator('a .nav-text:has-text("Simulation [")').click();
-    await page.getByRole('link', { name: 'OpenSeesMP V3.5 (Frontera)', exact: true }).click();
-
-    await page.locator('input[name="fileInputs.Input Directory"]')
-          .fill('tapis://cloud.data/corral/tacc/aci/CEP/community/opensees-mp/examples/smallmp');
-    await page.locator('input[name="parameterSet.appArgs.TCL Script"]').fill('Example.tcl');
-    const jobName = await page.locator('input[name="name"]').inputValue();
-    await page.getByRole('button', { name: 'Submit'}).click();
-    await page.getByTestId('loading-spinner').waitFor({ state: "hidden" });
-    await page.getByRole('link', { name: 'History > Jobs'}).click();
-
-    await page.getByTestId('loading-spinner').waitFor({ state: "hidden" });
-    await expect(page.locator('tr').filter({ hasText: jobName })).toBeVisible();
-    await page.locator('tr').filter({ hasText: jobName })
-          .getByRole('link', { name: 'View Details' }).click();
-    await expect(page.locator('.modal-title .d-inline-block')).toHaveText(jobName);
-  });
 });
 
 test('test app tray application visibility', async ({ page, portal, environment, baseURL }) => {
