@@ -62,7 +62,27 @@ module.exports = defineConfig({
             baseURL: `https://${NGINX_SERVER_NAME}`
           },
       dependencies: ['setup'],
-      testIgnore: ['unauthorized-user/*.spec.js', 'data-files/applications/*.spec.js']
+      testIgnore: ['unauthorized-user/*.spec.js']
+    },
+    {
+      // This project is used for the limited run type in Jenkins and skips the slow tests
+      name: 'limited',
+      use: { ...devices['Desktop Chrome'],
+            storageState: 'playwright/.auth/user.json',
+            portal: process.env.PORTAL,
+            environment: process.env.ENVIRONMENT,
+            baseURL: `https://${NGINX_SERVER_NAME}`
+          },
+      dependencies: ['setup'],
+      testIgnore: [
+        'unauthorized-user/*.spec.js', 
+        'applications/opensees-application.spec.js',
+        'data-files/data-files-applications.spec.js',
+        'data-files/data-files-automatic-filenames.spec.js',
+        'data-files/data-files-shared-workspace.spec.js',
+        'data-files/data-files-my-data-operations.spec.js',
+        'data-files/data-files-add.spec.js'
+      ]
     },
     {
       name: 'unauthorized',
@@ -72,17 +92,6 @@ module.exports = defineConfig({
             environment: process.env.ENVIRONMENT,
             baseURL: `https://${NGINX_SERVER_NAME}`
           },
-    },
-    {
-      name: 'applications',
-      testMatch: 'data-files/applications/*.spec.js',
-      use: { 
-        ...devices['Desktop Chrome'],
-        storageState: 'playwright/.auth/user.json',
-        portal: process.env.PORTAL,
-        environment: process.env.ENVIRONMENT,
-      },
-      dependencies: ['setup'],
     },
     {
       name: 'teardown',
