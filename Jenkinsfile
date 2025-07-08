@@ -58,7 +58,7 @@ pipeline {
                string(credentialsId: 'PORTALS_TEST_USER_MFA_SECRET', variable: 'MFA_SECRET')
             ]) {
                script {
-                  if (params['Run Type'] == 'Limited') {
+                  if (params.Run_Type == 'Limited') {
                      sh 'npx playwright test --list --project=limited --project=unauthorized'
                      sh 'USERNAME=$USERNAME PASSWORD=$PASSWORD MFA_SECRET=$MFA_SECRET npx playwright test --project=limited --project=unauthorized'
                   } else {
@@ -83,7 +83,7 @@ pipeline {
             def statusText = buildStatus == 'SUCCESS' ? 'PASSED' : 'FAILED'
             
             // Get run type for the message
-            def runType = params['Run Type'] ?: 'Default'
+            def runType = params.Run_Type ?: 'Default'
 
             def message = """
                   ${statusEmoji} *Core Portal E2E Tests - ${statusText}*
