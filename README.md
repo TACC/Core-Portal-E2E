@@ -10,6 +10,10 @@ Steps to run:
 3. Run the following command from root of the project: `python3 utils/pythonHelper.py` and ensure a file named `custom_portal_settings.json` gets created in the settings folder with some portal data
 4. Run tests using the command `npx playwright test`
 
+To run other portals:
+1. Repeat Steps 2-3 from above for the portal you want to test, replacing or renaming the previous files.
+2. Update fixtures/baseFixture.js with the portal information, replacing or renaming the previous file.
+
 Useful cli flags:
 * `--debug` to run debug mode (headed + step-through controls + selector creation)
 * `--headed` to run headed

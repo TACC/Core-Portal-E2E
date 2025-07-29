@@ -62,17 +62,32 @@ export class FileOperations {
     }
   }
 
-  async copyFileToTestDestination(page: Page) {
+  async goToTestStartingFolder(page: Page, location: string, portal: string, projectid: string) {
+    await page.getByRole('link', { name: 'My Dashboard' }).click();
+    await page.getByRole('link', { name: 'Data Files', exact: true }).click();
+
+    if (location === 'My Data (Work)') {
+      await page.getByRole('link', { name: 'My Data (Work)' }).click();
+      await page.getByRole('link', { name: 'e2e-test-files' }).click();
+      await page.getByRole('link', { name: 'test_data-do_not_delete' }).click();
+    }
+    if (location === 'Shared Workspaces') {
+      await page.getByRole('link', { name: 'Shared Workspaces' }).click();
+      await page.getByRole('link', { name: projectid }).click();
+    }
+  }
+
+  async copyFileToTestDestination(page: Page, portal: string) {
     //assumes we are in test_data-do_not_delete
     await page.getByRole('button', { name: 'Copy' }).click();
     await page.getByText('Back').click();
-    await page.getByText('test_data_destination').click();
-    await page.getByRole('row', { name: 'Folder test_data_destination Copy' }).getByRole('button', { name: 'Copy' }).click();
+    await page.getByRole("link", { name: `${portal}` }).click();
+    await page.getByRole('row', { name: `Folder ${portal} Copy` }).getByRole('button', { name: 'Copy' }).click();
   }
 
-  async goToTestDestinationFolder(page: Page) {
+  async goToTestDestinationFolder(page: Page, portal: string) {
     await page.getByRole('link', { name: 'My Data (Work)' }).click();
     await page.getByText('e2e-test-files').click();
-    await page.getByText('test_data_destination').click();
+    await page.getByRole("link", { name: `${portal}` }).click();
   }
 }
