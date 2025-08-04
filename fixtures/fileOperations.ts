@@ -62,7 +62,7 @@ export class FileOperations {
     }
   }
 
-  async goToTestStartingFolder(page: Page, location: string, portal: string, projectid: string) {
+  async goToTestStartingFolder(page: Page, location: string, projectid: string) {
     await page.getByRole('link', { name: 'My Dashboard' }).click();
     await page.getByRole('link', { name: 'Data Files', exact: true }).click();
 
