@@ -69,7 +69,7 @@ export class FileOperations {
     if (location === 'My Data (Work)') {
       await page.getByRole('link', { name: 'My Data (Work)' }).click();
       await page.getByRole('link', { name: 'e2e-test-files' }).click();
-      await page.getByRole('link', { name: 'test_data-do_not_delete' }).click();
+      await page.getByRole('link', { name: '00-test_data-do_not_delete' }).click();
     }
     if (location === 'Shared Workspaces') {
       await page.getByRole('link', { name: 'Shared Workspaces' }).click();
