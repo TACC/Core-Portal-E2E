@@ -1,7 +1,7 @@
 import { expect, base } from '@playwright/test';
 import { test } from '../../fixtures/baseFixture';
 import { WORKBENCH_SETTINGS } from '../../settings/custom_portal_settings.json';
- 
+
 const hideDataFiles = WORKBENCH_SETTINGS['hideDataFiles'];
 
 test.describe('Data Files Search Tests', () => {
@@ -16,10 +16,10 @@ test.describe('Data Files Search Tests', () => {
     })
 
     test('Searching using valid query', async ({ page }) => {
-        await page.getByPlaceholder('Search My Data (Work)').fill('frontera');
+        await page.getByPlaceholder('Search My Data (Work)').fill('cep');
         await page.getByRole('button', { name: 'Search', exact: true }).click();
 
-        await expect(page.getByRole('cell', { name: 'frontera', exact: true })).toBeVisible();
+        await expect(page.getByRole('cell', { name: 'cep', exact: true })).toBeVisible();
     })
 
     test('Invalid search shows not found message', async ({ page }) => {
@@ -34,7 +34,7 @@ test.describe('Data Files Search Tests', () => {
         await page.getByPlaceholder('Search My Data (Work)').fill('random string');
         await page.getByRole('button', { name: 'Search', exact: true }).click();
         await page.getByRole('button', { name: 'Back to All Files' }).click();
-        
+
         await expect(page.locator('.data-files-table-body')).toBeVisible()
         const rows = await page.getByRole('rowgroup').getByRole('row').all()
 
@@ -43,7 +43,7 @@ test.describe('Data Files Search Tests', () => {
     })
 
     test('Filtering works', async ({ page }) => {
-        
+
         await page.getByTestId('selector').selectOption('Folders')
 
         await expect(page.locator('.data-files-table-body')).toBeVisible()
