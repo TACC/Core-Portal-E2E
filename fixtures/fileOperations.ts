@@ -1,5 +1,8 @@
 import type { Page, Locator } from '@playwright/test';
 
+//portals for which we have to scroll down to get to their folders
+const scroll_portals = ['frontera', 'lccf', 'mise', 'ptdatax', 'utrc'];
+
 export class FileOperations {
   constructor(public readonly page: Page) {
   }
@@ -81,13 +84,20 @@ export class FileOperations {
     //assumes we are in test_data-do_not_delete
     await page.getByRole('button', { name: 'Copy' }).click();
     await page.getByText('Back').click();
-    await page.getByRole("link", { name: `${portal}` }).click();
+    if (scroll_portals.includes(portal)) {
+      await page.mouse.wheel(0, 400);
+    }
+    await page.getByRole("link", { name: `${portal}`, exact: true }).click();
     await page.getByRole('row', { name: `Folder ${portal} Copy` }).getByRole('button', { name: 'Copy' }).click();
   }
 
   async goToTestDestinationFolder(page: Page, portal: string) {
     await page.getByRole('link', { name: 'My Data (Work)' }).click();
     await page.getByText('e2e-test-files').click();
-    await page.getByRole("link", { name: `${portal}` }).click();
+    if (scroll_portals.includes(portal)) {
+      await page.locator('.data-files-table-body').dblclick();
+      await page.mouse.wheel(0, 400);
+    }
+    await page.getByRole("link", { name: `${portal}`, exact: true }).click();
   }
 }

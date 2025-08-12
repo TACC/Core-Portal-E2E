@@ -17,3 +17,4 @@ To run other portals:
 Useful cli flags:
 * `--debug` to run debug mode (headed + step-through controls + selector creation)
 * `--headed` to run headed
+* `--ui` to run the separate playwright ui that you can run tests in and get a trace log
