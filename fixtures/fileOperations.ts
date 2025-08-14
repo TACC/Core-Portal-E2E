@@ -88,7 +88,7 @@ export class FileOperations {
       await page.mouse.wheel(0, 400);
     }
     await page.getByRole("link", { name: `${portal}`, exact: true }).click();
-    await page.getByRole('row', { name: `Folder ${portal} Copy` }).getByRole('button', { name: 'Copy' }).click();
+    await page.getByRole('row', { name: `Folder ${portal} Copy`, exact: true }).getByRole('button', { name: 'Copy' }).click();
   }
 
   async goToTestDestinationFolder(page: Page, portal: string) {
