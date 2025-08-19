@@ -9,3 +9,8 @@ node_modules/
 /settings/custom_portal_settings.json
 /utils/__pycache__/
 /settings/__pycache__/
+
+/fixtures/baseFixture-*.js
+/settings/.env.*.portal
+/settings/*-custom_portal_settings.json
+/settings/*-custom_portal_settings.py
