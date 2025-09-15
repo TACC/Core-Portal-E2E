@@ -1,7 +1,7 @@
 import { expect, base } from '@playwright/test';
 import { test } from '../../fixtures/baseFixture';
 import { PORTAL_DATAFILES_STORAGE_SYSTEMS } from '../../settings/custom_portal_settings.json';
- 
+
 const portalStorageSystems = PORTAL_DATAFILES_STORAGE_SYSTEMS;
 
 test.describe('Unauthorized User Tests', () => {
@@ -15,10 +15,15 @@ test.describe('Unauthorized User Tests', () => {
     }
     test.skip(publicDataExists === false, 'Public Data not on portal, test skipped');
 
+    let topNavPortals = ['CEP', 'DRP', '3dem'];
+    if (!topNavPortals.includes(portal)) {
+      test.skip();
+    }
+
     await page.goto(baseURL);
     await page.getByRole('link', { name: 'Public Data' }).click();
 
-    const heading = page.getByRole('heading', {level: 2});
+    const heading = page.getByRole('heading', { level: 2 });
     await expect(heading.locator('.system-name')).toHaveText('Public Data');
   });
 
@@ -28,7 +33,7 @@ test.describe('Unauthorized User Tests', () => {
 
     await page.waitForURL(/https:\/\/portals(?:\.develop)?\.tapis\.io\/.*$/);
 
-    const heading = page.getByRole('heading', {level: 1});
+    const heading = page.getByRole('heading', { level: 1 });
     await expect(heading).toHaveText('Log In');
   })
 })
