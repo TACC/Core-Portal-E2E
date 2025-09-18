@@ -15,7 +15,7 @@ test.describe('Unauthorized User Tests', () => {
     }
     test.skip(publicDataExists === false, 'Public Data not on portal, test skipped');
 
-    let topNavPortals = ['CEP', 'DRP', '3dem'];
+    let topNavPortals = ['DRP', '3dem'];
     if (!topNavPortals.includes(portal)) {
       test.skip();
     }

@@ -10,7 +10,7 @@ for (const entry of PORTAL_DATAFILES_STORAGE_SYSTEMS) {
   }
 }
 
-let topNavPortals = ['CEP', 'DRP', '3dem'];
+let topNavPortals = ['DRP', '3dem'];
 
 test.describe('Public Data Tests', async () => {
 
