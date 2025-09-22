@@ -17,6 +17,12 @@ setup('authenticate', async ({ page, portal, environment, baseURL, mfaSecret }) 
   await page.waitForURL('**/*');
   const redirectUrl = page.url();
   
+  // Extract base URL (protocol + hostname) and set as environment variable
+  const url = new URL(redirectUrl);
+  const tapisTenantBaseUrl = `${url.protocol}//${url.hostname}`;
+  
+  process.env.TAPIS_TENANT_BASEURL = tapisTenantBaseUrl;
+    
   if (redirectUrl.includes('/oauth2/mfa')) {
     // MFA flow
     let totp = new OTPAuth.TOTP({
