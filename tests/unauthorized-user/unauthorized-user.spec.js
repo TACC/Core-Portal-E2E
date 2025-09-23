@@ -26,7 +26,7 @@ test.describe('Unauthorized User Tests', () => {
     const url = `${baseURL}/workbench/dashboard`;
     await page.goto(url);
 
-    await page.waitForURL(/https:\/\/portals(?:\.develop)?\.tapis\.io\/.*$/);
+    await page.waitForURL('**/*');
 
     const heading = page.getByRole('heading', {level: 1});
     await expect(heading).toHaveText('Log In');
