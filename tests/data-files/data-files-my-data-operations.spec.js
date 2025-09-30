@@ -160,7 +160,7 @@ test.describe('Data Files My Data Work Operations tests', () => {
         expect(copied_file).toBeUndefined;
     })
 
-    test('Link File', async ({ page, portal, fileOperations }) => {
+    test('Link File', async ({ page, portal, fileOperations, tapisTenantBaseUrl }) => {
         test.skip(makeLink === false, 'Link File hidden on portal, test skipped');
 
         //click into the data files area
@@ -194,7 +194,7 @@ test.describe('Data Files My Data Work Operations tests', () => {
         //continue the test
         await page.getByRole('button', { name: 'Generate Link' }).click();
         const link = await page.getByRole('textbox').getAttribute('value');
-        expect(link).toContain("https://portals.tapis.io/v3/files/postits/redeem/");
+        expect(link).toContain(`${tapisTenantBaseUrl}/v3/files/postits/redeem/`);
         //clipboard check for copy button
         await page.getByRole('dialog').getByRole('button', { name: 'Copy' }).click();
         let clipboardText = await page.evaluate("navigator.clipboard.readText()");
@@ -204,7 +204,7 @@ test.describe('Data Files My Data Work Operations tests', () => {
         await page.getByRole('button', { name: 'Confirm' }).click();
         const link2 = await page.getByRole('textbox').getAttribute('value');
         //TODO: refactor to work with other tapis tenants
-        expect(link2).toContain("https://portals.tapis.io/v3/files/postits/redeem/");
+        expect(link2).toContain(`${tapisTenantBaseUrl}/v3/files/postits/redeem/`);
         //"delete" check
         await page.getByRole('button', { name: 'Delete' }).click();
         await page.getByRole('button', { name: 'Confirm' }).click();

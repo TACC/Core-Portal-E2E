@@ -2,9 +2,9 @@ import { expect } from '@playwright/test';
 import { test } from '../../fixtures/baseFixture';
 import { PORTAL_PROJECTS_SYSTEM_PREFIX } from '../../settings/custom_portal_settings.json'
 
-test('Cleanup shared workspaces', async ({ page, baseURL }) => {
+test('Cleanup shared workspaces', async ({ page, baseURL, tapisTenantBaseUrl }) => {
 
-    const tenant = 'https://portals.tapis.io';
+    const tenant = tapisTenantBaseUrl;
     const projectPrefix = PORTAL_PROJECTS_SYSTEM_PREFIX;
 
     let systems = []
