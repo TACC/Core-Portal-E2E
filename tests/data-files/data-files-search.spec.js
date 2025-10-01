@@ -16,7 +16,7 @@ test.describe('Data Files Search Tests', () => {
     })
 
     test('Searching using valid query', async ({ page }) => {
-        await page.getByPlaceholder('Search My Data (Work)').fill('cep');
+        await page.getByPlaceholder('Search My Data (Work)').fill('cep-search-folder');
         await page.getByRole('button', { name: 'Search', exact: true }).click();
 
         await expect(page.getByRole('cell', { name: 'cep-search-folder', exact: true })).toBeVisible();
