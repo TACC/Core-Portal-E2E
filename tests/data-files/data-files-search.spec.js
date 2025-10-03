@@ -18,7 +18,7 @@ test.describe('Data Files Search Tests', () => {
     test('Searching using valid query', async ({ page }) => {
         await page.getByPlaceholder('Search My Data (Work)').fill('cep-search-folder');
         await page.getByRole('button', { name: 'Search', exact: true }).click();
-
+        await page.getByTestId('loading-spinner').waitFor({ state: "hidden" });
         await expect(page.getByRole('cell', { name: 'cep-search-folder', exact: true })).toBeVisible();
     })
 

@@ -184,8 +184,8 @@ test.describe('Data Files My Data Work Operations tests', () => {
         await page.getByRole('button', { name: 'Link' }).click();
         await expect(page.getByTestId('loading-spinner')).not.toBeVisible();
 
-        //if copy is enabled, there's already a link
-        if ((page.getByRole('dialog').getByRole('button', { name: 'Copy' }).isEnabled())) {
+        //check if there's already a link
+        if (await page.getByRole('dialog').getByRole('button', { name: 'Copy' }).isEnabled()) {
             //delete the link
             await page.getByRole('button', { name: 'Delete' }).click();
             await page.getByRole('button', { name: 'Confirm' }).click();
