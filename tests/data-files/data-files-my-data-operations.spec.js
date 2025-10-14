@@ -180,10 +180,18 @@ test.describe('Data Files My Data Work Operations tests', () => {
         await expect(copied_file).toBeVisible();
 
         //do the link testing
-        //TODO: check that there is not already a link from a failed test before running
         await page.getByRole('checkbox', { name: 'select file testLink.txt' }).click();
         await page.getByRole('button', { name: 'Link' }).click();
         await expect(page.getByTestId('loading-spinner')).not.toBeVisible();
+
+        //check if there's already a link
+        if (await page.getByRole('dialog').getByRole('button', { name: 'Copy' }).isEnabled()) {
+            //delete the link
+            await page.getByRole('button', { name: 'Delete' }).click();
+            await page.getByRole('button', { name: 'Confirm' }).click();
+        }
+
+        //continue the test
         await page.getByRole('button', { name: 'Generate Link' }).click();
         const link = await page.getByRole('textbox').getAttribute('value');
         expect(link).toContain(`${tapisTenantBaseUrl}/v3/files/postits/redeem/`);
