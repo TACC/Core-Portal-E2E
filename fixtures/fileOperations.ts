@@ -84,7 +84,9 @@ export class FileOperations {
     //assumes we are in test_data-do_not_delete
     await page.getByRole('button', { name: 'Copy' }).click();
     await page.getByText('Back').click();
+    await page.getByTestId('loading-spinner').waitFor({ state: "hidden" });
     if (scroll_portals.includes(portal)) {
+      await page.getByText('e2e-test-filesCopy00-').dblclick();
       await page.mouse.wheel(0, 400);
     }
     await page.getByRole("link", { name: `${portal}`, exact: true }).click();
