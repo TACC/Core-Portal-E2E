@@ -24,6 +24,8 @@ for (const app of apps) {
 
         const statuses = ['PROCESSING', 'QUEUEING', 'RUNNING', 'FINISHING', 'FINISHED']
 
+        test.describe.configure({ retries: 0 })
+
         test.beforeEach(async ({ page, portal, baseURL, fileOperations }) => {
             await page.goto(baseURL);
             await page.locator('#navbarDropdown').click();
@@ -72,6 +74,7 @@ for (const app of apps) {
                 const rows = await table.locator('tbody').locator('tr').all()
                 const row = rows[0];
                 const appNameInTable = await row.locator('td').nth(1).textContent();
+                await page.getByTestId('loading-spinner').waitFor({ state: "hidden" });
                 expect(appNameInTable.toLowerCase()).toContain(getAppName(app).toLowerCase());
                 const status = await row.locator('td').nth(2).textContent()
 
@@ -101,6 +104,7 @@ for (const app of apps) {
                 const statusRegExp = new RegExp(statuses.join('|'));
                 await expect(row, 'Does not have a valid status').toHaveText(statusRegExp, { ignoreCase: true });
                 await row.getByRole('link', { name: 'View Details', exact: true }).click();
+                await page.getByTestId('loading-spinner').waitFor({ state: "hidden" });
                 await expect(page.locator('dd:below(:text("App ID"))').first()).toHaveText(getAppName(app));
 
                 if (app === 'compress') {
