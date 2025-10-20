@@ -57,27 +57,50 @@ pipeline {
                usernamePassword(credentialsId: 'portal_tests_user', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD'),
                string(credentialsId: 'PORTALS_TEST_USER_MFA_SECRET', variable: 'MFA_SECRET')
             ]) {
-               sh 'npx playwright test --list'
-               sh 'USERNAME=$USERNAME PASSWORD=$PASSWORD MFA_SECRET=$MFA_SECRET npx playwright test'
+               script {
+                  if (params.Run_Type == 'Limited') {
+                     sh 'npx playwright test --list --project=limited --project=unauthorized'
+                     sh 'USERNAME=$USERNAME PASSWORD=$PASSWORD MFA_SECRET=$MFA_SECRET npx playwright test --project=limited --project=unauthorized'
+                  } else {
+                     sh 'npx playwright test --list --project=default --project=unauthorized'
+                     sh 'USERNAME=$USERNAME PASSWORD=$PASSWORD MFA_SECRET=$MFA_SECRET npx playwright test --project=default --project=unauthorized'
+                  }
+               }
             }
          }
       }
    }
    post {
       always {
-         publishHTML([
-            allowMissing: true, 
-            alwaysLinkToLastBuild: true, 
-            keepAll: true, 
-            reportDir: 'playwright-report', 
-            reportFiles: 'index.html', 
-            reportName: 'Playwright Test Report', 
-            reportTitles: ''
-         ])
-         junit(
-            allowEmptyResults: true,
-            testResults: 'playwright-report/results.xml'
-         )
+         script {
+            def testResults = junit(
+               allowEmptyResults: true,
+               testResults: 'playwright-report/results.xml'
+            )
+            
+            def buildStatus = currentBuild.result ?: 'SUCCESS'
+            def statusEmoji = buildStatus == 'SUCCESS' ? ':white_check_mark:' : ':x:'
+            def statusText = buildStatus == 'SUCCESS' ? 'PASSED' : 'FAILED'
+            
+            // Get run type for the message
+            def runType = params.Run_Type ?: 'Default'
+
+            def message = """
+                  ${statusEmoji} *Core Portal E2E Tests - ${statusText}*
+                  - *Portal:* ${params.Portal}
+                  - *Environment:* ${params.Environment}
+                  - *Run Type:* ${runType}
+                  - *Tests:* Total: ${testResults.totalCount}, Passed: ${testResults.passCount}, Failed: ${testResults.failCount}, Skipped: ${testResults.skipCount}
+
+                  <https://jenkins.portals.tacc.utexas.edu/job/Core_Portal_E2E_Tests/${currentBuild.number}/testReport/|View Test Report>
+            """.stripIndent()
+            
+            slackSend(
+               channel: "wma-e2e-slack-notifications", 
+               message: message
+            )
+         }
+         
          cleanWs()
       }
    }

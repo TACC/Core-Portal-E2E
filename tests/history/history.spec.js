@@ -2,7 +2,7 @@ import { test } from '../../fixtures/baseFixture'
 import { expect, base } from '@playwright/test';
 import { WORKBENCH_SETTINGS } from '../../settings/custom_portal_settings.json';
 
-const jobsv2Title = WORKBENCH_SETTINGS['jobsv2Title'];
+const jobsv2Title = WORKBENCH_SETTINGS['jobsv2Title'] || null;
 
 
 
