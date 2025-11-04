@@ -104,7 +104,7 @@ for (const app of apps) {
                 const statusRegExp = new RegExp(statuses.join('|'));
                 await expect(row, 'Does not have a valid status').toHaveText(statusRegExp, { ignoreCase: true });
                 await row.getByRole('link', { name: 'View Details', exact: true }).click();
-                await page.getByTestId('loading-spinner').waitFor({ state: "hidden" });
+                await page.getByRole('dialog').getByTestId('loading-spinner').waitFor({ state: "hidden" });
                 await expect(page.locator('dd:below(:text("App ID"))').first()).toHaveText(getAppName(app));
 
                 if (app === 'compress') {
