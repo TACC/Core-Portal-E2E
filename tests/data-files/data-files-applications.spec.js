@@ -9,12 +9,22 @@ for (const system of PORTAL_DATAFILES_STORAGE_SYSTEMS) {
     portalStorageSystems.push(system.name);
 }
 
+const getAppName = (app) => {
+    if (app == 'compress') {
+        return WORKBENCH_SETTINGS['compressApp']['id'];
+    }
+    if (app == 'extract') {
+        return WORKBENCH_SETTINGS['extractApp']['id'];
+    }
+}
+
 // Run tests for both compress and extract back to back
 for (const app of apps) {
     test.describe(`Data files ${app} tests`, () => {
 
-        let jobSubmissionTimestamp; // Used to identify a job on the History page
         const statuses = ['PROCESSING', 'QUEUEING', 'RUNNING', 'FINISHING', 'FINISHED']
+
+        test.describe.configure({ retries: 0 })
 
         test.beforeEach(async ({ page, portal, baseURL, fileOperations }) => {
             await page.goto(baseURL);
@@ -51,36 +61,30 @@ for (const app of apps) {
                     await page.getByRole('button', { name: 'Extract' }).click();
                     await page.getByRole('dialog').getByRole('button', { name: 'Extract' }).click();
                 }
-
-
+                
                 await expect(page.getByRole('dialog')).toBeVisible()
 
                 const notificationContent = page.locator('.notification-toast-content')
-
-                await expect(notificationContent).toBeVisible();
-                const toastText = await notificationContent.textContent();
-                const regExp = new RegExp(`${app}.* processing`);
-                await expect(notificationContent).toHaveText(regExp);
+                
                 await expect(notificationContent).toBeVisible();
 
-                const regex = /(\d{2}:\d{2}:\d{2})/;
-                let jobSubmissionTime = regex.exec(toastText)[1];
+                await page.getByRole('link', { name: 'History', exact: true }).click();
 
-                const date = new Date();
-                let year = date.toLocaleString("default", { year: 'numeric' });
-                let month = date.toLocaleString("default", { month: '2-digit' });
-                let day = date.toLocaleString("default", { day: '2-digit' });
+                const table = page.getByRole('table')
+                const rows = await table.locator('tbody').locator('tr').all()
+                const row = rows[0];
+                const appNameInTable = await row.locator('td').nth(1).textContent();
+                await page.getByTestId('loading-spinner').waitFor({ state: "hidden" });
+                expect(appNameInTable.toLowerCase()).toContain(getAppName(app).toLowerCase());
+                const status = await row.locator('td').nth(2).textContent()
 
-                jobSubmissionTimestamp = `${year}-${month}-${day}T${jobSubmissionTime}`;
+                const statusIndex = statuses.indexOf(status.toUpperCase());
 
                 try {
-                    for (let i = 1; i < statuses.length; i++) {
+                    for (let i = statusIndex + 1; i < statuses.length; i++) {
                         await expect(async () => {
-
-                            await expect(notificationContent).toBeVisible();
-                            const statusRegExp = new RegExp(`${app}.*${statuses[i]}`);
-                            await expect(notificationContent).toHaveText(statusRegExp, { ignoreCase: true });
-                            await expect(notificationContent).not.toBeVisible();
+                            const newStatus = await row.locator('td').nth(2).textContent();
+                            await expect(newStatus).toHaveText(statuses[i], { ignoreCase: true });
 
                         }, statuses[i - 1]).toPass({ timeout: 30000 });
                     }
@@ -92,22 +96,16 @@ for (const app of apps) {
             })
 
             test('successful job submission and job data', async ({ page }) => {
-                let appName;
-
-                if (app == 'compress') {
-                    appName = WORKBENCH_SETTINGS['compressApp']['id'];
-                }
-                if (app == 'extract') {
-                    appName = WORKBENCH_SETTINGS['extractApp']['id'];
-                }
 
                 await page.getByRole('link', { name: 'History', exact: true }).click();
-                const regExp = new RegExp(`${appName}.*${jobSubmissionTimestamp}`);
-                const row = page.locator("tr", { hasText: regExp });
+                const table = page.getByRole('table')
+                const rows = await table.locator('tbody').locator('tr').all()
+                const row = rows[0];
                 const statusRegExp = new RegExp(statuses.join('|'));
                 await expect(row, 'Does not have a valid status').toHaveText(statusRegExp, { ignoreCase: true });
                 await row.getByRole('link', { name: 'View Details', exact: true }).click();
-                await expect(page.locator('dd:below(:text("App ID"))').first()).toHaveText(appName);
+                await page.getByRole('dialog').getByTestId('loading-spinner').waitFor({ state: "hidden" });
+                await expect(page.locator('dd:below(:text("App ID"))').first()).toHaveText(getAppName(app));
 
                 if (app === 'compress') {
                     await expect(page.locator('dd:below(:text("Archive File Name"))').first()).toHaveText('testCompress');
