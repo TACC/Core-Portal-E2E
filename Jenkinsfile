@@ -31,7 +31,18 @@ pipeline {
                def sourceFilePath = "core-portal-deployments/${params.Portal}/camino"
                def destinationFilePath = 'settings'
 
-               sh "cp ${sourceFilePath}/${params.Environment}.settings_custom.py ${destinationFilePath}/custom_portal_settings.py"
+               // Try to copy settings_custom.py file - check for both possible formats
+               def settingsFile = "${params.Environment}.settings_custom.py"
+               def settingsFileAlt = "${params.Environment}.portal.settings_custom.py"
+               
+               if (fileExists("${sourceFilePath}/${settingsFile}")) {
+                  sh "cp ${sourceFilePath}/${settingsFile} ${destinationFilePath}/custom_portal_settings.py"
+               } else if (fileExists("${sourceFilePath}/${settingsFileAlt}")) {
+                  sh "cp ${sourceFilePath}/${settingsFileAlt} ${destinationFilePath}/custom_portal_settings.py"
+               } else {
+                  error("Settings file not found: neither ${settingsFile} nor ${settingsFileAlt} exists in ${sourceFilePath}")
+               }
+               
                sh "cp ${sourceFilePath}/${params.Environment}.env ${destinationFilePath}/.env.portal"
 
                // Running a Python script to process and output the portal settings as JSON
