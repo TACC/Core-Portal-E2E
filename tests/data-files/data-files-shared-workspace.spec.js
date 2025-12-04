@@ -22,6 +22,27 @@ test.describe('Shared Workspaces tests', () => {
         await page.getByRole('main').getByRole('link', { name: 'Shared Workspaces' }).click();
     })
 
+    //clean up just in case a test failed
+    test.afterEach(async ({ page, portal, baseURL, fileOperations }) => {
+        console.log(`Finished ${test.info().title} with status ${test.info().status} on portal ${portal} and base url ${baseURL}`);
+
+        if (test.info().status !== test.info().expectedStatus) {
+            console.log(`Did not run as expected, ended up at ${page.url()}`);
+            await page.goto(baseURL);
+            await page.locator('#navbarDropdown').click();
+            await page.getByRole('link', { name: 'My Dashboard' }).click();
+            await page.getByRole('link', { name: 'Data Files', exact: true }).click();
+            await fileOperations.goToTestDestinationFolder(page, portal);
+            await expect(page.getByTestId('loading-spinner')).not.toBeVisible();
+            await page.getByRole('checkbox', { name: "select all folders and files" }).click();
+            //check to see if trash can be used; not all failures have remaining files
+            const trashBttn = page.locator('button:has-text("Trash")');
+            if (await trashBttn.isEnabled()) {
+                await trashBttn.click();
+            }
+        }
+    })
+
     test('Add Shared Workspace', async ({ page }) => {
         test.setTimeout(100000)
         await page.getByRole('button', { name: '+ Add' }).click();
@@ -30,7 +51,7 @@ test.describe('Shared Workspaces tests', () => {
         await expect(page.locator('.modal-dialog')).toBeVisible();
         await page.getByRole('textbox').click();
         await page.getByRole('textbox').fill('Test Shared Workspace');
-        
+
         await expect(page.locator('.project-members__cell').nth(0)).toContainText('WMA Test User')
 
         await page.getByRole('button', { name: 'Add Workspace' }).click();
@@ -88,14 +109,14 @@ test.describe('Shared Workspaces tests', () => {
 
     test('Copy File', async ({ page, portal, fileOperations, baseURL }) => {
             //select the file
-            await page.getByRole('link', { name: 'DO NOT DELETE' }).click();
+            await page.getByRole('link', { name: 'E2E TESTING PROJECT - DO NOT DELETE' }).click();
             await page.getByRole('link', { name: '00-test_data-do_not_delete' }).click();
             await page.getByRole('checkbox', { name: 'testCopy.txt' }).click();
             //copy the file to the test directory
-            await fileOperations.copyFileToTestDestination(page, portal, 'DO NOT DELETE');
+            await fileOperations.copyFileToTestDestination(page, portal, 'E2E TESTING PROJECT - DO NOT DELETE');
 
             //go to the test_data_destination directory and check the file is there
-            await fileOperations.goToTestDestinationFolder(page, portal, 'DO NOT DELETE');
+            await fileOperations.goToTestDestinationFolder(page, portal, 'E2E TESTING PROJECT - DO NOT DELETE');
             const copied_file = page.getByRole('link', { name: 'testCopy.txt' });
             await expect(copied_file).toBeVisible();
 
@@ -106,7 +127,7 @@ test.describe('Shared Workspaces tests', () => {
         })
 
     test('Rename File', async ({ page, portal, fileOperations }) => {
-            await page.getByRole('link', { name: 'DO NOT DELETE' }).click();
+            await page.getByRole('link', { name: 'E2E TESTING PROJECT - DO NOT DELETE' }).click();
             await page.getByRole('link', { name: '00-test_data-do_not_delete' }).click();
             //click into the data files area
             await expect(page.locator('.data-files-table-body')).toBeVisible();
@@ -117,10 +138,10 @@ test.describe('Shared Workspaces tests', () => {
             //select the file
             await page.getByRole('checkbox', { name: 'testRename.txt' }).click();
             //copy the file
-            await fileOperations.copyFileToTestDestination(page, portal, 'DO NOT DELETE');
+            await fileOperations.copyFileToTestDestination(page, portal, 'E2E TESTING PROJECT - DO NOT DELETE');
 
             //go to the test_data_destination directory and check the file is there
-            await fileOperations.goToTestDestinationFolder(page, portal, 'DO NOT DELETE');
+            await fileOperations.goToTestDestinationFolder(page, portal, 'E2E TESTING PROJECT - DO NOT DELETE');
             const copied_file = page.getByRole('link', { name: 'testRename.txt' });
             await expect(copied_file).toBeVisible();
 
@@ -140,7 +161,7 @@ test.describe('Shared Workspaces tests', () => {
         })
 
         test('Move File', async ({ page, portal, fileOperations }) => {
-            await page.getByRole('link', { name: 'DO NOT DELETE' }).click();
+            await page.getByRole('link', { name: 'E2E TESTING PROJECT - DO NOT DELETE' }).click();
             await page.getByRole('link', { name: '00-test_data-do_not_delete' }).click();
             //click into the data files area
             await expect(page.locator('.data-files-table-body')).toBeVisible();
@@ -151,11 +172,11 @@ test.describe('Shared Workspaces tests', () => {
             //select the file
             await page.getByRole('checkbox', { name: 'testMove.txt' }).click();
             //copy the file
-            await fileOperations.copyFileToTestDestination(page, portal, 'DO NOT DELETE');
+            await fileOperations.copyFileToTestDestination(page, portal, 'E2E TESTING PROJECT - DO NOT DELETE');
 
             //go to the test_data_destination directory and check the file is there
             await page.getByRole('link', { name: 'Shared Workspaces' }).click();
-            await page.getByRole('link', { name: 'DO NOT DELETE' }).click();
+            await page.getByRole('link', { name: 'E2E TESTING PROJECT - DO NOT DELETE' }).click();
             const copied_file = page.getByRole('link', { name: 'testMove.txt' });
             await expect(copied_file).toBeVisible();
 
@@ -170,7 +191,7 @@ test.describe('Shared Workspaces tests', () => {
 
             //check for the moved file
             await page.getByRole('link', { name: 'Shared Workspaces' }).click();
-            await page.getByRole('link', { name: 'DO NOT DELETE' }).click();
+            await page.getByRole('link', { name: 'E2E TESTING PROJECT - DO NOT DELETE' }).click();
             await page.getByRole('link', { name: 'destination' }).click();
             const moved_file = page.getByRole('link', { name: 'testMove.txt' });
             await expect(moved_file).toBeVisible();
@@ -183,7 +204,7 @@ test.describe('Shared Workspaces tests', () => {
 
         test('Download File', async ({ page, portal, fileOperations }) => {
             //select the file
-            await page.getByRole('link', { name: 'DO NOT DELETE' }).click();
+            await page.getByRole('link', { name: 'E2E TESTING PROJECT - DO NOT DELETE' }).click();
             await page.getByRole('link', { name: '00-test_data-do_not_delete' }).click();
             //click into the data files area
             await expect(page.locator('.data-files-table-body')).toBeVisible();
@@ -194,10 +215,10 @@ test.describe('Shared Workspaces tests', () => {
             //select the file
             await page.getByRole('checkbox', { name: 'testDownload.txt' }).click();
             //copy the file
-            await fileOperations.copyFileToTestDestination(page, portal, 'DO NOT DELETE');
+            await fileOperations.copyFileToTestDestination(page, portal, 'E2E TESTING PROJECT - DO NOT DELETE');
 
             //go to the test_data_destination directory and check the file is there
-            await fileOperations.goToTestDestinationFolder(page, portal, 'DO NOT DELETE');
+            await fileOperations.goToTestDestinationFolder(page, portal, 'E2E TESTING PROJECT - DO NOT DELETE');
             const copied_file = page.getByRole('link', { name: 'testDownload.txt' });
             await expect(copied_file).toBeVisible();
 
@@ -218,7 +239,7 @@ test.describe('Shared Workspaces tests', () => {
         test('Link File', async ({ page, portal, fileOperations }) => {
             test.skip(makeLink === false, 'Link File hidden on portal, test skipped');
 
-            await page.getByRole('link', { name: 'DO NOT DELETE' }).click();
+            await page.getByRole('link', { name: 'E2E TESTING PROJECT - DO NOT DELETE' }).click();
             await page.getByRole('link', { name: '00-test_data-do_not_delete' }).click();
             //click into the data files area
             await expect(page.locator('.data-files-table-body')).toBeVisible();
@@ -229,10 +250,10 @@ test.describe('Shared Workspaces tests', () => {
             //select the file
             await page.getByRole('checkbox', { name: 'testLink.txt' }).click();
             //copy the file
-            await fileOperations.copyFileToTestDestination(page, portal, 'DO NOT DELETE');
+            await fileOperations.copyFileToTestDestination(page, portal, 'E2E TESTING PROJECT - DO NOT DELETE');
 
             //go to the test_data_destination directory and check the file is there
-            await fileOperations.goToTestDestinationFolder(page, portal, 'DO NOT DELETE');
+            await fileOperations.goToTestDestinationFolder(page, portal, 'E2E TESTING PROJECT - DO NOT DELETE');
             const copied_file = page.getByRole('link', { name: 'testLink.txt' });
             await expect(copied_file).toBeVisible();
 
@@ -267,7 +288,7 @@ test.describe('Shared Workspaces tests', () => {
         })
 
         test('Trash File', async ({ page, portal, fileOperations }) => {
-            await page.getByRole('link', { name: 'DO NOT DELETE' }).click();
+            await page.getByRole('link', { name: 'E2E TESTING PROJECT - DO NOT DELETE' }).click();
             await page.getByRole('link', { name: '00-test_data-do_not_delete' }).click();
             //click into the data files area
             await expect(page.locator('.data-files-table-body')).toBeVisible();
@@ -278,10 +299,10 @@ test.describe('Shared Workspaces tests', () => {
             //select the file
             await page.getByRole('checkbox', { name: 'testTrash.txt' }).click();
             //copy the file
-            await fileOperations.copyFileToTestDestination(page, portal, 'DO NOT DELETE');
+            await fileOperations.copyFileToTestDestination(page, portal, 'E2E TESTING PROJECT - DO NOT DELETE');
 
             //go to the test_data_destination directory and check the file is there
-            await fileOperations.goToTestDestinationFolder(page, portal, 'DO NOT DELETE');
+            await fileOperations.goToTestDestinationFolder(page, portal, 'E2E TESTING PROJECT - DO NOT DELETE');
             const copied_file = page.getByRole('link', { name: 'testTrash.txt' });
             await expect(copied_file).toBeVisible();
 
@@ -294,7 +315,7 @@ test.describe('Shared Workspaces tests', () => {
         test('View Path', async ({ page }) => {
             test.skip(viewPath === false, 'View Path hidden on portal, test skipped');
 
-            await page.getByRole('link', { name: 'DO NOT DELETE' }).click();
+            await page.getByRole('link', { name: 'E2E TESTING PROJECT - DO NOT DELETE' }).click();
             await page.getByRole('link', { name: '00-test_data-do_not_delete' }).click();
             //click the view path link for the copy file
             await page.getByRole('row', { name: 'testCopy.txt File' }).getByRole('button').click();
