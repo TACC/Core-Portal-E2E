@@ -11,12 +11,15 @@ test('Cleanup shared workspaces', async ({ page, baseURL, tapisTenantBaseUrl }) 
 
     try {
         const accessToken = await getAccessToken(page, baseURL)
-        
+
         systems = await getSystems(page, tenant, projectPrefix, accessToken)
 
         console.log(`Teardown: Found ${systems.length} shared workspaces to delete ${systems}`)
-    
+
         for (const system of systems) {
+            console.log(JSON.stringify(system))
+            if (system.id == "cep.project.CEP-1720")
+                continue
             await deleteSystem(page, system.id, tenant, accessToken)
             console.info(`Teardown: Shared workspace with id ${system.id} deleted`)
         }
@@ -41,7 +44,7 @@ test('Cleanup shared workspaces', async ({ page, baseURL, tapisTenantBaseUrl }) 
             for (const link of links) {
                 const href = await link.getAttribute('href');
                 expect(href).not.toContain(system.id);
-            }    
+            }
         }
     }
 })
