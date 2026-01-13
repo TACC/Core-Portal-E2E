@@ -3,7 +3,16 @@ import OTPAuth from 'otpauth';
 
 const authFile = 'playwright/.auth/user.json';
 
-setup('authenticate', async ({ page, portal, environment, baseURL, mfaSecret }) => {
+setup('authenticate', async ({ page, portal, environment, baseURL, mfaSecret }, testInfo) => {
+
+  // Add delay before retries to allow system to stabilize
+  if (testInfo.retry > 0) {
+    const delayMinutes = 5;
+    const delayMs = delayMinutes * 60 * 1000;
+    console.log(`Retry attempt ${testInfo.retry}: Waiting ${delayMinutes} minutes before retrying authentication...`);
+    await new Promise(resolve => setTimeout(resolve, delayMs));
+    await page.context().clearCookies();
+  }
 
   console.log("Using portal url: ", baseURL)
 
