@@ -5,6 +5,9 @@ const authFile = 'playwright/.auth/user.json';
 
 setup('authenticate', async ({ page, portal, environment, baseURL, mfaSecret }, testInfo) => {
 
+  // Set timeout to 15 minutes for setup
+  setup.setTimeout(15 * 60 * 1000);
+
   // Add delay before retries to allow system to stabilize
   if (testInfo.retry > 0) {
     const delayMinutes = 5;
