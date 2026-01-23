@@ -1,8 +1,11 @@
 import { expect } from '@playwright/test';
-import { test } from '../../fixtures/baseFixture';
-import { PORTAL_DATAFILES_STORAGE_SYSTEMS } from '../../settings/custom_portal_settings.json';
+import { test } from '../../fixtures/fileOperationsFixture';
+
+import { WORKBENCH_SETTINGS, PORTAL_DATAFILES_STORAGE_SYSTEMS } from '../../settings/custom_portal_settings.json';
 
 const portalStorageSystems = PORTAL_DATAFILES_STORAGE_SYSTEMS
+const makeLink = WORKBENCH_SETTINGS['makeLink'];
+const viewPath = WORKBENCH_SETTINGS['viewPath'];
 
 test.describe.configure({ mode: 'serial' })
 
@@ -19,6 +22,27 @@ test.describe('Shared Workspaces tests', () => {
         await page.getByRole('main').getByRole('link', { name: 'Shared Workspaces' }).click();
     })
 
+    //clean up just in case a test failed
+    test.afterEach(async ({ page, portal, baseURL, fileOperations }) => {
+        console.log(`Finished ${test.info().title} with status ${test.info().status} on portal ${portal} and base url ${baseURL}`);
+
+        if (test.info().status !== test.info().expectedStatus) {
+            console.log(`Did not run as expected, ended up at ${page.url()}`);
+            await page.goto(baseURL);
+            await page.locator('#navbarDropdown').click();
+            await page.getByRole('link', { name: 'My Dashboard' }).click();
+            await page.getByRole('link', { name: 'Data Files', exact: true }).click();
+            await fileOperations.goToTestDestinationFolder(page, portal);
+            await expect(page.getByTestId('loading-spinner')).not.toBeVisible();
+            await page.getByRole('checkbox', { name: "select all folders and files" }).click();
+            //check to see if trash can be used; not all failures have remaining files
+            const trashBttn = page.locator('button:has-text("Trash")');
+            if (await trashBttn.isEnabled()) {
+                await trashBttn.click();
+            }
+        }
+    })
+
     test('Add Shared Workspace', async ({ page }) => {
         test.setTimeout(100000)
         await page.getByRole('button', { name: '+ Add' }).click();
@@ -28,8 +52,7 @@ test.describe('Shared Workspaces tests', () => {
         await page.getByLabel('title').click();
         await page.getByLabel('title').fill('Test Shared Workspace');
         await page.getByLabel('description').click();
-        await page.getByLabel('description').fill('Test Shared Workspace description');
-
+        await page.getByLabel('description').fill('Test Shared Workspace');
         await expect(page.locator('.project-members__cell').nth(0)).toContainText('WMA Test User')
 
         await page.getByRole('button', { name: 'Add Workspace' }).click();
