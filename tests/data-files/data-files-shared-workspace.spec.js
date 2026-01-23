@@ -49,9 +49,10 @@ test.describe('Shared Workspaces tests', () => {
         await page.getByRole('menuitem', { name: 'Shared Workspace' }).click();
 
         await expect(page.locator('.modal-dialog')).toBeVisible();
-        await page.getByRole('textbox').click();
-        await page.getByRole('textbox').fill('Test Shared Workspace');
-
+        await page.getByLabel('title').click();
+        await page.getByLabel('title').fill('Test Shared Workspace');
+        await page.getByLabel('description').click();
+        await page.getByLabel('description').fill('Test Shared Workspace');
         await expect(page.locator('.project-members__cell').nth(0)).toContainText('WMA Test User')
 
         await page.getByRole('button', { name: 'Add Workspace' }).click();
@@ -88,7 +89,7 @@ test.describe('Shared Workspaces tests', () => {
 
     test('Edit Shared Workspace Name and Description', async ({ page }) => {
         await page.getByRole('link', { name: 'Test Shared Workspace' }).click();
-        await page.getByRole('button', { name: 'Edit Descriptions' }).click();
+        await page.getByRole('button', { name: 'Edit Workspace' }).click();
 
         await expect(page.locator('.modal-dialog')).toBeVisible();
 
