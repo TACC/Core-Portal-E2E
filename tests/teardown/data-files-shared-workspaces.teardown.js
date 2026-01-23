@@ -18,7 +18,7 @@ test('Cleanup shared workspaces', async ({ page, baseURL, tapisTenantBaseUrl }) 
 
         for (const system of systems) {
             console.log(JSON.stringify(system))
-            if (system.id == "cep.project.CEP-1720")
+            if (system.name == "E2E TESTING PROJECT – DO NOT DELETE")
                 continue
             await deleteSystem(page, system.id, tenant, accessToken)
             console.info(`Teardown: Shared workspace with id ${system.id} deleted`)
@@ -92,7 +92,7 @@ async function deleteSystem(page, systemId, tenant, accessToken) {
             method: 'POST',
             headers: {
                 "X-Tapis-Token": accessToken
-            } 
+            }
         });
 
         return await response.json();
