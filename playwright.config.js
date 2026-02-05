@@ -81,7 +81,8 @@ module.exports = defineConfig({
         'data-files/data-files-automatic-filenames.spec.js',
         'data-files/data-files-shared-workspace.spec.js',
         'data-files/data-files-my-data-operations.spec.js',
-        'data-files/data-files-add.spec.js'
+        'data-files/data-files-add.spec.js',
+        'data-files/data-files-shared-workspace-operations.spec.js'
       ]
     },
     {

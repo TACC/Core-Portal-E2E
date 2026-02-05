@@ -80,26 +80,40 @@ export class FileOperations {
     }
   }
 
-  async copyFileToTestDestination(page: Page, portal: string) {
+  async copyFileToTestDestination(page: Page, portal: string, sharedSystem?: string) {
     //assumes we are in test_data-do_not_delete
     await page.getByRole('button', { name: 'Copy' }).click();
-    await page.getByText('Back').click();
-    await page.getByTestId('loading-spinner').waitFor({ state: "hidden" });
-    if (scroll_portals.includes(portal)) {
-      await page.getByText('e2e-test-filesCopy00-').dblclick();
-      await page.mouse.wheel(0, 400);
+
+    if (sharedSystem) {
+      await page.getByText('Back').click();
+      await page.getByRole('dialog').getByTestId('selector').selectOption('shared');
+      await page.getByRole('link', { name: sharedSystem, exact: true }).click();
+      await page.getByRole('row', { name: `Folder ${sharedSystem} Copy` }).getByRole('button').click();
     }
-    await page.getByRole("link", { name: `${portal}`, exact: true }).click();
-    await page.getByRole('row', { name: `Folder ${portal} Copy`, exact: true }).getByRole('button', { name: 'Copy' }).click();
+    else {
+      await page.getByText('Back').click();
+      await page.getByTestId('loading-spinner').waitFor({ state: "hidden" });
+      if (scroll_portals.includes(portal)) {
+        await page.getByText('e2e-test-filesCopy00-').dblclick();
+        await page.mouse.wheel(0, 400);
+      }
+      await page.getByRole("link", { name: `${portal}`, exact: true }).click();
+      await page.getByRole('row', { name: `Folder ${portal} Copy`, exact: true }).getByRole('button', { name: 'Copy' }).click();
+    }
   }
 
-  async goToTestDestinationFolder(page: Page, portal: string) {
-    await page.getByRole('link', { name: 'My Data (Work)' }).click();
-    await page.getByText('e2e-test-files').click();
-    if (scroll_portals.includes(portal)) {
-      await page.locator('.data-files-table-body').dblclick();
-      await page.mouse.wheel(0, 400);
-    }
-    await page.getByRole("link", { name: `${portal}`, exact: true }).click();
+  async goToTestDestinationFolder(page: Page, portal: string, sharedSystem?: string) {
+    if (sharedSystem) {
+      await page.getByRole('main').getByRole('link', { name: 'Shared Workspaces' }).click();
+      await page.getByRole('link', { name: sharedSystem }).click();
+    } else {
+      await page.getByRole('link', { name: 'My Data (Work)' }).click();
+      await page.getByText('e2e-test-files').click();
+      if (scroll_portals.includes(portal)) {
+        await page.locator('.data-files-table-body').dblclick();
+        await page.mouse.wheel(0, 400);
+      }
+      await page.getByRole("link", { name: `${portal}`, exact: true }).click();
+      }
   }
 }
