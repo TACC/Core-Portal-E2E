@@ -1,8 +1,9 @@
 import { expect } from '@playwright/test';
 import { test } from '../../fixtures/baseFixture';
-import { PORTAL_DATAFILES_STORAGE_SYSTEMS } from '../../settings/custom_portal_settings.json';
+import { PORTAL_DATAFILES_STORAGE_SYSTEMS, WORKBENCH_SETTINGS } from '../../settings/custom_portal_settings.json';
 
-const portalStorageSystems = PORTAL_DATAFILES_STORAGE_SYSTEMS
+const portalStorageSystems = PORTAL_DATAFILES_STORAGE_SYSTEMS;
+const hideDataFiles = WORKBENCH_SETTINGS['hideDataFiles'];
 
 test.describe.configure({ mode: 'serial' })
 
@@ -10,6 +11,8 @@ test.describe('Shared Workspaces tests', () => {
 
     // Skip the tests if portal does not have Shared Workspaces
     test.skip(!portalStorageSystems.some(system => (system.scheme === 'projects')))
+
+    test.skip(hideDataFiles === true, 'Data Files hidden on portal, tests skipped');
 
     test.beforeEach(async ({ page, baseURL }) => {
         await page.goto(baseURL);
