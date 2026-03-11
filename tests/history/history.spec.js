@@ -3,11 +3,13 @@ import { expect, base } from '@playwright/test';
 import { WORKBENCH_SETTINGS } from '../../settings/custom_portal_settings.json';
 
 const jobsv2Title = WORKBENCH_SETTINGS['jobsv2Title'] || null;
+const hideApps = WORKBENCH_SETTINGS['hideApps'];
 
 
 
 test.describe('History Page Navigation Tests', () => {
     test.beforeEach(async ({ page, portal, environment, baseURL }) => {
+        test.skip(hideApps === true, 'Apps hidden on portal, test skipped');
         await page.goto(baseURL);
         await page.locator('#navbarDropdown').click();
         await page.getByRole('link', { name: 'My Dashboard' }).click();
