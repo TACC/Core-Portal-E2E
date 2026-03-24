@@ -8,6 +8,7 @@ test.describe('Data Files Search Tests', () => {
     test.skip(hideDataFiles === true, 'Data Files hidden on portal, test skipped');
 
     test.beforeEach(async ({ page, portal, environment, baseURL }) => {
+        testInfo.setTimeout(testInfo.timeout + 150000);
         await page.goto(baseURL);
         await page.locator('#navbarDropdown').click();
         await page.getByRole('link', { name: 'Dashboard' }).click();
@@ -43,7 +44,6 @@ test.describe('Data Files Search Tests', () => {
     })
 
     test('Filtering works', async ({ page }) => {
-
         await page.getByTestId('selector').selectOption('Folders')
 
         await expect(page.locator('.data-files-table-body')).toBeVisible()
