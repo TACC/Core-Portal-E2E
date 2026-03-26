@@ -2,7 +2,8 @@ import { test } from '../../fixtures/fileOperationsFixture';
 import { expect, base } from '@playwright/test';
 import { WORKBENCH_SETTINGS, PORTAL_DATAFILES_STORAGE_SYSTEMS } from '../../settings/custom_portal_settings.json';
 
-const apps = ['compress', 'extract']
+const apps = ['compress', 'extract'];
+const hideDataFiles = WORKBENCH_SETTINGS['hideDataFiles'];
 
 const portalStorageSystems = [];
 for (const system of PORTAL_DATAFILES_STORAGE_SYSTEMS) {
@@ -20,7 +21,9 @@ const getAppName = (app) => {
 
 // Run tests for both compress and extract back to back
 for (const app of apps) {
+    
     test.describe(`Data files ${app} tests`, () => {
+        test.skip(hideDataFiles === true, 'Data Files hidden on portal, tests skipped');
 
         const statuses = ['PROCESSING', 'QUEUEING', 'RUNNING', 'FINISHING', 'FINISHED']
 
