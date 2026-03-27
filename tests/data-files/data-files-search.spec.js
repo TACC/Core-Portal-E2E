@@ -7,7 +7,7 @@ const hideDataFiles = WORKBENCH_SETTINGS['hideDataFiles'];
 test.describe('Data Files Search Tests', () => {
     test.skip(hideDataFiles === true, 'Data Files hidden on portal, test skipped');
 
-    test.beforeEach(async ({ page, portal, environment, baseURL }) => {
+    test.beforeEach(async ({ page, portal, environment, baseURL }, testInfo) => {
         testInfo.setTimeout(testInfo.timeout + 150000);
         await page.goto(baseURL);
         await page.locator('#navbarDropdown').click();
