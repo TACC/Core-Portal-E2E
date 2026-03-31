@@ -100,13 +100,13 @@ test.describe('Shared Workspaces tests', () => {
         await page.getByLabel('title').fill('Test Shared Workspace Rename');
 
         await page.getByLabel('description').click();
-        await page.getByLabel('description').fill('Workspace description');
+        await page.getByLabel('description').fill('Test Shared Workspace description with minimum 50 characters edited');
 
         await page.getByRole('button', { name: 'Update Changes' }).click();
 
         await expect(page.locator('.modal-dialog')).not.toBeVisible();
 
         await expect(page.getByRole('heading', {level: 3})).toHaveText('Test Shared Workspace Rename')
-        await expect(page.getByText('Workspace description')).toBeVisible()
+        await expect(page.getByText('Test Shared Workspace description with minimum 50 characters edited')).toBeVisible()
     })
 })
