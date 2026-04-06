@@ -32,9 +32,12 @@ test.describe('Shared Workspaces tests', () => {
             await page.locator('#navbarDropdown').click();
             await page.getByRole('link', { name: 'My Dashboard' }).click();
             await page.getByRole('link', { name: 'Data Files', exact: true }).click();
-            await fileOperations.goToTestDestinationFolder(page, portal);
+            await fileOperations.goToTestDestinationFolder(page, portal, 'E2E TESTING PROJECT - DO NOT DELETE');
             await expect(page.getByTestId('loading-spinner')).not.toBeVisible();
             await page.getByRole('checkbox', { name: "select all folders and files" }).click();
+            await page.getByRole('checkbox', { name: '00-test_data-do_not_delete' }).click();
+            await page.getByRole('checkbox', { name: 'destination' }).click();
+            await page.getByRole('checkbox', { name: '.Trash' }).click();
             //check to see if trash can be used; not all failures have remaining files
             const trashBttn = page.locator('button:has-text("Trash")');
             if (await trashBttn.isEnabled()) {
@@ -288,4 +291,26 @@ test.describe('Shared Workspaces tests', () => {
             const path = page.getByTestId('textarea');
             expect(path).toContainText("/corral-repl/tacc/aci/CEP/projects/CEP-1720/00-test_data-do_not_delete/testCopy.txt");
         })
+
+        test('Copy from one system to another', async ({ page }) => {
+            await page.getByRole('link', { name: 'My Data (Work)' }).click();
+            await page.getByRole('link', { name: 'e2e-test-files' }).click();
+            await page.getByRole('link', { name: '-test_data-do_not_delete' }).click();
+            await page.getByRole('checkbox', { name: 'testCopy.txt' }).click();
+            await page.getByRole('button', { name: 'Copy' }).click();
+            await page.getByRole('dialog').getByTestId('selector').selectOption('shared');
+            await page.getByRole('link', { name: 'E2E TESTING PROJECT - DO NOT' }).click();
+            await page.getByRole('row', { name: 'Folder E2E TESTING PROJECT -' }).getByRole('button').click();
+            await page.getByRole('link', { name: 'Shared Workspaces' }).click();
+            await page.getByRole('link', { name: 'E2E TESTING PROJECT - DO NOT' }).click();
+            const copied_file = page.getByRole('link', { name: 'testCopy.txt' });
+            await expect(copied_file).toBeVisible();
+
+            await page.getByRole('checkbox', { name: 'testCopy.txt' }).click();
+            //check to see if trash can be used; not all failures have remaining files
+            const trashBttn = page.locator('button:has-text("Trash")');
+            if (await trashBttn.isEnabled()) {
+                await trashBttn.click();
+            }
+            });
 })
