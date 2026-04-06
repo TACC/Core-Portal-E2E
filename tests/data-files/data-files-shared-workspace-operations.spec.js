@@ -34,6 +34,8 @@ test.describe('Shared Workspaces tests', () => {
             await expect(page.getByTestId('loading-spinner')).not.toBeVisible();
             await page.getByRole('checkbox', { name: "select all folders and files" }).click();
             await page.getByRole('checkbox', { name: '00-test_data-do_not_delete' }).click();
+            await page.getByRole('checkbox', { name: 'destination' }).click();
+            await page.getByRole('checkbox', { name: '.Trash' }).click();
             //check to see if trash can be used; not all failures have remaining files
             const trashBttn = page.locator('button:has-text("Trash")');
             if (await trashBttn.isEnabled()) {
