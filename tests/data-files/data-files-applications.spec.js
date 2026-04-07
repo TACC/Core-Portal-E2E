@@ -72,12 +72,12 @@ for (const app of apps) {
                 await expect(notificationContent).toBeVisible();
 
                 await page.getByRole('link', { name: 'History', exact: true }).click();
+                await page.getByTestId('loading-spinner').waitFor({ state: "hidden" });
 
                 const table = page.getByRole('table')
-                const rows = await table.locator('tbody').locator('tr').all()
-                const row = rows[0];
+                const row = table.locator('tbody tr').filter({ hasText: getAppName(app) }).first();
+                await expect(row).toBeVisible();
                 const appNameInTable = await row.locator('td').nth(1).textContent();
-                await page.getByTestId('loading-spinner').waitFor({ state: "hidden" });
                 expect(appNameInTable.toLowerCase()).toContain(getAppName(app).toLowerCase());
                 const status = await row.locator('td').nth(2).textContent()
 
@@ -101,9 +101,10 @@ for (const app of apps) {
             test('successful job submission and job data', async ({ page }) => {
 
                 await page.getByRole('link', { name: 'History', exact: true }).click();
+                await page.getByTestId('loading-spinner').waitFor({ state: "hidden" });
                 const table = page.getByRole('table')
-                const rows = await table.locator('tbody').locator('tr').all()
-                const row = rows[0];
+                const row = table.locator('tbody tr').filter({ hasText: getAppName(app) }).first();
+                await expect(row).toBeVisible();
                 const statusRegExp = new RegExp(statuses.join('|'));
                 await expect(row, 'Does not have a valid status').toHaveText(statusRegExp, { ignoreCase: true });
                 await row.getByRole('link', { name: 'View Details', exact: true }).click();
