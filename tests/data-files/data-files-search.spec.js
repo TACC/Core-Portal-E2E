@@ -24,7 +24,7 @@ test.describe('Data Files Search Tests', () => {
     })
 
     test('Invalid search shows not found message', async ({ page }) => {
-        await page.getByPlaceholder('Search My Data (Work)').fill('random string');
+        await page.getByPlaceholder('Search My Data (Work)').fill('random_string');
         await page.getByRole('button', { name: 'Search', exact: true }).click();
 
         await expect(page.getByText('No files or folders to show.')).toBeVisible();
@@ -32,7 +32,7 @@ test.describe('Data Files Search Tests', () => {
     })
 
     test('Back to all files functionality works', async ({ page }) => {
-        await page.getByPlaceholder('Search My Data (Work)').fill('random string');
+        await page.getByPlaceholder('Search My Data (Work)').fill('random_string');
         await page.getByRole('button', { name: 'Search', exact: true }).click();
         await page.getByRole('button', { name: 'Back to All Files' }).click();
 
