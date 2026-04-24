@@ -22,3 +22,10 @@ Useful cli flags:
 * `--debug` to run debug mode (headed + step-through controls + selector creation)
 * `--headed` to run headed
 * `--ui` to run the separate playwright ui that you can run tests in and get a trace log
+
+
+# To Run DesignSafe
+1. `settings/.env.secret` from the Stache entry above (this uses the same secrets as core portal)
+2. `settings/.env.portal` from the Designsafe folder on Core Portal Deployments
+3. `settings/custom_portal_settings.json`: basic json with _only_ the `NGINX_SERVER_NAME`
+4. Run `npx playwright test --project=designsafe`
