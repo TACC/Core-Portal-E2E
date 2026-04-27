@@ -11,6 +11,6 @@ test.describe('Dashboard Tests', () => {
 
   test('test navigation to correct page', async ({ page, portal, environment, baseURL }) => {
     const url = page.url();
-    await expect(url).toBe('https://designsafe-ci.org/dashboard/');
+    expect(url).toBe(`${baseURL}/dashboard/`);
   });
 })

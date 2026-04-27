@@ -1,7 +1,6 @@
 # Core-Portal-E2E
 
-Steps to run:
-
+# Steps to run CEP:
 1. Run the command `npm install` and `npx playwright install` to install playwright and the relevant project dependancies
 2. In the settings folder create and populate the following files:
 	 * `.env.secret` : follow template in [.env.secret_example](https://github.com/TACC/Core-Portal-E2E/blob/main/settings/.env.secret_example) and populate with values from [Stache](https://stache.utexas.edu/entry/1fa70320bc0f4f23557c457237d5bf4e) entry
@@ -14,7 +13,7 @@ Steps to run:
 	- Limited test suite (skips application and datafile tests):
 		- `npx playwright test --project=limited --project=unauthorized`
 
-To run other portals:
+# To run other CEP portals:
 1. Repeat Steps 2-3 from above for the portal you want to test, replacing or renaming the previous files.
 2. Update fixtures/baseFixture.js with the portal information, replacing or renaming the previous file.
 
@@ -28,4 +27,5 @@ Useful cli flags:
 1. `settings/.env.secret` from the Stache entry above (this uses the same secrets as core portal)
 2. `settings/.env.portal` from the Designsafe folder on Core Portal Deployments
 3. `settings/custom_portal_settings.json`: basic json with _only_ the `NGINX_SERVER_NAME`
-4. Run `npx playwright test --project=designsafe`
+4. `fixtures/baseFixture.js`: update with designsafe info, especially the base url target
+5. Run `npx playwright test --project=designsafe`
