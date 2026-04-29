@@ -101,6 +101,28 @@ module.exports = defineConfig({
         storageState: 'playwright/.auth/user.json',
         baseURL: `https://${NGINX_SERVER_NAME}`
       }
+    },
+    {
+      name: 'designsafe-setup',
+      testMatch: 'setup/*.setup.js',
+      use: {
+        portal: process.env.PORTAL,
+        environment: process.env.ENVIRONMENT,
+        baseURL: `https://${NGINX_SERVER_NAME}`,
+        mfaSecret: process.env.MFA_SECRET
+      }
+    },
+    {
+      name: 'designsafe',
+      testMatch: 'designsafe/*.js',
+      use: {
+        storageState: 'playwright/.auth/user.json',
+        ...devices['Desktop Chrome'],
+        portal: process.env.PORTAL,
+        environment: process.env.ENVIRONMENT,
+        baseURL: `https://${NGINX_SERVER_NAME}`
+      },
+      dependencies: ['designsafe-setup'],
     }
 
     // {
