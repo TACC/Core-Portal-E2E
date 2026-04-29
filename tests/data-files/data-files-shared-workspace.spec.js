@@ -6,13 +6,15 @@ import { WORKBENCH_SETTINGS, PORTAL_DATAFILES_STORAGE_SYSTEMS } from '../../sett
 const portalStorageSystems = PORTAL_DATAFILES_STORAGE_SYSTEMS
 const makeLink = WORKBENCH_SETTINGS['makeLink'];
 const viewPath = WORKBENCH_SETTINGS['viewPath'];
+const hideDataFiles = WORKBENCH_SETTINGS['hideDataFiles'];
 
 test.describe.configure({ mode: 'serial' })
 
 test.describe('Shared Workspaces tests', () => {
 
     // Skip the tests if portal does not have Shared Workspaces
-    test.skip(!portalStorageSystems.some(system => (system.scheme === 'projects')))
+    test.skip(!portalStorageSystems.some(system => (system.scheme === 'projects')));
+    test.skip(hideDataFiles === true, 'Data Files hidden on portal, tests skipped');
 
     test.beforeEach(async ({ page, baseURL }) => {
         await page.goto(baseURL);
@@ -52,7 +54,7 @@ test.describe('Shared Workspaces tests', () => {
         await page.getByLabel('title').click();
         await page.getByLabel('title').fill('Test Shared Workspace');
         await page.getByLabel('description').click();
-        await page.getByLabel('description').fill('Test Shared Workspace');
+        await page.getByLabel('description').fill('Test Shared Workspace description with minimum 50 characters');
         await expect(page.locator('.project-members__cell').nth(0)).toContainText('WMA Test User')
 
         await page.getByRole('button', { name: 'Add Workspace' }).click();
@@ -98,13 +100,13 @@ test.describe('Shared Workspaces tests', () => {
         await page.getByLabel('title').fill('Test Shared Workspace Rename');
 
         await page.getByLabel('description').click();
-        await page.getByLabel('description').fill('Workspace description');
+        await page.getByLabel('description').fill('Test Shared Workspace description with minimum 50 characters edited');
 
         await page.getByRole('button', { name: 'Update Changes' }).click();
 
         await expect(page.locator('.modal-dialog')).not.toBeVisible();
 
         await expect(page.getByRole('heading', {level: 3})).toHaveText('Test Shared Workspace Rename')
-        await expect(page.getByText('Workspace description')).toBeVisible()
+        await expect(page.getByText('Test Shared Workspace description with minimum 50 characters edited')).toBeVisible()
     })
 })
