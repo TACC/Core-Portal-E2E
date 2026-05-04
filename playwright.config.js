@@ -62,7 +62,10 @@ module.exports = defineConfig({
             baseURL: `https://${NGINX_SERVER_NAME}`
           },
       dependencies: ['setup'],
-      testIgnore: ['unauthorized-user/*.spec.js']
+      testIgnore: [
+      'unauthorized-user/*.spec.js',
+      'designsafe/*.js',
+      ]
     },
     {
       // This project is used for the limited run type in Jenkins and skips the slow tests
@@ -82,7 +85,8 @@ module.exports = defineConfig({
         'data-files/data-files-shared-workspace.spec.js',
         'data-files/data-files-my-data-operations.spec.js',
         'data-files/data-files-add.spec.js',
-        'data-files/data-files-shared-workspace-operations.spec.js'
+        'data-files/data-files-shared-workspace-operations.spec.js',
+        'designsafe/*.js',
       ]
     },
     {
