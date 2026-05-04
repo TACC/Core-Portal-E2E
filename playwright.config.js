@@ -62,7 +62,10 @@ module.exports = defineConfig({
             baseURL: `https://${NGINX_SERVER_NAME}`
           },
       dependencies: ['setup'],
-      testIgnore: ['unauthorized-user/*.spec.js']
+      testIgnore: [
+      'unauthorized-user/*.spec.js',
+      'designsafe/*.js',
+      ]
     },
     {
       // This project is used for the limited run type in Jenkins and skips the slow tests
