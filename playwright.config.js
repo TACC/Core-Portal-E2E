@@ -1,7 +1,7 @@
 // @ts-check
 const { defineConfig, devices } = require('@playwright/test');
 import dotenv from 'dotenv'
-import { NGINX_SERVER_NAME } from './settings/custom_portal_settings.json'
+import { NGINX_SERVER_NAME, PORTAL_NAME } from './settings/custom_portal_settings.json'
 
 /**
  * Read environment variables from file.
@@ -10,6 +10,9 @@ import { NGINX_SERVER_NAME } from './settings/custom_portal_settings.json'
 
 dotenv.config({path: 'settings/.env.default'})
 dotenv.config({path: 'settings/.env.secret'})
+
+const portalName = ( PORTAL_NAME || '').toLowerCase().trim();
+const portalCustomTestMatch = [`custom/${portalName}/**/*.spec.js`];
 
 /**
  * @see https://playwright.dev/docs/test-configuration
@@ -97,6 +100,19 @@ module.exports = defineConfig({
             environment: process.env.ENVIRONMENT,
             baseURL: `https://${NGINX_SERVER_NAME}`
           },
+    },
+    {
+      name: 'portal-custom',
+      testMatch: portalCustomTestMatch,
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: 'playwright/.auth/user.json',
+        portal: process.env.PORTAL,
+        environment: process.env.ENVIRONMENT,
+        baseURL: `https://${NGINX_SERVER_NAME}`,
+        portalName: portalName
+      },
+      dependencies: ['setup'],
     },
     {
       name: 'teardown',
