@@ -300,7 +300,7 @@ test.describe('Shared Workspaces tests', () => {
             await page.getByRole('link', { name: 'E2E TESTING PROJECT - DO NOT' }).click();
             await page.getByRole('row', { name: 'Folder E2E TESTING PROJECT -' }).getByRole('button').click();
             await page.getByRole('link', { name: 'Shared Workspaces' }).click();
-            await page.getByRole('link', { name: 'E2E TESTING PROJECT - DO NOT' }).click();
+            await page.getByRole('link', { name: 'E2E TESTING PROJECT - DO NOT' }).click({ timeout: 2500 });
             const copied_file = page.getByRole('link', { name: 'testCopy.txt' });
             await expect(copied_file).toBeVisible();
 
