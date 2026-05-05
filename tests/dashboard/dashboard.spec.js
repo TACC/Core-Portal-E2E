@@ -1,11 +1,13 @@
 import { expect, base } from '@playwright/test';
-import { test } from '../../fixtures/baseFixture'
+import { test } from '../../fixtures/baseFixture';
+import { WORKBENCH_SETTINGS } from '../../settings/custom_portal_settings.json';
  
-
+const hideApps = WORKBENCH_SETTINGS['hideApps'];
 
 test.describe('Dashboard Tests', () => {
   
   test.beforeEach(async ({ page, portal, environment, baseURL }) => {
+    test.skip(hideApps === true, 'Apps hidden on portal, test skipped');
     await page.goto(baseURL);
     await page.locator('#navbarDropdown').click();
     await page.getByRole('link', { name: 'My Dashboard' }).click();
@@ -28,7 +30,7 @@ test.describe('Dashboard Tests', () => {
     await expect(page.getByRole('link', {name: 'Manage Account'})).toBeVisible();
   });
 
-  test('test applications page link exists when there are no submitted jobs', async ({ page, portal, environment, baseURL }) => {  
+  test('test applications page link exists when there are no submitted jobs', async ({ page, portal, environment, baseURL }) => {
     
     await expect(page.getByRole('heading', {level: 3, name: 'My Recent Jobs'})).toBeVisible();
   

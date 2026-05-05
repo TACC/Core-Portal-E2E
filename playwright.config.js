@@ -62,7 +62,10 @@ module.exports = defineConfig({
             baseURL: `https://${NGINX_SERVER_NAME}`
           },
       dependencies: ['setup'],
-      testIgnore: ['unauthorized-user/*.spec.js']
+      testIgnore: [
+      'unauthorized-user/*.spec.js',
+      'designsafe/*.js',
+      ]
     },
     {
       // This project is used for the limited run type in Jenkins and skips the slow tests
@@ -82,7 +85,8 @@ module.exports = defineConfig({
         'data-files/data-files-shared-workspace.spec.js',
         'data-files/data-files-my-data-operations.spec.js',
         'data-files/data-files-add.spec.js',
-        'data-files/data-files-shared-workspace-operations.spec.js'
+        'data-files/data-files-shared-workspace-operations.spec.js',
+        'designsafe/*.js',
       ]
     },
     {
@@ -101,6 +105,28 @@ module.exports = defineConfig({
         storageState: 'playwright/.auth/user.json',
         baseURL: `https://${NGINX_SERVER_NAME}`
       }
+    },
+    {
+      name: 'designsafe-setup',
+      testMatch: 'setup/*.setup.js',
+      use: {
+        portal: process.env.PORTAL,
+        environment: process.env.ENVIRONMENT,
+        baseURL: `https://${NGINX_SERVER_NAME}`,
+        mfaSecret: process.env.MFA_SECRET
+      }
+    },
+    {
+      name: 'designsafe',
+      testMatch: 'designsafe/*.js',
+      use: {
+        storageState: 'playwright/.auth/user.json',
+        ...devices['Desktop Chrome'],
+        portal: process.env.PORTAL,
+        environment: process.env.ENVIRONMENT,
+        baseURL: `https://${NGINX_SERVER_NAME}`
+      },
+      dependencies: ['designsafe-setup'],
     }
 
     // {

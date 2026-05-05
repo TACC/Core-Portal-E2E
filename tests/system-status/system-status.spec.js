@@ -2,9 +2,12 @@ import { test } from '../../fixtures/baseFixture';
 import { expect } from '@playwright/test';
 import {SYSTEM_MONITOR_DISPLAY_LIST} from '../../settings/custom_portal_settings.json';
 
+const systems = SYSTEM_MONITOR_DISPLAY_LIST.length;
+
 test.describe('System Status page tests', () => {
 
     test.beforeEach(async ({ page, baseURL }) => {
+        test.skip(systems === 0, 'No System Status, test skipped');
         await page.goto(baseURL);
         await page.locator('#navbarDropdown').click();
         await page.getByRole('link', { name: 'My Dashboard' }).click();

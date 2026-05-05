@@ -1,7 +1,8 @@
 import { expect, base } from '@playwright/test';
 import { test } from '../../fixtures/baseFixture';
-import { PORTAL_DATAFILES_STORAGE_SYSTEMS } from '../../settings/custom_portal_settings.json';
+import { PORTAL_DATAFILES_STORAGE_SYSTEMS, WORKBENCH_SETTINGS } from '../../settings/custom_portal_settings.json';
 
+const hideApps = WORKBENCH_SETTINGS['hideApps'];
 let has3rdPartyIntegrations = false;
 for (const entry of PORTAL_DATAFILES_STORAGE_SYSTEMS) {
   if (entry.integration) {
@@ -45,6 +46,7 @@ test.describe('My Account page tests', () => {
   });
   
   test('licenses section element is present', async ({ page }) => {
+    test.skip(hideApps === true, 'Apps hidden on portal, test skipped');
     await expect(page.getByRole('heading', { name: 'Licenses' })).toBeVisible();
   });
 

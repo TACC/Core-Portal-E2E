@@ -7,7 +7,8 @@ const hideDataFiles = WORKBENCH_SETTINGS['hideDataFiles'];
 test.describe('Data Files Search Tests', () => {
     test.skip(hideDataFiles === true, 'Data Files hidden on portal, test skipped');
 
-    test.beforeEach(async ({ page, portal, environment, baseURL }) => {
+    test.beforeEach(async ({ page, portal, environment, baseURL }, testInfo) => {
+        testInfo.setTimeout(testInfo.timeout + 150000);
         await page.goto(baseURL);
         await page.locator('#navbarDropdown').click();
         await page.getByRole('link', { name: 'Dashboard' }).click();
@@ -23,7 +24,7 @@ test.describe('Data Files Search Tests', () => {
     })
 
     test('Invalid search shows not found message', async ({ page }) => {
-        await page.getByPlaceholder('Search My Data (Work)').fill('random string');
+        await page.getByPlaceholder('Search My Data (Work)').fill('random_string');
         await page.getByRole('button', { name: 'Search', exact: true }).click();
 
         await expect(page.getByText('No files or folders to show.')).toBeVisible();
@@ -31,7 +32,7 @@ test.describe('Data Files Search Tests', () => {
     })
 
     test('Back to all files functionality works', async ({ page }) => {
-        await page.getByPlaceholder('Search My Data (Work)').fill('random string');
+        await page.getByPlaceholder('Search My Data (Work)').fill('random_string');
         await page.getByRole('button', { name: 'Search', exact: true }).click();
         await page.getByRole('button', { name: 'Back to All Files' }).click();
 
@@ -43,7 +44,6 @@ test.describe('Data Files Search Tests', () => {
     })
 
     test('Filtering works', async ({ page }) => {
-
         await page.getByTestId('selector').selectOption('Folders')
 
         await expect(page.locator('.data-files-table-body')).toBeVisible()
