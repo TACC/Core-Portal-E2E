@@ -74,7 +74,7 @@ test.describe('Onboarding Admin page tests', () => {
 
   test('invalid search works', async ({ page }) => {
     await page.getByPlaceholder('Search for users').click();
-    await page.getByPlaceholder('Search for users').fill('random string');
+    await page.getByPlaceholder('Search for users').fill('random_string');
     await page.getByRole('button', { name: 'Search', exact: true }).click();
 
     await expect(page.getByText('No users to show.')).toBeVisible();

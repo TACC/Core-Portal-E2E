@@ -84,7 +84,7 @@ test.describe('Shared Workspaces tests', () => {
         const rows = await table.locator('tbody').locator('tr').all()
         expect(rows.length).toBe(1);
 
-        await input.fill('random string')
+        await input.fill('random_string')
         await searchButton.click();
         await expect(table).toContainText("No Shared Workspaces match your search term.")
     })
