@@ -11,8 +11,9 @@ const hideDataFiles = WORKBENCH_SETTINGS['hideDataFiles'];
 test.describe('Shared Workspaces tests', () => {
 
     // Skip the tests if portal does not have Shared Workspaces
-    test.skip(!portalStorageSystems.some(system => (system.scheme === 'projects')));
-        test.skip(hideDataFiles === true, 'Data Files hidden on portal, tests skipped');
+    test.skip(!portalStorageSystems.some(system => (system.scheme === 'projects')), 
+    'Portal does not have shared workspaces, tests skipped');
+    test.skip(hideDataFiles === true, 'Data Files hidden on portal, tests skipped');
 
     test.beforeEach(async ({ page, baseURL }) => {
         await page.goto(baseURL);
