@@ -1,11 +1,16 @@
 import { expect } from '@playwright/test';
 import { test } from '../../fixtures/baseFixture';
-import { PORTAL_PROJECTS_SYSTEM_PREFIX, WORKBENCH_SETTINGS } from '../../settings/custom_portal_settings.json';
+import { PORTAL_PROJECTS_SYSTEM_PREFIX, WORKBENCH_SETTINGS, PORTAL_DATAFILES_STORAGE_SYSTEMS } from '../../settings/custom_portal_settings.json';
 
 const hideDataFiles = WORKBENCH_SETTINGS['hideDataFiles'];
+const portalStorageSystems = PORTAL_DATAFILES_STORAGE_SYSTEMS
 
 test('Cleanup shared workspaces', async ({ page, baseURL, tapisTenantBaseUrl }) => {
-    test.skip(hideDataFiles === true, 'Data Files hidden on portal, tests skipped');
+
+    test.skip(!portalStorageSystems.some(system => (system.scheme === 'projects')), 
+    'Portal does not have shared workspaces, tests skipped');
+
+    test.skip(hideDataFiles === true || !hasSharedWorkspaces, 'Data Files hidden on portal, tests skipped');
 
     const tenant = tapisTenantBaseUrl;
     const projectPrefix = PORTAL_PROJECTS_SYSTEM_PREFIX;
