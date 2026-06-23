@@ -71,10 +71,10 @@ pipeline {
                script {
                   if (params.Run_Type == 'Limited') {
                      sh 'npx playwright test --list --project=limited --project=unauthorized'
-                     sh 'USERNAME=$USERNAME PASSWORD=$PASSWORD MFA_SECRET=$MFA_SECRET npx playwright test --project=limited --project=unauthorized'
+                     sh 'USERNAME=$USERNAME PASSWORD=$PASSWORD MFA_SECRET=$MFA_SECRET npx playwright test --project=limited --project=unauthorized --project=portal-custom'
                   } else {
                      sh 'npx playwright test --list --project=default --project=unauthorized'
-                     sh 'USERNAME=$USERNAME PASSWORD=$PASSWORD MFA_SECRET=$MFA_SECRET npx playwright test --project=default --project=unauthorized'
+                     sh 'USERNAME=$USERNAME PASSWORD=$PASSWORD MFA_SECRET=$MFA_SECRET npx playwright test --project=default --project=unauthorized --project=portal-custom'
                   }
                }
             }

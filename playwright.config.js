@@ -68,6 +68,7 @@ module.exports = defineConfig({
       testIgnore: [
       'unauthorized-user/*.spec.js',
       'designsafe/*.js',
+      'custom/**/*.spec.js',
       ]
     },
     {
@@ -90,6 +91,7 @@ module.exports = defineConfig({
         'data-files/data-files-add.spec.js',
         'data-files/data-files-shared-workspace-operations.spec.js',
         'designsafe/*.js',
+        'custom/**/*.spec.js',
       ]
     },
     {
