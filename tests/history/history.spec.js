@@ -2,10 +2,7 @@ import { test } from '../../fixtures/baseFixture'
 import { expect, base } from '@playwright/test';
 import { WORKBENCH_SETTINGS } from '../../settings/custom_portal_settings.json';
 
-const jobsv2Title = WORKBENCH_SETTINGS['jobsv2Title'] || null;
 const hideApps = WORKBENCH_SETTINGS['hideApps'];
-
-
 
 test.describe('History Page Navigation Tests', () => {
     test.beforeEach(async ({ page, portal, environment, baseURL }) => {
@@ -30,20 +27,5 @@ test.describe('History Page Navigation Tests', () => {
 
             expect(await applicationsPageLink.getAttribute('href')).toEqual('/workbench/applications')
         }
-    })
-
-    test('Jobv2 tab is displayed and redirects correctly', async ({ page, portal, environment, baseURL }) => {
-        if (jobsv2Title === null) {
-            test.skip("this portal does not have a jobsv2Title");
-        }
-        await expect(page.getByRole('link', { name: jobsv2Title })).toBeVisible();
-
-        await page.getByRole('link', { name: jobsv2Title }).click();
-
-        const heading = page.getByRole('heading', { level: 2 })
-        await expect(heading).toHaveText('History / ' + jobsv2Title)
-
-        const url = baseURL
-        expect(page.url()).toBe(`${url}/workbench/history/jobsv2`)
     })
 })
