@@ -47,6 +47,8 @@ test.describe('Allocation Page Tests', () => {
 
         await page.getByRole('link', { name: 'Expired' }).click();
 
+        await page.waitForTimeout(500)
+
         const headingValueExpired = (await page.getByRole('heading', { level: 2 }).innerText()).replace(/\s+/g, "");
 
         expect(headingValueExpired).toBe('Allocations/Expired');
