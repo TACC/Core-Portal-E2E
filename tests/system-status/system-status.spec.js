@@ -20,9 +20,9 @@ test.describe('System Status page tests', () => {
 
             await page.getByRole('link', { name: system, exact: true }).click();
 
+            await page.getByTestId('loading-spinner').waitFor({ state: "hidden" });
             const headingValueApproved = (await page.getByRole('heading', { level: 2 }).innerText()).replace(/\s+/g, "");
             expect(headingValueApproved).toBe(`SystemStatus/${system}`);
-            await page.waitForTimeout(500)
         }
     })
 
