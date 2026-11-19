@@ -57,7 +57,7 @@ test.describe('Shared Workspaces tests', () => {
         await page.getByLabel('description').fill('Test Shared Workspace description with minimum 50 characters');
         await expect(page.locator('.project-members__cell').nth(0)).toContainText('WMA Test User')
 
-        await page.getByRole('button', { name: 'Add Workspace' }).click();
+        await page.getByRole('button', { name: 'Add Shared Workspace' }).click();
 
         await expect(page.locator('.modal-dialog')).not.toBeVisible({timeout: 20000});
 
