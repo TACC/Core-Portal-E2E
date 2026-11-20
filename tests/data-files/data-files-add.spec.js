@@ -9,7 +9,7 @@ test.describe('test Add button', async () => {
   test.describe.configure({ mode: 'serial' });
 
   test.beforeEach(async ({ page, baseURL }) => {
-    if (baseURL === 'https://cep.test'){
+    if (baseURL === 'cep.test'){
       baseURL = 'https://cep.test/workbench'
     }
 

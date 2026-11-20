@@ -31,7 +31,7 @@ for (const app of apps) {
 
         test.beforeEach(async ({ page, portal, baseURL, fileOperations }) => {
 
-            if (baseURL === 'https://cep.test'){
+            if (baseURL === 'cep.test'){
                 baseURL = 'https://cep.test/workbench'
             }
             await page.goto(baseURL);

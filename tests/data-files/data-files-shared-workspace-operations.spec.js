@@ -16,7 +16,7 @@ test.describe('Shared Workspaces tests', () => {
     test.skip(hideDataFiles === true, 'Data Files hidden on portal, tests skipped');
 
     test.beforeEach(async ({ page, baseURL }) => {
-        if (baseURL === 'https://cep.test'){
+        if (baseURL === 'cep.test'){
             baseURL = 'https://cep.test/workbench'
         }
         await page.goto(baseURL);

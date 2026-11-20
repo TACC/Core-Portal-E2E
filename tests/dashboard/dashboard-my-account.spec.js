@@ -14,7 +14,7 @@ for (const entry of PORTAL_DATAFILES_STORAGE_SYSTEMS) {
 test.describe('My Account page tests', () => {
 
   test.beforeEach(async ({ page, portal, environment, baseURL }) => {
-    if (baseURL === 'https://cep.test'){
+    if (baseURL === 'cep.test'){
       baseURL = 'https://cep.test/workbench'
     }
     await page.goto(baseURL);
@@ -28,7 +28,7 @@ test.describe('My Account page tests', () => {
   });
 
   test('back to dashboard button exists and redirects correctly', async ({ page, portal, environment, baseURL }) => {
-    if (baseURL === 'https://cep.test'){
+    if (baseURL === 'cep.test'){
       baseURL = 'https://cep.test'
     }
 

@@ -26,7 +26,6 @@ setup('authenticate', async ({ page, portal, environment, baseURL, mfaSecret }, 
     await page.goto(baseURL);
     await page.getByRole('link', { name: 'Log in' }).click();
   }
-  console.log("Using portal url: ", baseURL)
   await page.getByLabel('Username').click();
   await page.getByLabel('Username').fill(process.env.USERNAME);
   await page.getByLabel('Password').click();

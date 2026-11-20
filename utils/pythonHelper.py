@@ -31,7 +31,7 @@ data = {
     or [],
     "SYSTEM_MONITOR_DISPLAY_LIST": custom_portal_settings._SYSTEM_MONITOR_DISPLAY_LIST
     or [],
-    "NGINX_SERVER_NAME": os.getenv("NGINX_SERVER_NAME") or "https://cep.test",
+    "NGINX_SERVER_NAME": os.getenv("NGINX_SERVER_NAME") or "cep.test",
     "WORKBENCH_SETTINGS": custom_portal_settings._WORKBENCH_SETTINGS or [],
     "PORTAL_PROJECTS_SYSTEM_PREFIX": custom_portal_settings._PORTAL_PROJECTS_SYSTEM_PREFIX
     or "",

@@ -10,7 +10,7 @@ test.describe('Data Files Navigation Tests', () => {
   test.skip(hideDataFiles === true, 'Data Files hidden on portal, test skipped');
 
   test.beforeEach(async ({ page, baseURL }) => {
-    if (baseURL === 'https://cep.test'){
+    if (baseURL === 'cep.test'){
         baseURL = 'https://cep.test/workbench'
     }
 

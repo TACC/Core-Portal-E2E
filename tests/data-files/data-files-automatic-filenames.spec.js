@@ -12,7 +12,7 @@ test.describe('test automatic filenames', async () => {
     test.beforeEach(async ({ page, baseURL }) => {
       test.skip(hideDataFiles === true, 'Data Files hidden on portal, tests skipped');
 
-      if (baseURL === 'https://cep.test'){
+      if (baseURL === 'cep.test'){
         baseURL = 'https://cep.test/workbench'
       }
       await page.goto(baseURL);

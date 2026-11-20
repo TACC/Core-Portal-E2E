@@ -6,7 +6,7 @@ const hideDataFiles = WORKBENCH_SETTINGS['hideDataFiles'];
 const portalStorageSystems = PORTAL_DATAFILES_STORAGE_SYSTEMS
 
 test('Cleanup shared workspaces', async ({ page, baseURL, tapisTenantBaseUrl }) => {
-    if (baseURL === 'https://cep.test'){
+    if (baseURL === 'cep.test'){
         baseURL = 'https://cep.test/workbench'
     }
     test.skip(!portalStorageSystems.some(system => (system.scheme === 'projects')),
@@ -38,7 +38,7 @@ test('Cleanup shared workspaces', async ({ page, baseURL, tapisTenantBaseUrl }) 
     }
 
     // Ensure there are no shared workspaces left over
-    if (baseURL === 'https://cep.test'){
+    if (baseURL === 'cep.test'){
       baseURL = 'https://cep.test/workbench'
     }
     await page.goto(baseURL);
@@ -63,7 +63,7 @@ test('Cleanup shared workspaces', async ({ page, baseURL, tapisTenantBaseUrl }) 
 })
 
 async function getAccessToken(page, baseURL) {
-    if (baseURL === 'https://cep.test'){
+    if (baseURL === 'cep.test'){
       baseURL = 'https://cep.test'
     }
 

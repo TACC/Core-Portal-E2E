@@ -9,7 +9,7 @@ test.describe('Data Files Breadcrumbs Tests', () => {
 
     test.beforeEach(async ({ page, portal, environment, baseURL }) => {
         test.skip(hideDataFiles === true, 'Data Files hidden on portal, tests skipped');
-        if (baseURL === 'https://cep.test'){
+        if (baseURL === 'cep.test'){
             baseURL = 'https://cep.test/workbench'
         }
         await page.goto(baseURL);

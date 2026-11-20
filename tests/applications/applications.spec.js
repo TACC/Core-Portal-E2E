@@ -8,7 +8,7 @@ test.describe('Applications tests', () => {
 
   test.beforeEach(async ({ page, portal, environment, baseURL }) => {
     test.skip(hideApps === true, 'Apps hidden on portal, test skipped');
-    if (baseURL === 'https://cep.test'){
+    if (baseURL === 'cep.test'){
       baseURL = 'https://cep.test/workbench'
     }
     await page.goto(baseURL);
@@ -49,7 +49,7 @@ test('test app tray application visibility', async ({ page, portal, environment,
 })
 
 async function getAppTray(page, baseURL) {
-    if (baseURL === 'https://cep.test'){
+    if (baseURL === 'cep.test'){
       baseURL = 'https://cep.test/workbench'
     }
 

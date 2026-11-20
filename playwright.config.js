@@ -152,7 +152,8 @@ module.exports = defineConfig({
             storageState: 'playwright/.auth/user.json',
             portal: process.env.PORTAL,
             environment: process.env.ENVIRONMENT,
-            baseURL: 'cep.test'
+            baseURL: 'cep.test',
+            ignoreHTTPSErrors: true
           },
       dependencies: ['setup'],
       testIgnore: [

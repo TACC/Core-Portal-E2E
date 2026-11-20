@@ -7,7 +7,7 @@ const portalUserAccountSteps = PORTAL_USER_ACCOUNT_SETUP_STEPS;
 test.describe('Onboarding Admin page tests', () => {
 
   test.beforeEach(async ({ page, portal, environment, baseURL }) => {
-    if (baseURL === 'https://cep.test'){
+    if (baseURL === 'cep.test'){
       baseURL = 'https://cep.test/workbench'
     }
     await page.goto(baseURL);

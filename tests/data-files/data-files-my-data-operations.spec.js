@@ -16,7 +16,7 @@ test.describe('Data Files My Data Work Operations tests', () => {
     test.beforeEach(async ({ page, portal, baseURL, fileOperations }, testInfo) => {
         testInfo.setTimeout(testInfo.timeout + 150000);
 
-        if (baseURL === 'https://cep.test'){
+        if (baseURL === 'cep.test'){
             baseURL = 'https://cep.test/workbench'
         }
 
@@ -31,7 +31,7 @@ test.describe('Data Files My Data Work Operations tests', () => {
 
     //clean up just in case a test failed
     test.afterEach(async ({ page, portal, baseURL, fileOperations }) => {
-        if (baseURL === 'https://cep.test'){
+        if (baseURL === 'cep.test'){
             baseURL = 'https://cep.test/workbench'
         }
 

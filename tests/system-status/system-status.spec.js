@@ -9,7 +9,7 @@ test.describe('System Status page tests', () => {
     test.beforeEach(async ({ page, baseURL }) => {
         test.skip(systems === 0, 'No System Status, test skipped');
 
-        if (baseURL === 'https://cep.test'){
+        if (baseURL === 'cep.test'){
             baseURL = 'https://cep.test/workbench'
         }
 

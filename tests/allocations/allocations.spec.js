@@ -1,6 +1,4 @@
 import { test } from '../../fixtures/baseFixture';
-// import { test, expect } from '../../fixtures/fileOperationsFixture';
-// import { base, Page } from '@playwright/test';
 import { expect, base } from '@playwright/test';
 import { WORKBENCH_SETTINGS } from '../../settings/custom_portal_settings.json';
 
@@ -11,7 +9,7 @@ test.describe('Allocation Page Tests', () => {
     test.skip(hideAllocations === true, 'Allocations hidden on portal, test skipped');
 
     test.beforeEach(async ({ page, portal, environment, baseURL }) => {
-        if (baseURL === 'https://cep.test'){
+        if (baseURL === 'cep.test'){
             baseURL = 'https://cep.test/workbench'
         }
         await page.goto(baseURL);
