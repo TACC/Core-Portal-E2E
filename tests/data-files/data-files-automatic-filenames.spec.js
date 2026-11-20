@@ -3,14 +3,18 @@ import { test, expect } from '../../fixtures/fileOperationsFixture';
 import { WORKBENCH_SETTINGS } from '../../settings/custom_portal_settings.json';
 
 const hideDataFiles = WORKBENCH_SETTINGS['hideDataFiles'];
- 
+
 
 test.describe('test automatic filenames', async () => {
 
   test.describe.configure({ mode: 'serial' });
 
     test.beforeEach(async ({ page, baseURL }) => {
-        test.skip(hideDataFiles === true, 'Data Files hidden on portal, tests skipped');
+      test.skip(hideDataFiles === true, 'Data Files hidden on portal, tests skipped');
+
+      if (baseURL === 'https://cep.test'){
+        baseURL = 'https://cep.test/workbench'
+      }
       await page.goto(baseURL);
       await page.locator('#navbarDropdown').click();
       await page.getByRole('link', { name: 'Dashboard' }).click();

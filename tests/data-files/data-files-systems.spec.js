@@ -10,6 +10,10 @@ test.describe('Data Files Navigation Tests', () => {
   test.skip(hideDataFiles === true, 'Data Files hidden on portal, test skipped');
 
   test.beforeEach(async ({ page, baseURL }) => {
+    if (baseURL === 'https://cep.test'){
+        baseURL = 'https://cep.test/workbench'
+    }
+
     await page.goto(baseURL);
     await page.locator('#navbarDropdown').click();
     await page.getByRole('link', { name: 'Dashboard' }).click();

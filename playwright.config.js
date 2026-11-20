@@ -11,7 +11,7 @@ import { NGINX_SERVER_NAME, PORTAL_NAME } from './settings/custom_portal_setting
 dotenv.config({path: 'settings/.env.default'})
 dotenv.config({path: 'settings/.env.secret'})
 
-const portalName = ( PORTAL_NAME || '').toLowerCase().trim();
+const portalName = ( typeof PORTAL_NAME !== 'undefined' ? PORTAL_NAME:'').toLowerCase().trim();
 const portalCustomTestMatch = [`custom/${portalName}/**/*.spec.js`];
 
 /**
@@ -82,7 +82,7 @@ module.exports = defineConfig({
           },
       dependencies: ['setup'],
       testIgnore: [
-        'unauthorized-user/*.spec.js', 
+        'unauthorized-user/*.spec.js',
         'applications/opensees-application.spec.js',
         'data-files/data-files-applications.spec.js',
         'data-files/data-files-automatic-filenames.spec.js',
@@ -145,6 +145,22 @@ module.exports = defineConfig({
         baseURL: `https://${NGINX_SERVER_NAME}`
       },
       dependencies: ['designsafe-setup'],
+    },
+    {
+      name: 'local',
+      use: { ...devices['Desktop Chrome'],
+            storageState: 'playwright/.auth/user.json',
+            portal: process.env.PORTAL,
+            environment: process.env.ENVIRONMENT,
+            baseURL: 'cep.test'
+          },
+      dependencies: ['setup'],
+      testIgnore: [
+      'unauthorized-user/*.spec.js',
+      'designsafe/*.js',
+      'custom/**/*.spec.js',
+      ]
+
     }
 
     // {

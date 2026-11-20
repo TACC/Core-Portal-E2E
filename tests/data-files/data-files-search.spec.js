@@ -9,6 +9,9 @@ test.describe('Data Files Search Tests', () => {
 
     test.beforeEach(async ({ page, portal, environment, baseURL }, testInfo) => {
         testInfo.setTimeout(testInfo.timeout + 150000);
+        if (baseURL === 'https://cep.test'){
+            baseURL = 'https://cep.test/workbench'
+        }
         await page.goto(baseURL);
         await page.locator('#navbarDropdown').click();
         await page.getByRole('link', { name: 'Dashboard' }).click();

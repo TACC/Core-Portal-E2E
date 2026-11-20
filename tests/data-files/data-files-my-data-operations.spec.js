@@ -15,6 +15,11 @@ test.describe('Data Files My Data Work Operations tests', () => {
 
     test.beforeEach(async ({ page, portal, baseURL, fileOperations }, testInfo) => {
         testInfo.setTimeout(testInfo.timeout + 150000);
+
+        if (baseURL === 'https://cep.test'){
+            baseURL = 'https://cep.test/workbench'
+        }
+
         await page.goto(baseURL);
         await page.locator('#navbarDropdown').click();
         //check to see if My Data Work exists on this portal
@@ -26,6 +31,10 @@ test.describe('Data Files My Data Work Operations tests', () => {
 
     //clean up just in case a test failed
     test.afterEach(async ({ page, portal, baseURL, fileOperations }) => {
+        if (baseURL === 'https://cep.test'){
+            baseURL = 'https://cep.test/workbench'
+        }
+
         console.log(`Finished ${test.info().title} with status ${test.info().status} on portal ${portal} and base url ${baseURL}`);
 
         if (test.info().status !== test.info().expectedStatus) {

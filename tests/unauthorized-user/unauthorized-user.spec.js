@@ -19,7 +19,9 @@ test.describe('Unauthorized User Tests', () => {
     if (!topNavPortals.includes(portal)) {
       test.skip();
     }
-
+    if (baseURL === 'https://cep.test'){
+      baseURL = 'https://cep.test/workbench'
+    }
     await page.goto(baseURL);
     await page.getByRole('link', { name: 'Public Data' }).click();
 
@@ -28,6 +30,9 @@ test.describe('Unauthorized User Tests', () => {
   });
 
   test('redirect to login page when accessing a page requiring auth', async ({ page, portal, environment, baseURL }) => {
+    if (baseURL === 'https://cep.test'){
+      baseURL = 'https://cep.test/workbench'
+    }
     const url = `${baseURL}/workbench/dashboard`;
     await page.goto(url);
 

@@ -17,6 +17,10 @@ test.describe('Public Data Tests', async () => {
   test.skip(publicDataEntry === false, 'Public Data not on portal, test skipped');
 
   test.beforeEach(async ({ page, portal, environment, baseURL }) => {
+    if (baseURL === 'https://cep.test'){
+            baseURL = 'https://cep.test/workbench'
+    }
+
     await page.goto(baseURL);
   })
 

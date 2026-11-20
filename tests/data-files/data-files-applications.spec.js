@@ -21,7 +21,7 @@ const getAppName = (app) => {
 
 // Run tests for both compress and extract back to back
 for (const app of apps) {
-    
+
     test.describe(`Data files ${app} tests`, () => {
         test.skip(hideDataFiles === true, 'Data Files hidden on portal, tests skipped');
 
@@ -30,6 +30,10 @@ for (const app of apps) {
         test.describe.configure({ retries: 0 })
 
         test.beforeEach(async ({ page, portal, baseURL, fileOperations }) => {
+
+            if (baseURL === 'https://cep.test'){
+                baseURL = 'https://cep.test/workbench'
+            }
             await page.goto(baseURL);
             await page.locator('#navbarDropdown').click();
             //check to see if My Data Work exists on this portal
@@ -64,11 +68,11 @@ for (const app of apps) {
                     await page.getByRole('button', { name: 'Extract' }).click();
                     await page.getByRole('dialog').getByRole('button', { name: 'Extract' }).click();
                 }
-                
+
                 await expect(page.getByRole('dialog')).toBeVisible()
 
                 const notificationContent = page.locator('.notification-toast-content')
-                
+
                 await expect(notificationContent).toBeVisible();
 
                 await page.getByRole('link', { name: 'History', exact: true }).click();

@@ -17,8 +17,16 @@ setup('authenticate', async ({ page, portal, environment, baseURL, mfaSecret }, 
 
   console.log("Using portal url: ", baseURL)
 
-  await page.goto(baseURL);
-  await page.getByRole('link', { name: 'Log in' }).click();
+
+  if (baseURL === 'https://cep.test'){
+    baseURL += '/login'
+    await page.goto(baseURL);
+  }
+  else{
+    await page.goto(baseURL);
+    await page.getByRole('link', { name: 'Log in' }).click();
+  }
+  console.log("Using portal url: ", baseURL)
   await page.getByLabel('Username').click();
   await page.getByLabel('Username').fill(process.env.USERNAME);
   await page.getByLabel('Password').click();
@@ -26,13 +34,13 @@ setup('authenticate', async ({ page, portal, environment, baseURL, mfaSecret }, 
   await page.getByRole('button', { name: 'Log In' }).click();
   await page.waitForURL('**/*');
   const redirectUrl = page.url();
-  
+
   // Extract base URL (protocol + hostname) and set as environment variable
   const url = new URL(redirectUrl);
   const tapisTenantBaseUrl = `${url.protocol}//${url.hostname}`;
-  
+
   process.env.TAPIS_TENANT_BASEURL = tapisTenantBaseUrl;
-    
+
   if (redirectUrl.includes('/oauth2/mfa')) {
     // MFA flow
     let totp = new OTPAuth.TOTP({
@@ -50,7 +58,7 @@ setup('authenticate', async ({ page, portal, environment, baseURL, mfaSecret }, 
 
   await page.waitForURL('**/*');
   const postAuthUrl = page.url();
-  
+
   if (postAuthUrl.includes('/oauth2/authorize')) {
     await page.getByRole('button', { name: 'Connect' }).click();
   }
