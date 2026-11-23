@@ -31,7 +31,7 @@ test.describe('Unauthorized User Tests', () => {
 
   test('redirect to login page when accessing a page requiring auth', async ({ page, portal, environment, baseURL }) => {
     if (baseURL === 'cep.test'){
-      baseURL = 'https://cep.test/workbench'
+      baseURL = 'https://cep.test'
     }
     const url = `${baseURL}/workbench/dashboard`;
     await page.goto(url);

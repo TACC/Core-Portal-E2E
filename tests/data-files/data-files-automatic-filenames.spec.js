@@ -17,7 +17,7 @@ test.describe('test automatic filenames', async () => {
       }
       await page.goto(baseURL);
       await page.locator('#navbarDropdown').click();
-      await page.getByRole('link', { name: 'Dashboard' }).click();
+      await page.getByRole('link', { name: 'My Dashboard' }).click();
       await page.getByRole('link', { name: 'Data Files' }).click();
     })
 

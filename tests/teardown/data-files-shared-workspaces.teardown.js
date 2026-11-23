@@ -43,7 +43,7 @@ test('Cleanup shared workspaces', async ({ page, baseURL, tapisTenantBaseUrl }) 
     }
     await page.goto(baseURL);
     await page.locator('#navbarDropdown').click();
-    await page.getByRole('link', { name: 'Dashboard' }).click();
+    await page.getByRole('link', { name: 'My Dashboard' }).click();
     await page.getByRole('link', { name: 'Data Files' }).click();
     await page.getByRole('main').getByRole('link', { name: 'Shared Workspaces' }).click();
 
