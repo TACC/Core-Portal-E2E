@@ -14,7 +14,7 @@ test.describe('Data Files Breadcrumbs Tests', () => {
         }
         await page.goto(baseURL);
         await page.locator('#navbarDropdown').click();
-        await page.getByRole('link', { name: 'Dashboard' }).click();
+        await page.getByRole('link', { name: 'My Dashboard' }).click();
         await page.getByRole('link', { name: 'Data Files' }).click();
         await page.getByRole('main').getByRole('link', { name: 'My Data (Work)' }).click();
         await page.getByRole('link', { name: '.Trash' }).click();
