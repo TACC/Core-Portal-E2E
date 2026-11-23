@@ -1,14 +1,6 @@
 import { test as base } from '@playwright/test'
 import dotenv from 'dotenv'
 
-function resolveLocalBaseURL(baseURL){
-  console.log('*****')
-  if (baseURL === 'https://cep.test') {
-    return 'https://cep.test/workbench';
-  }
-  return baseURL;
-}
-
 export const test = base.extend({
     portal: ['cep', {option: true}],
     environment: ['prod', {option: true}],
