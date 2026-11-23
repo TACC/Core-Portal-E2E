@@ -17,15 +17,21 @@ test.describe('Shared Workspaces tests', () => {
     test.skip(hideDataFiles === true, 'Data Files hidden on portal, tests skipped');
 
     test.beforeEach(async ({ page, baseURL }) => {
+        if (baseURL === 'cep.test'){
+            baseURL = 'https://cep.test/workbench'
+        }
         await page.goto(baseURL);
         await page.locator('#navbarDropdown').click();
-        await page.getByRole('link', { name: 'Dashboard' }).click();
+        await page.getByRole('link', { name: 'My Dashboard' }).click();
         await page.getByRole('link', { name: 'Data Files' }).click();
         await page.getByRole('main').getByRole('link', { name: 'Shared Workspaces' }).click();
     })
 
     //clean up just in case a test failed
     test.afterEach(async ({ page, portal, baseURL, fileOperations }) => {
+        if (baseURL === 'cep.test'){
+            baseURL = 'https://cep.test/workbench'
+        }
         console.log(`Finished ${test.info().title} with status ${test.info().status} on portal ${portal} and base url ${baseURL}`);
 
         if (test.info().status !== test.info().expectedStatus) {

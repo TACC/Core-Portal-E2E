@@ -8,6 +8,11 @@ test.describe('System Status page tests', () => {
 
     test.beforeEach(async ({ page, baseURL }) => {
         test.skip(systems === 0, 'No System Status, test skipped');
+
+        if (baseURL === 'cep.test'){
+            baseURL = 'https://cep.test/workbench'
+        }
+
         await page.goto(baseURL);
         await page.locator('#navbarDropdown').click();
         await page.getByRole('link', { name: 'My Dashboard' }).click();
@@ -37,15 +42,15 @@ test.describe('System Status page tests', () => {
             const rows = await systemStatusTable.locator('tbody').locator('tr').all()
 
             expect(rows.length).toEqual(1)
-        
+
 
         }
     })
-    
+
     test('Queue status table shows up on each system tab and shows all system queues', async ({ page }) => {
         for (const system of SYSTEM_MONITOR_DISPLAY_LIST) {
             await page.getByRole('link', { name: system, exact: true }).click();
-        
+
             const systemQueuesTable = page.locator('article').locator('table');
 
             await expect(systemQueuesTable.locator('tbody')).toBeVisible();

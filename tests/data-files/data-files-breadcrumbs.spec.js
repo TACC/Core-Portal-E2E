@@ -3,30 +3,33 @@ import { test } from '../../fixtures/baseFixture';
 import { WORKBENCH_SETTINGS } from '../../settings/custom_portal_settings.json';
 
 const hideDataFiles = WORKBENCH_SETTINGS['hideDataFiles'];
- 
+
 
 test.describe('Data Files Breadcrumbs Tests', () => {
-    
+
     test.beforeEach(async ({ page, portal, environment, baseURL }) => {
         test.skip(hideDataFiles === true, 'Data Files hidden on portal, tests skipped');
+        if (baseURL === 'cep.test'){
+            baseURL = 'https://cep.test/workbench'
+        }
         await page.goto(baseURL);
         await page.locator('#navbarDropdown').click();
-        await page.getByRole('link', { name: 'Dashboard' }).click();
+        await page.getByRole('link', { name: 'My Dashboard' }).click();
         await page.getByRole('link', { name: 'Data Files' }).click();
         await page.getByRole('main').getByRole('link', { name: 'My Data (Work)' }).click();
         await page.getByRole('link', { name: '.Trash' }).click();
     })
 
-    test('Test "Go to ..." button', async ({ page }) => {
+    test('Test "Go to ..." button', async ({ page, baseURL }) => {
         await page.getByRole('button', { name: 'Go to ...' }).click();
         await expect(page.locator('button:has-text("My Data (Work)")')).toBeVisible();
     })
 
-    test('Test Breadcrumbs Directory Label display', async ({ page }) => {
+    test('Test Breadcrumbs Directory Label display', async ({ page, baseURL }) => {
         await expect(page.locator('div.breadcrumbs:has-text(".Trash")')).toBeVisible();
     })
 
-    test('Test "View Full Path" display', async ({ page }) => {
+    test('Test "View Full Path" display', async ({ page, baseURL }) => {
         await page.getByRole('button', { name: 'View Full Path' }).click();
         await expect(page.locator('div.modal-body textarea:has-text(".Trash")')).toBeVisible();
     })

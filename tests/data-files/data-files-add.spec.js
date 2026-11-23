@@ -9,9 +9,13 @@ test.describe('test Add button', async () => {
   test.describe.configure({ mode: 'serial' });
 
   test.beforeEach(async ({ page, baseURL }) => {
+    if (baseURL === 'cep.test'){
+      baseURL = 'https://cep.test/workbench'
+    }
+
     await page.goto(baseURL);
     await page.locator('#navbarDropdown').click();
-    await page.getByRole('link', { name: 'Dashboard' }).click();
+    await page.getByRole('link', { name: 'My Dashboard' }).click();
     await page.getByRole('link', { name: 'Data Files' }).click();
   })
 

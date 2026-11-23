@@ -5,12 +5,15 @@ import { WORKBENCH_SETTINGS } from '../../settings/custom_portal_settings.json';
 const hideApps = WORKBENCH_SETTINGS['hideApps'];
 
 test.describe('Applications tests', () => {
-  
+
   test.beforeEach(async ({ page, portal, environment, baseURL }) => {
     test.skip(hideApps === true, 'Apps hidden on portal, test skipped');
+    if (baseURL === 'cep.test'){
+      baseURL = 'https://cep.test/workbench'
+    }
     await page.goto(baseURL);
     await page.locator('#navbarDropdown').click();
-    await page.getByRole('link', { name: 'Dashboard' }).click();
+    await page.getByRole('link', { name: 'My Dashboard' }).click();
     await page.getByRole('link', { name: 'Applications', exact: true }).click();
   });
 
@@ -20,14 +23,15 @@ test.describe('Applications tests', () => {
   });
 });
 
-test('test app tray application visibility', async ({ page, portal, environment, baseURL }) => {
+test('test app tray application visibility', async ({ page, portal, environment, baseURL }, testInfo) => {
+  test.skip(testInfo.project.name === 'local', 'Apptray tests wont work locally, test skipped');
   test.skip(hideApps === true, 'Apps hidden on portal, test skipped');
-  
+
   const appTray = await getAppTray(page, baseURL);
 
   await page.goto(baseURL);
   await page.locator('#navbarDropdown').click();
-  await page.getByRole('link', { name: 'Dashboard' }).click();
+  await page.getByRole('link', { name: 'My Dashboard' }).click();
   await page.getByRole('link', { name: 'Applications', exact: true }).click();
 
   for (const tab of appTray) {
@@ -46,6 +50,10 @@ test('test app tray application visibility', async ({ page, portal, environment,
 })
 
 async function getAppTray(page, baseURL) {
+    if (baseURL === 'cep.test'){
+      baseURL = 'https://cep.test'
+    }
+
     const url = `${baseURL}/api/workspace/tray`;
 
     const cookies = await page.context().cookies()

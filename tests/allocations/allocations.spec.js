@@ -9,6 +9,9 @@ test.describe('Allocation Page Tests', () => {
     test.skip(hideAllocations === true, 'Allocations hidden on portal, test skipped');
 
     test.beforeEach(async ({ page, portal, environment, baseURL }) => {
+        if (baseURL === 'cep.test'){
+            baseURL = 'https://cep.test/workbench'
+        }
         await page.goto(baseURL);
         await page.locator('#navbarDropdown').click();
         await page.getByRole('link', { name: 'My Dashboard' }).click();

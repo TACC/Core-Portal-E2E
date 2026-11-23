@@ -1,12 +1,15 @@
 import { expect, base } from '@playwright/test';
 import { test } from '../../fixtures/baseFixture';
 import { PORTAL_USER_ACCOUNT_SETUP_STEPS } from '../../settings/custom_portal_settings.json';
- 
+
 const portalUserAccountSteps = PORTAL_USER_ACCOUNT_SETUP_STEPS;
 
 test.describe('Onboarding Admin page tests', () => {
 
   test.beforeEach(async ({ page, portal, environment, baseURL }) => {
+    if (baseURL === 'cep.test'){
+      baseURL = 'https://cep.test/workbench'
+    }
     await page.goto(baseURL);
     await page.locator('#navbarDropdown').click();
     if (expect(page.getByRole('link', { name: 'Onboarding Admin' }).isDisabled)) {
@@ -104,7 +107,7 @@ test.describe('Onboarding Admin page tests', () => {
       const heading = page.locator('.modal-dialog').getByRole('heading', { level: 6 });
 
       await expect(heading).toHaveText(`${userName} - ${stepName}`)
-      
+
       await page.getByRole('button', { name: 'Close' }).click();
     }
   });
