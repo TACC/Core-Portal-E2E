@@ -34,7 +34,7 @@ test.describe('Dashboard Tests', () => {
   });
 
   test('test applications page link exists when there are no submitted jobs', async ({ page, portal, environment, baseURL }) => {
-
+    test.skip(baseURL === 'cep.test', 'Local user has jobs, test skipped');
     await expect(page.getByRole('heading', {level: 3, name: 'My Recent Jobs'})).toBeVisible();
 
     test.slow();
@@ -42,7 +42,6 @@ test.describe('Dashboard Tests', () => {
     const jobs = page.locator('table.jobs-view tbody tr[role="row"]');
     const jobsCount = await jobs.count();
     const statusMessage = page.locator('table.jobs-view tbody tr:first-child.-status');
-
     if (jobsCount == 0 && await statusMessage.isVisible()){
         await expect(statusMessage.getByRole('link')).toContainText('Applications Page');
     }

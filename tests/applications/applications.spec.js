@@ -24,6 +24,7 @@ test.describe('Applications tests', () => {
 });
 
 test('test app tray application visibility', async ({ page, portal, environment, baseURL }) => {
+  test.skip(baseURL === 'cep.test', 'Apptray tests wont work locally, test skipped');
   test.skip(hideApps === true, 'Apps hidden on portal, test skipped');
 
   const appTray = await getAppTray(page, baseURL);
@@ -50,7 +51,7 @@ test('test app tray application visibility', async ({ page, portal, environment,
 
 async function getAppTray(page, baseURL) {
     if (baseURL === 'cep.test'){
-      baseURL = 'https://cep.test/workbench'
+      baseURL = 'https://cep.test/'
     }
 
     const url = `${baseURL}/api/workspace/tray`;

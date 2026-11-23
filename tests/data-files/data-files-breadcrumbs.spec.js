@@ -20,16 +20,16 @@ test.describe('Data Files Breadcrumbs Tests', () => {
         await page.getByRole('link', { name: '.Trash' }).click();
     })
 
-    test('Test "Go to ..." button', async ({ page }) => {
+    test('Test "Go to ..." button', async ({ page, baseURL }) => {
         await page.getByRole('button', { name: 'Go to ...' }).click();
         await expect(page.locator('button:has-text("My Data (Work)")')).toBeVisible();
     })
 
-    test('Test Breadcrumbs Directory Label display', async ({ page }) => {
+    test('Test Breadcrumbs Directory Label display', async ({ page, baseURL }) => {
         await expect(page.locator('div.breadcrumbs:has-text(".Trash")')).toBeVisible();
     })
 
-    test('Test "View Full Path" display', async ({ page }) => {
+    test('Test "View Full Path" display', async ({ page, baseURL }) => {
         await page.getByRole('button', { name: 'View Full Path' }).click();
         await expect(page.locator('div.modal-body textarea:has-text(".Trash")')).toBeVisible();
     })
